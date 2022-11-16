@@ -8,6 +8,13 @@ alias rm="rm -I --preserve-root"
 alias update="sudo apt update && sudo apt upgrade"
 alias ping="ping -c 5"
 
+if [[ -v WSL_DISTRO_NAME ]]; then
+    function clip() {
+        cat $1 | clip.exe
+    }
+fi
+
+
 if (( $+commands[podman] )); then
     alias docker="podman"
 fi
