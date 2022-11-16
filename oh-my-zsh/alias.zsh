@@ -38,7 +38,7 @@ dksh() {
 alias dkps="docker ps --format '{{.ID}} ~ {{.Names}} ~ {{.Status}} ~ {{.Image}}'"
 alias dktop="docker stats --format 'table {{.Container}}\t{{.Name}}\t{{.CPUPerc}}\t{{.MemPerc}}\t{{.NetIO}}\t{{.BlockIO}}'"
 dkstats() {
-    if [ $# -eq 0 ]; then
+    if [[ $# -eq 0 ]]; then
         docker stats --no-stream
     else
         docker stats --no-stream | grep $1
