@@ -58,6 +58,7 @@ alias gc!="git commit -v --amend"
 
 alias gaac="gaa && gc"
 
+alias gb="git branch --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate"
 alias gs="git status -sb"
 
 alias gst="git stash"
