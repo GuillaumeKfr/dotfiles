@@ -1,4 +1,3 @@
-
 # General purpose
 alias py="python3"
 alias tf="terraform"
@@ -14,38 +13,42 @@ if [[ -v WSL_DISTRO_NAME ]]; then
     }
 fi
 
-
-if (( $+commands[podman] )); then
+if [[ -x "$(command -v podman)" ]]; then
     alias docker="podman"
 fi
 
+docker_aliases() {
+    alias jupyter="docker run --rm -p 8888:8888 -e JUPYTER_ENABLE_LAB=yes -v ${PWD}:/home/jovyan/work docker.io/jupyter/minimal-notebook"
+    alias jupyterStop="docker stop $(docker ps -a -f "ancestor=jupyter/minimal-notebook" -q)"
+
+    alias dk="docker"
+    alias dkl="docker logs"
+    alias dklf="docker logs -f"
+    alias dki="docker images"
+    alias dkc="docker container"
+    alias dkrm="docker rm"
+
+    alias dke="docker exec"
+    dksh() {
+        docker exec -it $1 /bin/sh
+    }
+
+    alias dkps="docker ps --format '{{.ID}} ~ {{.Names}} ~ {{.Status}} ~ {{.Image}}'"
+    alias dktop="docker stats --format 'table {{.Container}}\t{{.Name}}\t{{.CPUPerc}}\t{{.MemPerc}}\t{{.NetIO}}\t{{.BlockIO}}'"
+    dkstats() {
+        if [[ $# -eq 0 ]]; then
+            docker stats --no-stream
+        else
+            docker stats --no-stream | grep $1
+        fi
+    }
+
+    alias dkprune="docker system prune -af"
+}
 # Docker
-alias jupyter="docker run --rm -p 8888:8888 -e JUPYTER_ENABLE_LAB=yes -v ${PWD}:/home/jovyan/work docker.io/jupyter/minimal-notebook"
-alias jupyterStop="docker stop $(docker ps -a -f "ancestor=jupyter/minimal-notebook" -q)"
-
-alias dk="docker"
-alias dkl="docker logs"
-alias dklf="docker logs -f"
-alias dki="docker images"
-alias dkc="docker container"
-alias dkrm="docker rm"
-
-alias dke="docker exec"
-dksh() {
-    docker exec -it $1 /bin/sh
-}
-
-alias dkps="docker ps --format '{{.ID}} ~ {{.Names}} ~ {{.Status}} ~ {{.Image}}'"
-alias dktop="docker stats --format 'table {{.Container}}\t{{.Name}}\t{{.CPUPerc}}\t{{.MemPerc}}\t{{.NetIO}}\t{{.BlockIO}}'"
-dkstats() {
-    if [[ $# -eq 0 ]]; then
-        docker stats --no-stream
-    else
-        docker stats --no-stream | grep $1
-    fi
-}
-
-alias dkprune="docker system prune -af"
+if [[ -x "$(command -v docker)" ]]; then
+    docker_aliases
+fi
 
 # Git
 alias g="git"
