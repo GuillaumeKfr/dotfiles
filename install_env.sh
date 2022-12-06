@@ -18,8 +18,8 @@ ln -sf "$DOTFILES_DIR"/zsh/p10k.zsh "$HOME"/.p10k.zsh
 # Install oh-my-zsh and plugins
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-git clone "https://github.com/zsh-users/zsh-autosuggestions.git" "${ZSH_PLUGINS_DIR}"/zsh-autosuggestions.git
-git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_PLUGINS_DIR}"/zsh-syntax-highlighting.git
+git clone "https://github.com/zsh-users/zsh-autosuggestions.git" "${ZSH_PLUGINS_DIR}"/zsh-autosuggestions
+git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_PLUGINS_DIR}"/zsh-syntax-highlighting
 git clone "https://github.com/agkozak/zsh-z" "${ZSH_PLUGINS_DIR}"/zsh-z
 git clone --depth=1 "https://github.com/romkatv/powerlevel10k.git" "${ZSH_THEMES_DIR}"/powerlevel10k
 
