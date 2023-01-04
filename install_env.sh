@@ -34,3 +34,11 @@ git clone "https://github.com/tmux-plugins/tpm" "$HOME"/.tmux/plugins/tpm
 
 # Link tmux config
 ln -sf "$DOTFILES_DIR"/tmux/tmux.conf "$HOME"/.tmux.conf
+
+# Install neovim
+
+curl -LO https://github.com/neovim/neovim/releases/download/v0.8.2/nvim-linux64.deb
+sudo apt install ./nvim-linux64.deb
+
+# TODO: Link neovim config
+#
