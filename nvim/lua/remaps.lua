@@ -31,6 +31,3 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 
 -- Fugitive
 vim.keymap.set('n', '<leader>gs', vim.cmd.Git)
-
--- Tree
-vim.keymap.set('n', '<c-e>', '<cmd>NvimTreeToggle<cr>')
