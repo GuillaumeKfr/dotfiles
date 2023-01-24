@@ -27,6 +27,11 @@ return require('packer').startup(function(use)
         requires = { 'kyazdani42/nvim-web-devicons', opt = true }
     }
 
+    use({
+        'scalameta/nvim-metals',
+        requires = { "nvim-lua/plenary.nvim"}
+    })
+
     use {
         'VonHeikemen/lsp-zero.nvim',
         requires = {
