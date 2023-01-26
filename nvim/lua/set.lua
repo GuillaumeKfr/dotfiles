@@ -26,7 +26,7 @@ vim.opt.signcolumn = "yes"
 
 vim.opt.updatetime = 250
 
-vim.opt.colorcolumn = "80"
+vim.opt.colorcolumn = ""
 
 vim.api.nvim_create_autocmd('TextYankPost', {
     callback = function()
