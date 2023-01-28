@@ -1,5 +1,5 @@
 # General purpose
-alias v="nvim"
+alias v="nvim ."
 alias py="python3"
 alias tf="terraform"
 alias calc="bc -l"
