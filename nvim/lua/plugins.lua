@@ -8,7 +8,8 @@ return require('packer').startup(function(use)
         'nvim-telescope/telescope.nvim', tag = '0.1.1',
         requires = { { 'nvim-lua/plenary.nvim' } }
     }
-    use { 'dracula/vim', as = 'dracula' }
+--    use { 'dracula/vim', as = 'dracula' }
+    use { 'catppuccin/nvim', as = 'catppuccin' }
     use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
     use { 'tpope/vim-fugitive' }
     use { 'lewis6991/gitsigns.nvim' }
