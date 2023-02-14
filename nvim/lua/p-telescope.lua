@@ -1,19 +1,20 @@
-require('telescope').setup(){
+require('telescope').setup {
     defaults={
         file_ignore_patterns = {
-            "node_modules", ".git", "build", "dist"
-        }
+            "node_modules", ".git/", "build", "dist"
+        },
     },
     pickers = {
         find_files = {
-            additional_args = function(_)
-                return {"--hidden"}
-            end
+            hidden = true,
+            theme = 'dropdown',
         },
         live_grep = {
-            additional_args = function(_)
-                return {"--hidden"}
-            end
+            hidden = true,
+            theme = "dropdown",
         },
+        diagnostics = {
+            theme = "dropdown"
+        }
     },
 }
