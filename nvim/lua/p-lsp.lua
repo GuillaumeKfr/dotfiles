@@ -2,10 +2,6 @@ local lsp = require('lsp-zero')
 
 lsp.preset('recommended')
 
-lsp.ensure_installed({
-    'sumneko_lua'
-})
-
 local cmp = require('cmp')
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
 local cmp_mappings = lsp.defaults.cmp_mappings({
@@ -67,17 +63,6 @@ require('mason-lspconfig').setup_handlers({
     function(server_name)
         require('lspconfig')[server_name].setup(lsp_config)
     end,
-    sumneko_lua = function()
-        require('lspconfig').sumneko_lua.setup(vim.tbl_extend('force', lsp_config, {
-            settings = {
-                Lua = {
-                    diagnostics = {
-                        globals = { 'vim' }
-                    }
-                }
-            }
-        }))
-    end
 })
 
 lsp.setup()
