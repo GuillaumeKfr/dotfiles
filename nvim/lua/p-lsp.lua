@@ -49,6 +49,11 @@ local on_attach = function(_, bufnr)
             vim.lsp.buf.format()
         end
     })
+
+    vim.api.nvim_create_autocmd("BufWritePre", {
+        pattern = { "*" },
+        command = [[%s/\s\+$//e]],
+    })
 end
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
