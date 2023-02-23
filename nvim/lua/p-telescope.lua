@@ -15,6 +15,9 @@ require('telescope').setup {
         },
         diagnostics = {
             theme = "dropdown"
+        },
+        buffers = {
+            theme = "dropdown"
         }
     },
 }
