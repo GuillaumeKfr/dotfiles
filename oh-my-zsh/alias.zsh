@@ -14,6 +14,13 @@ if [[ -v WSL_DISTRO_NAME ]]; then
     }
 fi
 
+if [[ -x "$(command -v exa)" ]]; then
+    alias ls="exa --group-directories-first --icons"
+    alias ll="ls --long"
+    alias la="ll --all"
+    alias tree="ll --tree"
+fi
+
 if [[ -x "$(command -v podman)" ]]; then
     alias docker="podman"
 fi
