@@ -1,36 +1,42 @@
-vim.g.mapleader = ' '
+local vim = vim
+local g = vim.g
+local opt = vim.opt
+local bo = vim.bo
+local api = vim.api
 
-vim.opt.number = true
-vim.opt.relativenumber = true
+g.mapleader = ' '
 
-vim.opt.tabstop = 4
-vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
+opt.number = true
+opt.relativenumber = true
 
-vim.opt.smartindent = true
+opt.tabstop = 4
+opt.softtabstop = 4
+opt.shiftwidth = 4
+opt.expandtab = true
 
-vim.opt.wrap = false
+opt.smartindent = true
 
-vim.opt.swapfile = false
-vim.opt.autoread = true
-vim.bo.autoread = true
+opt.wrap = false
 
-vim.opt.hlsearch = false
-vim.opt.incsearch = true
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
+opt.swapfile = false
+opt.autoread = true
+bo.autoread = true
 
-vim.opt.termguicolors = true
+opt.hlsearch = false
+opt.incsearch = true
+opt.ignorecase = true
+opt.smartcase = true
 
-vim.opt.scrolloff = 8
-vim.opt.signcolumn = "yes"
+opt.termguicolors = true
 
-vim.opt.updatetime = 250
+opt.scrolloff = 8
+opt.signcolumn = "yes"
 
-vim.opt.colorcolumn = ""
+opt.updatetime = 250
 
-vim.api.nvim_create_autocmd('TextYankPost', {
+opt.colorcolumn = ""
+
+api.nvim_create_autocmd('TextYankPost', {
     callback = function()
         vim.highlight.on_yank({
             higroup = 'IncSearch',
@@ -50,3 +56,6 @@ vim.g.clipboard = {
         ["*"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
     }
 }
+
+opt.splitright = true       -- Vertical split to the right
+opt.splitbelow = true       -- Horizontal split to the bottom
