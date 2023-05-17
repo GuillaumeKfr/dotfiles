@@ -8,6 +8,7 @@ return require("packer").startup(function(use)
 		tag = "0.1.1",
 		requires = { { "nvim-lua/plenary.nvim" } },
 	})
+    use ({ 'nvim-tree/nvim-web-devicons' })
 	--    use { 'dracula/vim', as = 'dracula' }
 	use({ "catppuccin/nvim", as = "catppuccin" })
 	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
