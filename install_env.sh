@@ -57,10 +57,10 @@ echo "== SYS == Adding extra repos"
 sudo apt-add-repository -qq "${EXTRA_REPOS[@]}"
 
 echo "== CLI == Installing dependencies"
-sudo apt -qq install "${CLIP_DEPS[@]}"
+sudo apt -qq install -y "${CLIP_DEPS[@]}"
 
 echo "== CLI == Installing tools"
-sudo apt -qq install "${CLI_TOOLS[@]}"
+sudo apt -qq install -y "${CLI_TOOLS[@]}"
 
 echo "== PIP == Installing dependencies"
 pip install --quiet --upgrade "${PIP_DEPS[@]}"
