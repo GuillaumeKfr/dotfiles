@@ -28,3 +28,6 @@ if type -q podman
     alias docker="podman"
 end
 
+if type -q zoxide
+    alias z="zoxide"
+end

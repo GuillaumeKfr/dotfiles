@@ -96,13 +96,16 @@ git clone --quiet "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${
 git clone --quiet "https://github.com/agkozak/zsh-z" "${ZSH_PLUGINS_DIR}"/zsh-z
 git clone --quiet --depth=1 "https://github.com/romkatv/powerlevel10k.git" "${ZSH_THEMES_DIR}"/powerlevel10k
 
-echo "== VIM == Install NeoVim"
+echo "== Tools == Install NeoVim"
 curl --silent --location --remote-name https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
 chmod u+x nvim.appimage
 sudo mv nvim.appimage /usr/local/bin/nvim
 
-echo "== Prompt == Install Starship"
+echo "== Tools == Install Starship"
 curl -sS https://starship.rs/install.sh | sh
+
+echo "== Tools == Install Zoxide"
+curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
 
 echo "== Change shell"
 shell_opts=(zsh fish)
