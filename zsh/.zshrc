@@ -155,6 +155,10 @@ if [[ -x "$(command -v exa)" ]]; then
     alias tree="ll --tree"
 fi
 
+if [[ -x "$(command -v batcat)" ]]; then
+    alias cat=batcat
+fi
+
 if [[ -x "$(command -v podman)" ]]; then
     alias docker="podman"
 fi

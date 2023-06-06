@@ -21,6 +21,7 @@ CLIP_DEPS=(
 )
 
 CLI_TOOLS=(
+    bat
     exa
     jq
     shellcheck
