@@ -5,5 +5,14 @@ disabled = true
 disabled = true
 
 [git_metrics]
-disabled = false
+disabled = true
 
+[git_status]
+ahead = '[⇡${count}](green)'
+diverged = '[⇡${ahead_count}](green)[⇣${behind_count}](red)'
+behind = '[⇣${count}](red)'
+staged = '[+$count](green)'
+modified = '[!$count](yellow)'
+deleted = '[-$count](red)'
+untracked = '[?$count](blue)'
+style = 'white'
