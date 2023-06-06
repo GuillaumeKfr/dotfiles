@@ -6,6 +6,10 @@ ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 ZSH_PLUGINS_DIR="${ZSH_CUSTOM_DIR}/plugins"
 ZSH_THEMES_DIR="${ZSH_CUSTOM_DIR}/themes"
 
+EXTRA_REPOS=(
+    "ppa:fish-shell/release-3"
+)
+
 CLIP_DEPS=(
     build-essential 
     libcairo2-dev 
@@ -23,6 +27,7 @@ CLIP_DEPS=(
 CLI_TOOLS=(
     bat
     exa
+    fish
     jq
     shellcheck
     tmux
@@ -47,6 +52,9 @@ STOW_DIRS=(
 
 echo "== SYS == Upgrade packages"
 sudo apt -qq update && apt -qq upgrade -y
+
+echo "== SYS == Adding extra repos"
+sudo apt-add-repository -qq "${EXTRA_REPOS[@]}"
 
 echo "== CLI == Installing dependencies"
 sudo apt -qq install "${CLIP_DEPS[@]}"
@@ -93,5 +101,10 @@ chmod u+x nvim.appimage
 sudo mv nvim.appimage /usr/local/bin/nvim
 
 echo "== Change shell"
-chsh -s "$(which zsh)"
+shell_opts=(zsh fish)
+select user_shell in "${shell_opts[@]}"; do
+    chsh -s "$(which "${user_shell}")"
+    break
+done
+chsh -s "$(which fish)"
 
