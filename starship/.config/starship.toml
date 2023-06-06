@@ -1,0 +1,9 @@
+[gcloud]
+disabled = true
+
+[aws]
+disabled = true
+
+[git_metrics]
+disabled = false
+

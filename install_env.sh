@@ -45,8 +45,10 @@ PIP_TOOLS=(
 )
 
 STOW_DIRS=(
+    fish
     nvim
     tmux
+    starship
     zsh
 )
 
