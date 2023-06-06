@@ -84,8 +84,6 @@ git clone --depth=1 "https://github.com/romkatv/powerlevel10k.git" "${ZSH_THEMES
 echo "== Change shell"
 chsh -s "$(which zsh)"
 
-# Install neovim
-
 echo "== VIM == Install NeoVim"
 curl -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
 chmod u+x nvim.appimage
