@@ -16,6 +16,7 @@ CLIP_DEPS=(
     pkg-config 
     python3-pip
     ripgrep 
+    stow
     unzip 
 )
 
