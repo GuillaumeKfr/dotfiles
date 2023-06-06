@@ -48,7 +48,6 @@ STOW_DIRS=(
     fish
     nvim
     tmux
-    starship
     zsh
 )
 
@@ -101,6 +100,9 @@ echo "== VIM == Install NeoVim"
 curl --silent --location --remote-name https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
 chmod u+x nvim.appimage
 sudo mv nvim.appimage /usr/local/bin/nvim
+
+echo "== Prompt == Install Starship"
+curl -sS https://starship.rs/install.sh | sh
 
 echo "== Change shell"
 shell_opts=(zsh fish)
