@@ -45,22 +45,22 @@ STOW_DIRS=(
 )
 
 echo "== SYS == Upgrade packages"
-sudo apt update && apt upgrade -y
+sudo apt -qq update && apt -qq upgrade -y
 
 echo "== CLI == Installing dependencies"
-sudo apt install -y "${CLIP_DEPS[@]}"
+sudo apt -qq install "${CLIP_DEPS[@]}"
 
 echo "== CLI == Installing tools"
-sudo apt install -y "${CLI_TOOLS[@]}"
+sudo apt -qq install "${CLI_TOOLS[@]}"
 
 echo "== PIP == Installing dependencies"
-pip install --upgrade "${PIP_DEPS[@]}"
+pip install --quiet --upgrade "${PIP_DEPS[@]}"
 
 echo "== PIP == Upgrade packages"
-pip-review --auto
+pip-review --auto --quiet
 
 echo "== PIP == Installing tools"
-pip install --upgrade "${PIP_TOOLS[@]}"
+pip install --quiet --upgrade "${PIP_TOOLS[@]}"
 
 echo "== CFG == Stow configuration files"
 pushd "${DOTFILES_DIR}" || exit
@@ -81,13 +81,13 @@ rm -rf "${ZSH_PLUGINS_DIR}"/zsh-autosuggestions
 rm -rf "${ZSH_PLUGINS_DIR}"/zsh-syntax-highlighting
 rm -rf "${ZSH_PLUGINS_DIR}"/zsh-z
 rm -rf "${ZSH_THEMES_DIR}"/powerlevel10k
-git clone "https://github.com/zsh-users/zsh-autosuggestions.git" "${ZSH_PLUGINS_DIR}"/zsh-autosuggestions
-git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_PLUGINS_DIR}"/zsh-syntax-highlighting
-git clone "https://github.com/agkozak/zsh-z" "${ZSH_PLUGINS_DIR}"/zsh-z
-git clone --depth=1 "https://github.com/romkatv/powerlevel10k.git" "${ZSH_THEMES_DIR}"/powerlevel10k
+git clone --quiet "https://github.com/zsh-users/zsh-autosuggestions.git" "${ZSH_PLUGINS_DIR}"/zsh-autosuggestions
+git clone --quiet "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_PLUGINS_DIR}"/zsh-syntax-highlighting
+git clone --quiet "https://github.com/agkozak/zsh-z" "${ZSH_PLUGINS_DIR}"/zsh-z
+git clone --quiet --depth=1 "https://github.com/romkatv/powerlevel10k.git" "${ZSH_THEMES_DIR}"/powerlevel10k
 
 echo "== VIM == Install NeoVim"
-curl -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
+curl --silent --location --remote-name https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
 chmod u+x nvim.appimage
 sudo mv nvim.appimage /usr/local/bin/nvim
 
