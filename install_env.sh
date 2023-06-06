@@ -20,6 +20,7 @@ CLIP_DEPS=(
 )
 
 CLI_TOOLS=(
+    exa
     jq
     shellcheck
     tmux
