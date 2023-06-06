@@ -71,7 +71,7 @@ done
 popd || exit
 
 echo "== ZSH == Install OMZ"
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 echo "== ZSH == Install plugins"
 mkdir -p "${ZSH_PLUGINS_DIR}"
