@@ -40,6 +40,7 @@ PIP_TOOLS=(
 
 STOW_DIRS=(
     nvim
+    tmux
     zsh
 )
 
@@ -76,17 +77,20 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 echo "== ZSH == Install plugins"
 mkdir -p "${ZSH_PLUGINS_DIR}"
 
+rm -rf "${ZSH_PLUGINS_DIR}"/zsh-autosuggestions
+rm -rf "${ZSH_PLUGINS_DIR}"/zsh-syntax-highlighting
+rm -rf "${ZSH_PLUGINS_DIR}"/zsh-z
+rm -rf "${ZSH_THEMES_DIR}"/powerlevel10k
 git clone "https://github.com/zsh-users/zsh-autosuggestions.git" "${ZSH_PLUGINS_DIR}"/zsh-autosuggestions
 git clone "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_PLUGINS_DIR}"/zsh-syntax-highlighting
 git clone "https://github.com/agkozak/zsh-z" "${ZSH_PLUGINS_DIR}"/zsh-z
 git clone --depth=1 "https://github.com/romkatv/powerlevel10k.git" "${ZSH_THEMES_DIR}"/powerlevel10k
-
-echo "== Change shell"
-chsh -s "$(which zsh)"
 
 echo "== VIM == Install NeoVim"
 curl -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
 chmod u+x nvim.appimage
 sudo mv nvim.appimage /usr/local/bin/nvim
 
+echo "== Change shell"
+chsh -s "$(which zsh)"
 
