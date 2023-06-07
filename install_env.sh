@@ -107,6 +107,11 @@ curl -sS https://starship.rs/install.sh | sh
 echo "== Tools == Install Zoxide"
 curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
 
+echo "== SSH == Create private key"
+if [[ ! -d ~/.ssh ]]; then
+    echo "== No existing config found. Generating key."
+fi
+
 echo "== Change shell"
 shell_opts=(zsh fish)
 select user_shell in "${shell_opts[@]}"; do
