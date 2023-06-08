@@ -104,8 +104,21 @@ sudo mv nvim.appimage /usr/local/bin/nvim
 echo "== Tools == Install Starship"
 curl -sS https://starship.rs/install.sh | sh
 
+echo "== Tools == Install FZF"
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+pushd ~/.fzf
+git pull
+install --all --no-bash --no-zsh --no-fish
+popd
+
 echo "== Tools == Install Zoxide"
 curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+
+echo "== Fish == Install Fisher"
+curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
+
+echo "== Fish == Install plugins"
+fisher install kidonng/zoxide.fish
 
 echo "== SSH == Create private key"
 if [[ ! -d ~/.ssh ]]; then

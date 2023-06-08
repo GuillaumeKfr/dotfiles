@@ -232,3 +232,5 @@ git_aliases() {
     alias grbc="git rebase --continue"
 }
 git_aliases
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
