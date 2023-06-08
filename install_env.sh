@@ -46,6 +46,8 @@ PIP_TOOLS=(
 
 STOW_DIRS=(
     fish
+    fzf
+    git
     nvim
     tmux
     zsh
