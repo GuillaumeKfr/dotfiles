@@ -102,7 +102,7 @@ chmod u+x nvim.appimage
 sudo mv nvim.appimage /usr/local/bin/nvim
 
 echo "== Tools == Install Starship"
-curl -sS https://starship.rs/install.sh | sh
+sh -c "$(curl -sS https://starship.rs/install.sh)" "" -y
 
 echo "== Tools == Install FZF"
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
