@@ -100,6 +100,7 @@ git clone --quiet --depth=1 "https://github.com/romkatv/powerlevel10k.git" "${ZS
 
 echo "== Tools == Install Homebrew"
 NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 echo "== Tools == Install NeoVim"
 curl --silent --location --remote-name https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
