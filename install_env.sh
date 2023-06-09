@@ -35,6 +35,14 @@ CLI_TOOLS=(
     zsh
 )
 
+BREW_INSTALLS=(
+    bat
+    neovim
+    fzf
+    starship
+    zoxide
+)
+
 PIP_DEPS=(
     pip-review
 )
@@ -62,8 +70,13 @@ sudo apt-add-repository -qq "${EXTRA_REPOS[@]}"
 echo "== CLI == Installing dependencies"
 sudo apt -qq install -y "${CLIP_DEPS[@]}"
 
+echo "== CLI == Installing Homebrew"
+NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
 echo "== CLI == Installing tools"
 sudo apt -qq install -y "${CLI_TOOLS[@]}"
+brew install -q "${BREW_INSTALLS[@]}"
 
 echo "== PIP == Installing dependencies"
 pip install --quiet --upgrade "${PIP_DEPS[@]}"
@@ -97,28 +110,6 @@ git clone --quiet "https://github.com/zsh-users/zsh-autosuggestions.git" "${ZSH_
 git clone --quiet "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_PLUGINS_DIR}"/zsh-syntax-highlighting
 git clone --quiet "https://github.com/agkozak/zsh-z" "${ZSH_PLUGINS_DIR}"/zsh-z
 git clone --quiet --depth=1 "https://github.com/romkatv/powerlevel10k.git" "${ZSH_THEMES_DIR}"/powerlevel10k
-
-echo "== Tools == Install Homebrew"
-NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
-echo "== Tools == Install NeoVim"
-curl --silent --location --remote-name https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
-chmod u+x nvim.appimage
-sudo mv nvim.appimage /usr/local/bin/nvim
-
-echo "== Tools == Install Starship"
-sh -c "$(curl -sS https://starship.rs/install.sh)" "" -y
-
-echo "== Tools == Install FZF"
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-pushd ~/.fzf
-git pull
-install --all --no-bash --no-zsh --no-fish
-popd
-
-echo "== Tools == Install Zoxide"
-curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
 
 echo "== Fish == Install Fisher"
 curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
