@@ -25,7 +25,6 @@ CLIP_DEPS=(
 )
 
 CLI_TOOLS=(
-    bat
     exa
     fish
     jq
