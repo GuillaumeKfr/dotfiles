@@ -6,11 +6,11 @@ ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 ZSH_PLUGINS_DIR="${ZSH_CUSTOM_DIR}/plugins"
 ZSH_THEMES_DIR="${ZSH_CUSTOM_DIR}/themes"
 
-EXTRA_REPOS=(
+APT_EXTRA_REPOS=(
     "ppa:fish-shell/release-3"
 )
 
-CLIP_DEPS=(
+APT_DEPS=(
     build-essential 
     libcairo2-dev 
     libdbus-glib-1-dev 
@@ -24,7 +24,7 @@ CLIP_DEPS=(
     unzip 
 )
 
-CLI_TOOLS=(
+APT_INSTALLS=(
     exa
     fish
     jq
@@ -47,7 +47,7 @@ PIP_DEPS=(
     pip-review
 )
 
-PIP_TOOLS=(
+PIP_INSTALLS=(
     black
     sqlfluff
 )
@@ -65,17 +65,17 @@ echo "== SYS == Upgrade packages"
 sudo apt -qq update && apt -qq upgrade -y
 
 echo "== SYS == Adding extra repos"
-sudo apt-add-repository -qq "${EXTRA_REPOS[@]}"
+sudo apt-add-repository -qq "${APT_EXTRA_REPOS[@]}"
 
 echo "== CLI == Installing dependencies"
-sudo apt -qq install -y "${CLIP_DEPS[@]}"
+sudo apt -qq install -y "${APT_DEPS[@]}"
 
 echo "== CLI == Installing Homebrew"
 NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 echo "== CLI == Installing tools"
-sudo apt -qq install -y "${CLI_TOOLS[@]}"
+sudo apt -qq install -y "${APT_INSTALLS[@]}"
 brew install -q "${BREW_INSTALLS[@]}"
 
 echo "== PIP == Installing dependencies"
@@ -85,7 +85,7 @@ echo "== PIP == Upgrade packages"
 pip-review --auto --quiet
 
 echo "== PIP == Installing tools"
-pip install --quiet --upgrade "${PIP_TOOLS[@]}"
+pip install --quiet --upgrade "${PIP_INSTALLS[@]}"
 
 echo "== CFG == Stow configuration files"
 pushd "${DOTFILES_DIR}" || exit
