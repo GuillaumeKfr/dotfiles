@@ -36,8 +36,9 @@ CLI_TOOLS=(
 
 BREW_INSTALLS=(
     bat
-    neovim
     fzf
+    git-delta
+    neovim
     starship
     zoxide
 )
