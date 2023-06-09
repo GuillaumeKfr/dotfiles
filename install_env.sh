@@ -25,6 +25,7 @@ APT_DEPS=(
 )
 
 BREW_INSTALLS=(
+    asdf
     bat
     exa
     fish
