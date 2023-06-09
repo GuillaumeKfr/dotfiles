@@ -6,49 +6,39 @@ ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 ZSH_PLUGINS_DIR="${ZSH_CUSTOM_DIR}/plugins"
 ZSH_THEMES_DIR="${ZSH_CUSTOM_DIR}/themes"
 
-APT_EXTRA_REPOS=(
-    "ppa:fish-shell/release-3"
-)
+APT_EXTRA_REPOS=()
 
 APT_DEPS=(
     build-essential 
     libcairo2-dev 
     libdbus-glib-1-dev 
-    libfuse2 
     libgirepository1.0-dev 
     libsystemd-dev 
     pkg-config 
     python3-pip
     ripgrep 
     stow
-    unzip 
-)
-
-APT_INSTALLS=(
-    exa
-    fish
-    jq
-    shellcheck
-    tmux
-    unzip
-    zsh
 )
 
 BREW_INSTALLS=(
     bat
+    exa
+    fish
     fzf
     git-delta
+    jq
     neovim
+    shellcheck
     starship
+    tmux
+    unzip
     zoxide
-)
-
-PIP_DEPS=(
-    pip-review
+    zsh
 )
 
 PIP_INSTALLS=(
     black
+    pip-review
     sqlfluff
 )
 
@@ -75,17 +65,13 @@ NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Ho
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 echo "== CLI == Installing tools"
-sudo apt -qq install -y "${APT_INSTALLS[@]}"
 brew install -q "${BREW_INSTALLS[@]}"
-
-echo "== PIP == Installing dependencies"
-pip install --quiet --upgrade "${PIP_DEPS[@]}"
-
-echo "== PIP == Upgrade packages"
-pip-review --auto --quiet
 
 echo "== PIP == Installing tools"
 pip install --quiet --upgrade "${PIP_INSTALLS[@]}"
+
+echo "== PIP == Upgrade packages"
+pip-review --auto --quiet
 
 echo "== CFG == Stow configuration files"
 pushd "${DOTFILES_DIR}" || exit
