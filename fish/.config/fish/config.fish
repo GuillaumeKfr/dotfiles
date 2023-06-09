@@ -15,6 +15,7 @@ set -q MANPATH; or set MANPATH ''; set -gx MANPATH "/home/linuxbrew/.linuxbrew/s
 set -q INFOPATH; or set INFOPATH ''; set -gx INFOPATH "/home/linuxbrew/.linuxbrew/share/info" $INFOPATH;
 
 # ASDF
-echo -e "\nsource "(brew --prefix asdf)"/libexec/asdf.fish" >> ~/.config/fish/config.fish
+source /home/linuxbrew/.linuxbrew/opt/asdf/libexec/asdf.fish
 
 starship init fish | source
+
