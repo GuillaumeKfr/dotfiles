@@ -1,11 +1,11 @@
-alias v="nvim ."
-alias py="python3"
-alias tf="terraform"
-alias calc="bc -l"
-alias mkdir="mkdir -pv"
+abbr --add v nvim .
+abbr --add py python3
+abbr --add tf terraform
+abbr --add calc bc -l
+# abbr --add mkdir mkdir -pv
 alias rm="rm -I --preserve-root"
-alias update="sudo apt update && sudo apt upgrade"
-alias ping="ping -c 5"
+abbr --add update "sudo apt update && sudo apt upgrade"
+abbr --add ping ping -c 5
 
 if test -n WSL_DISTRO_NAME
     function clip
@@ -30,4 +30,17 @@ end
 
 if type -q zoxide
     alias z="zoxide"
+end
+
+function mkdir -d "Create a directory and set CWD"
+    command mkdir -pv $argv
+    if test $status = 0
+        switch $argv[(count $argv)]
+            case '-*'
+
+            case '*'
+                cd $argv[(count $argv)]
+                return
+        end
+    end
 end

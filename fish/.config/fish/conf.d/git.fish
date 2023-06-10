@@ -1,32 +1,32 @@
-alias g="git"
+abbr --add g git
 
-alias ga="git add"
-alias gaa="git add --all"
+abbr --add ga git add
+abbr --add gaa git add --all
 
-alias gc="git commit -v -m"
-alias gc!="git commit -v --amend"
+abbr --add gc git commit -v -m
+abbr --add gc! git commit -v --amend
 
-alias gaac="gaa && gc"
+abbr --add gaac "git add --all && git commit -v -m"
 
 alias gb="git branch --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate"
-alias gs="git status -sb"
+abbr --add gs git status -sb
 
-alias gst="git stash"
-alias gsta="git stash apply"
-alias gstp="git stash pop"
+abbr --add gst git stash
+abbr --add gsta git stash apply
+abbr --add gstp git stash pop
 
-alias gco="git checkout"
+abbr --add gco git checkout
 
-alias gd="git diff"
+abbr --add gd git diff
 
-alias gl="git pull"
+abbr --add gl git pull
 
 alias glog="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset'"
 
-alias gm="git merge"
+abbr --add gm git merge
 
-alias gp="git push"
+abbr --add gp git push
 
-alias grb="git rebase"
-alias grba="git rebase --abort"
-alias grbc="git rebase --continue"
+abbr --add grb git rebase
+abbr --add alias grba git rebase --abort
+abbr --add grbc git rebase --continue

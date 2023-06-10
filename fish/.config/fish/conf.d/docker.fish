@@ -1,27 +1,29 @@
 function dk_alias
-    alias dk="docker"
-    alias dkl="docker logs"
-    alias dklf="docker logs -f"
-    alias dki="docker images"
-    alias dkc="docker container"
-    alias dkrm="docker rm"
+    abbr --add dk docker
+    abbr --add dkl docker logs
+    abbr --add dklf docker logs -f
+    abbr --add dki docker images
+    abbr --add dkc docker container
+    abbr --add dkrm docker rm
 
-    alias dke="docker exec"
+    abbr --add dke docker exec
 
-# alias dksh="docker exec -it $argv /bin/sh"
+    function dksh
+        docker exec -it $argv /bin/sh
+    end
 
     alias dkps="docker ps --format '{{.ID}} ~ {{.Names}} ~ {{.Status}} ~ {{.Image}}'"
     alias dktop="docker stats --format 'table {{.Container}}\t{{.Name}}\t{{.CPUPerc}}\t{{.MemPerc}}\t{{.NetIO}}\t{{.BlockIO}}'"
 
-# dkstats() {
-#     if [[ $# -eq 0 ]]; then
-#         docker stats --no-stream
-#     else
-#         docker stats --no-stream | grep $1
-#     fi
-# }
+    function dkstats
+        if count $argv > /dev/null
+            docker stats --no-stream | grep $argv
+        else
+            docker stats --no-stream
+        end
+    end
 
-    alias dkprune="docker system prune -af"
+    abbr --add dkprune docker system prune -af
 end
 
 if type -q docker
