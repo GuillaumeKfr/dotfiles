@@ -61,7 +61,7 @@ STOW_DIRS=(
 )
 
 logging::info "== SYS == Upgrade packages"
-sudo apt -qq update && apt -qq upgrade -y
+sudo apt -qq update && sudo apt -qq upgrade -y
 wait_input
 
 logging::info "== SYS == Adding extra repos"
