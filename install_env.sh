@@ -96,11 +96,9 @@ mkdir -p "${ZSH_PLUGINS_DIR}"
 rm -rf "${ZSH_PLUGINS_DIR}"/zsh-autosuggestions
 rm -rf "${ZSH_PLUGINS_DIR}"/zsh-syntax-highlighting
 rm -rf "${ZSH_PLUGINS_DIR}"/zsh-z
-rm -rf "${ZSH_THEMES_DIR}"/powerlevel10k
 git clone --quiet "https://github.com/zsh-users/zsh-autosuggestions.git" "${ZSH_PLUGINS_DIR}"/zsh-autosuggestions
 git clone --quiet "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_PLUGINS_DIR}"/zsh-syntax-highlighting
 git clone --quiet "https://github.com/agkozak/zsh-z" "${ZSH_PLUGINS_DIR}"/zsh-z
-git clone --quiet --depth=1 "https://github.com/romkatv/powerlevel10k.git" "${ZSH_THEMES_DIR}"/powerlevel10k
 
 logging::info "== Fish == Install Fisher"
 curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
