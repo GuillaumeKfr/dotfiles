@@ -88,7 +88,7 @@ done
 popd || exit
 
 logging::info "== ZSH == Install OMZ"
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+ZSH=~/.oh-my-zsh sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 logging::info "== ZSH == Install plugins"
 mkdir -p "${ZSH_PLUGINS_DIR}"
