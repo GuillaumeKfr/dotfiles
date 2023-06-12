@@ -118,6 +118,10 @@ git clone --quiet "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${
 git clone --quiet "https://github.com/agkozak/zsh-z" "${ZSH_PLUGINS_DIR}"/zsh-z
 wait_input
 
+logging::info "== Fish == Set as valid shell"
+which fish | sudo tee -a /etc/shells > /dev/null
+wait_input
+
 logging::info "== Fish == Install Fisher"
 curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
 wait_input
