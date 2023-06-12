@@ -11,7 +11,7 @@ ZSH_PLUGINS_DIR="${ZSH_CUSTOM_DIR}/plugins"
 ZSH_THEMES_DIR="${ZSH_CUSTOM_DIR}/themes"
 
 wait_input() {
-  read -p -r "Press enter to continue: "
+  read -p "Press enter to continue: " -r 
 }
 
 APT_EXTRA_REPOS=()
