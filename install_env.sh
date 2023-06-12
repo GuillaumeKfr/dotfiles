@@ -90,7 +90,7 @@ pip install --quiet --upgrade "${PIP_INSTALLS[@]}"
 wait_input
 
 logging::info "== PIP == Upgrade packages"
-pip-review --auto --quiet
+~/.local/bin/pip-review --auto --quiet
 wait_input
 
 logging::info "== CFG == Stow configuration files"
