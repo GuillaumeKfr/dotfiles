@@ -60,7 +60,11 @@ logging::info "== SYS == Upgrade packages"
 sudo apt -qq update && apt -qq upgrade -y
 
 logging::info "== SYS == Adding extra repos"
-sudo apt-add-repository "${APT_EXTRA_REPOS[@]}"
+if [[ ${#APT_EXTRA_REPOS[@]} > 0 ]]; then
+    sudo apt-add-repository "${APT_EXTRA_REPOS[@]}"
+else
+    logging::warn "No extra repo to add"
+fi
 
 logging::info "== CLI == Installing dependencies"
 sudo apt -qq install -y "${APT_DEPS[@]}"
