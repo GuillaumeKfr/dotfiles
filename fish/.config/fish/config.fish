@@ -17,5 +17,6 @@ set -q INFOPATH; or set INFOPATH ''; set -gx INFOPATH "/home/linuxbrew/.linuxbre
 # ASDF
 source /home/linuxbrew/.linuxbrew/opt/asdf/libexec/asdf.fish
 
+# Starship
 starship init fish | source
 
