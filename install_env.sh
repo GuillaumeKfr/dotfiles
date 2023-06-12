@@ -2,7 +2,7 @@
 
 SCRIPT_DIR="$( dirname -- "${BASH_SOURCE[0]}" )"
 
-source "${SCRIPT_DIR}/lib/logging.sh"
+source "${SCRIPT_DIR}/_libs/logging.sh"
 
 # Env
 DOTFILES_DIR="$HOME"/dotfiles
