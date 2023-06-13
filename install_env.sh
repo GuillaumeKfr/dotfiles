@@ -39,6 +39,7 @@ BREW_INSTALLS=(
     neovim
     shellcheck
     starship
+    tldr
     tmux
     unzip
     zoxide
