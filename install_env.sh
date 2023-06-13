@@ -134,11 +134,9 @@ logging::info "== User == Change shell"
 wait_input
 shell_opts=(zsh fish)
 select user_shell in "${shell_opts[@]}"; do
-    echo ${user_shell}
-    which "${user_shell}"
-    chsh -s "$(which "${user_shell}")"
-    break
+    if chsh -s "$(which "${user_shell}")"; then
+        break
+    fi
 done
-chsh -s "$(which fish)"
 
 logging::success "Installation complete."
