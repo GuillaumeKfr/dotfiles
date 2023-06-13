@@ -122,14 +122,6 @@ logging::info "== Fish == Set as valid shell"
 wait_input
 which fish | sudo tee -a /etc/shells > /dev/null
 
-logging::info "== Fish == Install Fisher & plugins"
-wait_input
-fish -c '
-curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
-fisher install jorgebucaran/fisher
-fisher install kidonng/zoxide.fish
-'
-
 logging::info "== SSH == Create private key"
 wait_input
 if [[ ! -d ~/.ssh ]]; then

@@ -20,3 +20,5 @@ source /home/linuxbrew/.linuxbrew/opt/asdf/libexec/asdf.fish
 # Starship
 starship init fish | source
 
+# Zoxide
+zoxide init fish | source
