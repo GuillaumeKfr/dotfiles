@@ -124,10 +124,11 @@ which fish | sudo tee -a /etc/shells > /dev/null
 
 logging::info "== Fish == Install Fisher"
 wait_input
-curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
+curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
 
 logging::info "== Fish == Install plugins"
 wait_input
+fisher install jorgebucaran/fisher
 fisher install kidonng/zoxide.fish
 
 logging::info "== SSH == Create private key"
@@ -142,6 +143,8 @@ logging::info "== User == Change shell"
 wait_input
 shell_opts=(zsh fish)
 select user_shell in "${shell_opts[@]}"; do
+    echo ${user_shell}
+    which "${user_shell}"
     chsh -s "$(which "${user_shell}")"
     break
 done
