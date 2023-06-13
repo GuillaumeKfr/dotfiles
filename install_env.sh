@@ -77,8 +77,8 @@ wait_input
 sudo apt -qq install -y "${APT_DEPS[@]}"
 
 logging::info "== CLI == Installing Homebrew"
-NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 wait_input
+NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 logging::info "== CLI == Installing tools"
