@@ -59,57 +59,20 @@ STOW_DIRS=(
     zsh
 )
 
-steps::sys_setup ${APT_EXTRA_REPOS[@]}
+sudo --validate
 
-steps::deps ${APT_DEPS[@]}
+steps::sys_setup "${APT_EXTRA_REPOS[@]}"
 
-logging::info "== CLI == Installing tools"
-brew install -q "${BREW_INSTALLS[@]}"
+steps::deps "${APT_DEPS[@]}"
 
-logging::info "== PIP == Installing tools"
-pip install --quiet --upgrade "${PIP_INSTALLS[@]}"
+steps::brew_installs "${BREW_INSTALLS[@]}"
 
-logging::info "== PIP == Upgrade packages"
-~/.local/bin/pip-review --auto --quiet
+steps::pip_installs "${PIP_INSTALLS[@]}"
 
-logging::info "== CFG == Stow configuration files"
-pushd "${DOTFILES_DIR}" || exit
-for dir in "${STOW_DIRS[@]}"; do
-    logging::info "stow $dir"
-    stow -D "${dir}"
-    stow "${dir}"
-done
-popd || exit
+steps::setup_stow "${STOW_DIRS[@]}"
 
-logging::info "== ZSH == Install OMZ"
-ZSH=~/.oh-my-zsh sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+steps::ssh_config
 
-logging::info "== ZSH == Install plugins"
-mkdir -p "${ZSH_PLUGINS_DIR}"
-
-rm -rf "${ZSH_PLUGINS_DIR}"/zsh-autosuggestions
-rm -rf "${ZSH_PLUGINS_DIR}"/zsh-syntax-highlighting
-rm -rf "${ZSH_PLUGINS_DIR}"/zsh-z
-git clone --quiet "https://github.com/zsh-users/zsh-autosuggestions.git" "${ZSH_PLUGINS_DIR}"/zsh-autosuggestions
-git clone --quiet "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_PLUGINS_DIR}"/zsh-syntax-highlighting
-git clone --quiet "https://github.com/agkozak/zsh-z" "${ZSH_PLUGINS_DIR}"/zsh-z
-
-logging::info "== Fish == Set as valid shell"
-which fish | sudo tee -a /etc/shells > /dev/null
-
-logging::info "== SSH == Create private key"
-if [[ ! -d ~/.ssh ]]; then
-    logging::info "== No existing config found. Generating key."
-else
-    logging::warn "SSH config already existing. Skipping section."
-fi
-
-logging::info "== User == Change shell"
-shell_opts=(zsh fish)
-select user_shell in "${shell_opts[@]}"; do
-    if chsh -s "$(which "${user_shell}")"; then
-        break
-    fi
-done
+steps::setup_shell
 
 logging::success "Installation complete."
