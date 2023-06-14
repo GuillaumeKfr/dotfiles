@@ -64,10 +64,33 @@ steps::brew_installs() {
 
     logging::info "Installing tools with homebrew"
 
-    if ! brew install -q "${to_install[@]}"; then
-        logging::err "Failed to install formulae"
-        exit 1
-    fi
+    for formula in "${to_install}"; do
+        if ! brew list "${formula}" &>/dev/null; then
+            logging::info "Installing ${formula}"
+
+            if ! brew install -q "${formula}"; then
+                logging::err "Failed to install ${formula}"
+                exit 1
+            fi
+
+            logging::success "Installed ${formula}"
+            continue
+        fi
+
+        if ! brew outdated "${formula}" &>/dev/null; then
+            logging::info "Upgrading ${formula}"
+
+            if ! brew upgrade -q "${formula}"; then
+                logging::err "Failed to upgrade ${formula}"
+                exit 1
+            fi
+
+            logging::success "Upgraded ${formula}"
+        fi
+
+        logging::info "${formula} already installed & up-to-date"
+    done
+
 
     logging::success "Installation complete"
 }
