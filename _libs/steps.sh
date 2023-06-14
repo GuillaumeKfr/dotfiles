@@ -62,33 +62,35 @@ steps::deps() {
 steps::brew_installs() {
     local to_install=("${@}")
 
-    logging::info "Installing tools with homebrew"
+    logging::info "Installing tools with Homebrew"
 
-    for formula in "${to_install}"; do
+    for formula in "${to_install[@]}"; do
+        logging::info "[${formula}] Checking formula"
+
         if ! brew list "${formula}" &>/dev/null; then
-            logging::info "Installing ${formula}"
+            logging::info "[${formula}] Installing"
 
             if ! brew install -q "${formula}"; then
-                logging::err "Failed to install ${formula}"
+                logging::err "[${formula}] Install failed"
                 exit 1
             fi
 
-            logging::success "Installed ${formula}"
+            logging::success "[${formula}] Installed"
             continue
         fi
 
         if ! brew outdated "${formula}" &>/dev/null; then
-            logging::info "Upgrading ${formula}"
+            logging::info "[${formula}] Upgrading"
 
             if ! brew upgrade -q "${formula}"; then
-                logging::err "Failed to upgrade ${formula}"
+                logging::err "[${formula}] Upgrade failed"
                 exit 1
             fi
 
-            logging::success "Upgraded ${formula}"
+            logging::success "[${formula}] Upgraded"
         fi
 
-        logging::info "${formula} already installed & up-to-date"
+        logging::info "[${formula}] Nothing to do"
     done
 
 
