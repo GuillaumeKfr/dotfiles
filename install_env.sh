@@ -3,6 +3,7 @@
 SCRIPT_DIR="$( dirname -- "${BASH_SOURCE[0]}" )"
 
 source "${SCRIPT_DIR}/_libs/logging.sh"
+source "${SCRIPT_DIR}/_libs/steps.sh"
 
 # Env
 DOTFILES_DIR="$HOME"/dotfiles
@@ -58,22 +59,9 @@ STOW_DIRS=(
     zsh
 )
 
-logging::info "== SYS == Upgrade packages"
-sudo apt -qq update && sudo apt -qq upgrade -y
+steps::sys_setup ${APT_EXTRA_REPOS[@]}
 
-logging::info "== SYS == Adding extra repos"
-if [[ ${#APT_EXTRA_REPOS[@]} > 0 ]]; then
-    sudo apt-add-repository "${APT_EXTRA_REPOS[@]}"
-else
-    logging::warn "No extra repo to add"
-fi
-
-logging::info "== CLI == Installing dependencies"
-sudo apt -qq install -y "${APT_DEPS[@]}"
-
-logging::info "== CLI == Installing Homebrew"
-NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+steps::deps ${APT_DEPS[@]}
 
 logging::info "== CLI == Installing tools"
 brew install -q "${BREW_INSTALLS[@]}"
