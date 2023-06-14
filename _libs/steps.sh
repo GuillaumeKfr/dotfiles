@@ -176,6 +176,7 @@ __setup_zsh() {
     git clone --quiet "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_PLUGINS_DIR}"/zsh-syntax-highlighting
     git clone --quiet "https://github.com/agkozak/zsh-z" "${ZSH_PLUGINS_DIR}"/zsh-z
 
+    logging::info "Set zsh as default shell"
     chsh -s "$(which zsh)"
 }
 
@@ -191,6 +192,7 @@ __setup_fish() {
 
     which fish | sudo tee -a /etc/shells > /dev/null
 
+    logging::info "Set fish as default shell"
     chsh -s "$(which fish)"
 }
 
