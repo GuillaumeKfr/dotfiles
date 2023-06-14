@@ -10,10 +10,6 @@ ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 ZSH_PLUGINS_DIR="${ZSH_CUSTOM_DIR}/plugins"
 ZSH_THEMES_DIR="${ZSH_CUSTOM_DIR}/themes"
 
-wait_input() {
-  read -p "Press enter to continue... " -r 
-}
-
 APT_EXTRA_REPOS=()
 
 APT_DEPS=(
@@ -63,11 +59,9 @@ STOW_DIRS=(
 )
 
 logging::info "== SYS == Upgrade packages"
-wait_input
 sudo apt -qq update && sudo apt -qq upgrade -y
 
 logging::info "== SYS == Adding extra repos"
-wait_input
 if [[ ${#APT_EXTRA_REPOS[@]} > 0 ]]; then
     sudo apt-add-repository "${APT_EXTRA_REPOS[@]}"
 else
@@ -75,28 +69,22 @@ else
 fi
 
 logging::info "== CLI == Installing dependencies"
-wait_input
 sudo apt -qq install -y "${APT_DEPS[@]}"
 
 logging::info "== CLI == Installing Homebrew"
-wait_input
 NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 logging::info "== CLI == Installing tools"
-wait_input
 brew install -q "${BREW_INSTALLS[@]}"
 
 logging::info "== PIP == Installing tools"
-wait_input
 pip install --quiet --upgrade "${PIP_INSTALLS[@]}"
 
 logging::info "== PIP == Upgrade packages"
-wait_input
 ~/.local/bin/pip-review --auto --quiet
 
 logging::info "== CFG == Stow configuration files"
-wait_input
 pushd "${DOTFILES_DIR}" || exit
 for dir in "${STOW_DIRS[@]}"; do
     logging::info "stow $dir"
@@ -106,11 +94,9 @@ done
 popd || exit
 
 logging::info "== ZSH == Install OMZ"
-wait_input
 ZSH=~/.oh-my-zsh sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 logging::info "== ZSH == Install plugins"
-wait_input
 mkdir -p "${ZSH_PLUGINS_DIR}"
 
 rm -rf "${ZSH_PLUGINS_DIR}"/zsh-autosuggestions
@@ -121,11 +107,9 @@ git clone --quiet "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${
 git clone --quiet "https://github.com/agkozak/zsh-z" "${ZSH_PLUGINS_DIR}"/zsh-z
 
 logging::info "== Fish == Set as valid shell"
-wait_input
 which fish | sudo tee -a /etc/shells > /dev/null
 
 logging::info "== SSH == Create private key"
-wait_input
 if [[ ! -d ~/.ssh ]]; then
     logging::info "== No existing config found. Generating key."
 else
@@ -133,7 +117,6 @@ else
 fi
 
 logging::info "== User == Change shell"
-wait_input
 shell_opts=(zsh fish)
 select user_shell in "${shell_opts[@]}"; do
     if chsh -s "$(which "${user_shell}")"; then
