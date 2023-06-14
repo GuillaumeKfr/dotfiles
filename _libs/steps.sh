@@ -5,28 +5,28 @@
 steps::sys_setup() {
     local repos_list=("${@}")
 
-    logging::info "Upgrade packages"
+    logging::info "[sys] Upgrading packages..."
 
     if sudo apt -qq update && sudo apt -qq upgrade -y; then
-        logging::success "Upgrade complete"
+        logging::success "[sys] Upgrade complete"
     else
-        logging::err "Error in apt"
+        logging::err "[sys] Error in apt"
         exit 1
     fi
 
-    logging::info "Adding extra repos"
+    logging::info "[sys] Adding extra repos..."
 
     if [[ ${#repos_list[@]} = 0 ]]; then
-        logging::warn "No extra repo to add"
+        logging::warn "[sys] No extra repo to add"
         return
     fi
 
     if ! sudo apt-add-repository "${APT_EXTRA_REPOS[@]}"; then
-        logging::error "Issue when adding repos"
+        logging::error "[sys] Issue when adding repos"
         exit 1
     fi
 
-    logging::success "Repos added"
+    logging::success "[sys] Added extra repos"
 }
 
 # Params:
@@ -34,27 +34,26 @@ steps::sys_setup() {
 steps::deps() {
     local deps_list=("${@}")
 
-    logging::info "Installing apt dependencies"
+    logging::info "[deps] Installing apt dependencies..."
 
-    if sudo apt -qq install -y "${deps_list[@]}"; then
-        logging::success "Dependencies installed"
-    else
-        logging::err "Failed with install"
+    if ! sudo apt -qq install -y "${deps_list[@]}"; then
+        logging::err "[deps] Install failed"
         exit 1
     fi
 
-    logging::success "Dependencies installed"
-    logging::info "Installing Homebrew"
+    logging::success "[deps] Installed apt dependencies"
+
+    logging::info "[deps] Installing Homebrew..."
 
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
     if [[ ! "$(command -v brew)" ]]; then
-        logging::err "Failed to install homebrew"
+        logging::err "[deps] Install failed"
         exit 1
     fi
 
-    logging::success "Homebrew installed"
+    logging::success "[deps] Installed Homebrew"
 }
 
 # Params:
@@ -62,39 +61,38 @@ steps::deps() {
 steps::brew_installs() {
     local to_install=("${@}")
 
-    logging::info "Installing tools with Homebrew"
+    logging::info "[brew] Installing formulae..."
 
     for formula in "${to_install[@]}"; do
-        logging::info "[${formula}] Checking formula"
+        logging::info "[brew] [${formula}] Checking formula..."
 
         if ! brew list "${formula}" &>/dev/null; then
-            logging::info "[${formula}] Installing"
+            logging::info "[brew] [${formula}] Installing..."
 
             if ! brew install -q "${formula}"; then
-                logging::err "[${formula}] Install failed"
+                logging::err "[brew] [${formula}] Install failed"
                 exit 1
             fi
 
-            logging::success "[${formula}] Installed"
+            logging::success "[brew] [${formula}] Installed"
             continue
         fi
 
         if ! brew outdated "${formula}" &>/dev/null; then
-            logging::info "[${formula}] Upgrading"
+            logging::info "[brew] [${formula}] Upgrading..."
 
             if ! brew upgrade -q "${formula}"; then
-                logging::err "[${formula}] Upgrade failed"
+                logging::err "[brew] [${formula}] Upgrade failed"
                 exit 1
             fi
 
-            logging::success "[${formula}] Upgraded"
+            logging::success "[brew] [${formula}] Upgraded"
         fi
 
-        logging::info "[${formula}] Nothing to do"
+        logging::info "[brew] [${formula}] Nothing to do"
     done
 
-
-    logging::success "Installation complete"
+    logging::success "[brew] Installed all formulae"
 }
 
 # Params:
@@ -102,71 +100,77 @@ steps::brew_installs() {
 steps::pip_installs() {
     local to_install=("${@}")
 
-    logging::info "Installing tools with pip"
+    logging::info "[pip] Installing packages..."
 
     if ! pip install --quiet --upgrade "${to_install[@]}"; then
-        logging::err "Failed to install packages"
+        logging::err "[pip] Install failed"
         exit 1
     fi
 
-    logging::success "Installation complete"
+    logging::success "[pip] Installed all packages"
 
-    logging::info "Upgrade pip packages"
+    logging::info "[pip] Upgrading pip packages..."
 
     if ! ~/.local/bin/pip-review --auto --quiet; then
-        logging::err "Failed to upgrade packages"
+        logging::err "[pip] Upgrade failed"
         return
     fi
 
-    logging::success "Upgrade complete"
+    logging::success "[pip] Upgraded all packages"
 }
 
 # Params:
 #   - 1: List of folders to stow
 steps::setup_stow() {
     local to_stow=("${@}")
-    logging::info "Stowing configuration files"
+    logging::info "[stow] Stowing configuration folders..."
 
     pushd "${SCRIPT_DIR}" || exit 1
 
     for dir in "${to_stow[@]}"; do
-        logging::info "Stowing $dir"
+        logging::info "[stow] [${dir}] Stowing ..."
 
         
         if ! stow -D "${dir}" || ! stow "${dir}" ; then
-            logging::error "Failed to stow $dir"
+            logging::error "[stow] [${dir}] Stow failed"
             exit
         fi
+
+        logging::success "[stow] [${dir}] Stowed"
     done
 
     popd || exit 1
 
-    logging::success "Operation complete"
+    logging::success "[stow] Stowed all config folders"
 }
 
 steps::ssh_config() {
-    logging::info "Configure SSH connectivity"
+    logging::info "[ssh] Configuring SSH connectivity..."
 
     if [[ -d ~/.ssh ]]; then
-        logging::warn "SSH config already existing. Skipping section."
+        logging::warn "[ssh] Config already existing. Skipping section."
+        return
     fi
 
-    logging::info "No existing SSH config found. Generating key."
+    logging::info "[ssh] No existing SSH config found. Generating key."
+    logging::info "[ssh] <To be implemented>"
 }
 
 __setup_zsh() {
-    logging::info "Setup ZSH configuration"
+    logging::info "[zsh] Setting up configuration..."
 
     if [[ ! "$(command -v zsh)" ]]; then
-        logging::err "ZSH is not installed or not found in PATH"
+        logging::err "[zsh] ZSH is not installed or not found in PATH"
         exit 1
     fi
 
-    logging::info "Install OMZ"
+    logging::info "[zsh] Installing OMZ..."
 
     ZSH=~/.oh-my-zsh sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
-    logging::info "Install plugins"
+    logging::success "[zsh] Installed OMZ"
+
+    logging::info "[zsh] Installing plugins"
 
     mkdir -p "${ZSH_PLUGINS_DIR}"
 
@@ -178,24 +182,40 @@ __setup_zsh() {
     git clone --quiet "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_PLUGINS_DIR}"/zsh-syntax-highlighting
     git clone --quiet "https://github.com/agkozak/zsh-z" "${ZSH_PLUGINS_DIR}"/zsh-z
 
-    logging::info "Set zsh as default shell"
-    chsh -s "$(which zsh)"
-}
+    logging::success "[zsh] Installed plugins"
 
-__setup_fish() {
-    logging::info "Setup FISH configuration"
+    logging::info "[zsh] Setting ZSH as default"
 
-    if [[ ! "$(command -v fish)" ]]; then
-        logging::err "FISH is not installed or not found in PATH"
+    if ! chsh -s "$(which zsh)"; then
+        logging::err "[zsh] Failed to set ZSH as default"
         exit 1
     fi
 
-    logging::info "Set fish as valid shell"
+    logging::success "[zsh] Set ZSH as default"
+}
+
+__setup_fish() {
+    logging::info "[fish] Setting up configuration..."
+
+    if [[ ! "$(command -v fish)" ]]; then
+        logging::err "[fish] FISH is not installed or not found in PATH"
+        exit 1
+    fi
+
+    logging::info "[fish] Setting fish as valid shell..."
 
     which fish | sudo tee -a /etc/shells > /dev/null
 
-    logging::info "Set fish as default shell"
-    chsh -s "$(which fish)"
+    logging::success "[fish] Set up as valid"
+
+    logging::info "[fish] Setting FISH as default"
+
+    if ! chsh -s "$(which fish)"; then
+        logging::err "[fish] Failed to set FISH as default"
+        exit 1
+    fi
+
+    logging::success "[fish] Set FISH as default"
 }
 
 steps::setup_shell() {
@@ -203,17 +223,19 @@ steps::setup_shell() {
 
     shell_opts=(zsh fish)
 
+    logging::info "[shell] Select a shell to setup:"
+
     select user_shell in "${shell_opts[@]}"; do
         if [[ 1 -le "$REPLY" ]] && [[ "$REPLY" -le "${#shell_opts}" ]]; then
             if [[ ! "$(command -v "${user_shell}")" ]]; then
-                logging::err "${user_shell} is not installed or not found in PATH"
+                logging::err "[shell] ${user_shell} is not installed or not found in PATH"
             else
                 setup_cmd="__setup_${user_shell}"
                 $setup_cmd
                 break
             fi
         else
-            logging::warn "Wrong selection: Select any number from 1-$#"
+            logging::warn "[shell] Wrong selection: Select any number from 1-${#shell_opts}"
         fi
     done
 }
