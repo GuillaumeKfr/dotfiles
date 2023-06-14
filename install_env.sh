@@ -57,6 +57,7 @@ STOW_DIRS=(
     fzf
     git
     nvim
+    starship
     tmux
     zsh
 )
