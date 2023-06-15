@@ -1,8 +1,9 @@
+echo "Hello from aliases file"
+
 abbr --add v nvim .
 abbr --add py python3
 abbr --add tf terraform
 abbr --add calc bc -l
-# abbr --add mkdir mkdir -pv
 alias rm="rm -I --preserve-root"
 abbr --add update "sudo apt update && sudo apt upgrade"
 abbr --add ping ping -c 5
@@ -13,23 +14,19 @@ if test -n WSL_DISTRO_NAME
     end
 end
 
-if type -q exa
+if command -q exa
     alias ls="exa --group-directories-first --icons"
     alias ll="ls --long"
     alias la="ll --all"
     alias tree="ll --tree"
 end
 
-if type -q bat
+if command -q bat
     alias cat=bat
 end
 
-if type -q podman
+if command -q podman
     alias docker="podman"
-end
-
-if type -q zoxide
-    alias z="zoxide"
 end
 
 function mkdir -d "Create a directory and set CWD"

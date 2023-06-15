@@ -1,3 +1,5 @@
+status filename
+
 if status is-interactive
     # Commands to run in interactive sessions can go here
 end
@@ -22,3 +24,8 @@ starship init fish | source
 
 # Zoxide
 zoxide init fish | source
+
+# Aliases
+source $HOME/.config/fish/aliases.fish
+source $HOME/.config/fish/docker.fish
+source $HOME/.config/fish/git.fish

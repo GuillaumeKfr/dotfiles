@@ -28,5 +28,5 @@ abbr --add gm git merge
 abbr --add gp git push
 
 abbr --add grb git rebase
-abbr --add alias grba git rebase --abort
+abbr --add grba git rebase --abort
 abbr --add grbc git rebase --continue
