@@ -1,38 +1,24 @@
 #! /bin/bash
 
-# string formatters
-if [[ -t 1 ]]; then
-    tty_escape() { printf "\033[%sm" "$1"; }
-else
-    tty_escape() { :; }
-fi
+__fmt_reset=$(tput sgr 0)
 
-__tty_mkbold() { tty_escape "1;$1"; }
-
-__tty_blue="$(__tty_mkbold 34)"
-__tty_green="$(__tty_mkbold 32)"
-__tty_red="$(__tty_mkbold 31)"
-__tty_yellow="$(__tty_mkbold "1;33")"
-__tty_bold="$(__tty_mkbold 39)"
-
-__tty_reset="$(tty_escape 0)"
-
-__chomp() {
-    printf "%s" "${1/"$'\n'"/}"
-}
+__fmt_red=$(tput setaf 1)
+__fmt_green=$(tput setaf 2)
+__fmt_yellow=$(tput setaf 3)
+__fmt_blue=$(tput setaf 4)
 
 logging::warn() {
-    printf "${__tty_yellow}[!] %s${__tty_reset}\n" "$(__chomp "$1")" >&2
+    printf "${__fmt_yellow}[!] $1${__fmt_reset}\n" >&2
 }
 
 logging::info() {
-    printf "${__tty_blue}[i] %s${__tty_reset}\n" "$(__chomp "$1")"
+    printf "${__fmt_blue}[i] $1${__fmt_reset}\n"
 }
 
 logging::success() {
-    printf "${__tty_green}[✓] %s${__tty_reset}\n" "$(__chomp "$1")"
+    printf "${__fmt_green}[✓] $1${__fmt_reset}\n"
 }
 
 logging::err() {
-    printf "${__tty_red}[⨯] %s${__tty_reset}\n" "$(__chomp "$1")" >&2
+    printf "${__fmt_red}[⨯] $1${__fmt_reset}\n" >&2
 }
