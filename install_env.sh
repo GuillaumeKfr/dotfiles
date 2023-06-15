@@ -27,6 +27,9 @@ APT_DEPS=(
 
 APT_TO_REMOVE=(
     python3
+    python3.10
+    python3-minimal
+    python3.10-minimal
 )
 
 BREW_INSTALLS=(
@@ -50,6 +53,7 @@ BREW_INSTALLS=(
 )
 
 PIP_INSTALLS=(
+    pip
     black
     pip-review
     sqlfluff

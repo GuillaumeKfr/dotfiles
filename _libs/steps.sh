@@ -137,7 +137,7 @@ steps::pip_installs() {
 
     logging::info "[pip] Installing packages..."
 
-    if ! pip install --quiet --upgrade "${to_install[@]}"; then
+    if ! python3 -m pip install --quiet --upgrade "${to_install[@]}"; then
         logging::err "[pip] Install failed"
         exit 1
     fi
