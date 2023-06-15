@@ -1,5 +1,5 @@
 require'nvim-treesitter.configs'.setup {
-	ensure_installed = { "help", "lua", "json" },
+	ensure_installed = { "lua", "json" },
 
 	sync_install = false,
 	auto_install = true,
