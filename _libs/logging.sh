@@ -30,7 +30,7 @@ logging::info() {
 }
 
 logging::success() {
-    printf "${__tty_green}[✓] %s${__tty_reset}\n" "$(__chomp "$1")" >&2
+    printf "${__tty_green}[✓] %s${__tty_reset}\n" "$(__chomp "$1")"
 }
 
 logging::err() {
