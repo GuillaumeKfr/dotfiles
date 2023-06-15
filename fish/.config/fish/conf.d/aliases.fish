@@ -20,8 +20,8 @@ if type -q exa
     alias tree="ll --tree"
 end
 
-if type -q batcat
-    alias cat=batcat
+if type -q bat
+    alias cat=bat
 end
 
 if type -q podman
