@@ -34,6 +34,8 @@ BREW_INSTALLS=(
     git-delta
     jq
     neovim
+    podman
+    python
     shellcheck
     starship
     tldr
