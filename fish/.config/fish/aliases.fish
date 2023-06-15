@@ -1,5 +1,3 @@
-echo "Hello from aliases file"
-
 abbr --add v nvim .
 abbr --add py python3
 abbr --add tf terraform
