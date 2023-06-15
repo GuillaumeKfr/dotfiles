@@ -25,6 +25,10 @@ APT_DEPS=(
     stow
 )
 
+APT_TO_REMOVE=(
+    python3
+)
+
 BREW_INSTALLS=(
     asdf
     bat
@@ -66,6 +70,8 @@ sudo --validate
 steps::sys_setup "${APT_EXTRA_REPOS[@]}"
 
 steps::deps "${APT_DEPS[@]}"
+
+steps::clean_preinstalled "${APT_TO_REMOVE[@]}"
 
 steps::brew_installs "${BREW_INSTALLS[@]}"
 

@@ -57,6 +57,41 @@ steps::deps() {
 }
 
 # Params:
+#   -1: List of APT packages to remove
+steps::clean_preinstalled() {
+    local packages=("${@}")
+
+    logging::info "[clean] Removing packages..."
+
+    for package in "${packages[@]}"; do
+        logging::info "[clean] [${package}] Checking package..."
+
+        if ! apt list --installed "${package}" | grep "installed"; then
+            logging::info "[clean] [${package}] Not found. Skipping..."
+            continue
+        fi
+
+        logging::info "[clean] [${package}] Removing ..."
+
+        if ! sudo apt -qq remove -y "${package}"; then
+            logging::error "[clean] [${package}] Remove failed"
+            exit 1
+        fi
+
+        logging::success "[clean] [${package}] Removed"
+    done
+
+    logging::info "[clean] Remove unused packages"
+    
+    if ! sudo apt -qq autoremove -y; then
+        logging::err "[clean] Remove failed"
+        exit 1
+    fi
+
+    logging::success "[clean] Removed all packages"
+}
+
+# Params:
 #   - 1: List of formulae
 steps::brew_installs() {
     local to_install=("${@}")
