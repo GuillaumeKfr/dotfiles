@@ -1,9 +1,9 @@
 --vim.g.loaded_netrw = 1
 --vim.g.loaded_netrwPlugin = 1
 
+require('plugins')
 require('set')
 require('remaps')
-require('plugins')
 require('colors')
 require('p-lsp')
 require('p-treesitter')
