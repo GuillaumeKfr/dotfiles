@@ -15,7 +15,14 @@ if test -n WSL_DISTRO_NAME
 end
 
 if command -q exa
-    alias ls="exa --group-directories-first --icons"
+    set -l exa_git_available (exa --version | grep '\+git')
+
+    if test -n exa_git_available
+        alias ls="exa --group-directories-first --icons --git"
+    else
+        alias ls="exa --group-directories-first --icons"
+    end
+
     alias ll="ls --long"
     alias la="ll --all"
     alias tree="ll --tree"
