@@ -56,6 +56,7 @@ PIP_INSTALLS=(
     pip
     black
     pip-review
+    pre-commit
     sqlfluff
 )
 
