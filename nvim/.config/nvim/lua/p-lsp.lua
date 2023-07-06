@@ -103,6 +103,8 @@ null_ls.setup({
         null_ls.builtins.diagnostics.eslint,
         null_ls.builtins.completion.spell,
         null_ls.builtins.diagnostics.sqlfluff,
+        null_ls.builtins.diagnostics.shellcheck.with({ filetypes = { "sh", "zsh" } }),
+        null_ls.builtins.formatting.shfmt.with({ filetypes = { "sh", "zsh" } }),
     },
 })
 
