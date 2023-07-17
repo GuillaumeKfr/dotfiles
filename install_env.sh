@@ -34,6 +34,7 @@ APT_TO_REMOVE=(
 
 BREW_INSTALLS=(
     asdf
+    ansible
     bat
     exa
     fish
