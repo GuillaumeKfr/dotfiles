@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # Params:
-#  - 1: List of APT repos 
+#  - 1: List of APT repos
 steps::sys_setup() {
     local repos_list=("${@}")
 
@@ -82,7 +82,7 @@ steps::clean_preinstalled() {
     done
 
     logging::info "[clean] Remove unused packages"
-    
+
     if ! sudo apt -qq autoremove -y; then
         logging::err "[clean] Remove failed"
         exit 1
@@ -154,6 +154,38 @@ steps::pip_installs() {
     logging::success "[pip] Upgraded all packages"
 }
 
+steps::custom_installs() {
+    logging::info "[custom] Installing Snowflake SQL ..."
+    local snowsql_bootstrap_version="1.2"
+    local snowsql_version="${snowsql_bootstrap_version}.27"
+    local archi="linux_x86_64"
+    local snowsql_bootstrap_url="https://sfc-repo.azure.snowflakecomputing.com/snowsql/bootstrap"
+    local snowsql_dl_url="${snowsql_bootstrap_url}/${snowsql_bootstrap_version}/${archi}/snowsql-${snowsql_version}-${archi}"
+
+    # Download installer & signature
+    curl -O "${snowsql_dl_url}.bash"
+    # curl -O "${snowsql_dl_url}.bash.sig"
+
+    # Get public key
+    # gpg --keyserver hkp://keyserver.ubuntu.com --recv-keys 630D9F3CAB551AF3
+
+    # Check signature
+    # if ! gpg --verify snowsql-${snowsql_version}-${archi}.bash.sig snowsql-${snowsql_version}-${archi}.bash; then
+    #     logging::err "[custom] Failed to validate downloaded snowsql installer"
+    #     return
+    # fi
+    #
+    # gpg --delete-key "Snowflake Computing"
+
+    # Install snowsql
+    if ! SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-${snowsql_version}-${archi}.bash; then
+        logging::err "[custom] Installation failed"
+        return
+    fi
+
+    logging::success "[custom] Installed Snowflake SQL"
+}
+
 # Params:
 #   - 1: List of folders to stow
 steps::setup_stow() {
@@ -165,8 +197,7 @@ steps::setup_stow() {
     for dir in "${to_stow[@]}"; do
         logging::info "[stow] [${dir}] Stowing ..."
 
-        
-        if ! stow -D "${dir}" || ! stow "${dir}" ; then
+        if ! stow -D "${dir}" || ! stow "${dir}"; then
             logging::error "[stow] [${dir}] Stow failed"
             exit
         fi
@@ -239,7 +270,7 @@ __setup_fish() {
 
     logging::info "[fish] Setting fish as valid shell..."
 
-    which fish | sudo tee -a /etc/shells > /dev/null
+    which fish | sudo tee -a /etc/shells >/dev/null
 
     logging::success "[fish] Set up as valid"
 

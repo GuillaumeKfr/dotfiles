@@ -1,6 +1,6 @@
 #! /bin/bash
 
-SCRIPT_DIR="$( dirname -- "${BASH_SOURCE[0]}" )"
+SCRIPT_DIR="$(dirname -- "${BASH_SOURCE[0]}")"
 
 source "${SCRIPT_DIR}/_libs/logging.sh"
 source "${SCRIPT_DIR}/_libs/steps.sh"
@@ -14,14 +14,14 @@ ZSH_THEMES_DIR="${ZSH_CUSTOM_DIR}/themes"
 APT_EXTRA_REPOS=()
 
 APT_DEPS=(
-    build-essential 
-    libcairo2-dev 
-    libdbus-glib-1-dev 
-    libgirepository1.0-dev 
-    libsystemd-dev 
-    pkg-config 
+    build-essential
+    libcairo2-dev
+    libdbus-glib-1-dev
+    libgirepository1.0-dev
+    libsystemd-dev
+    pkg-config
     python3-pip
-    ripgrep 
+    ripgrep
     stow
 )
 
@@ -84,6 +84,8 @@ steps::brew_installs "${BREW_INSTALLS[@]}"
 steps::pip_installs "${PIP_INSTALLS[@]}"
 
 steps::setup_stow "${STOW_DIRS[@]}"
+
+steps::custom_installs
 
 steps::ssh_config
 
