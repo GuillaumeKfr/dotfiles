@@ -23,6 +23,7 @@ APT_DEPS=(
     python3-pip
     ripgrep
     stow
+    uidmap
 )
 
 APT_TO_REMOVE=(
