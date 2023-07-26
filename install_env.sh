@@ -6,10 +6,8 @@ source "${SCRIPT_DIR}/_libs/logging.sh"
 source "${SCRIPT_DIR}/_libs/steps.sh"
 
 # Env
-DOTFILES_DIR="$HOME"/dotfiles
 ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 ZSH_PLUGINS_DIR="${ZSH_CUSTOM_DIR}/plugins"
-ZSH_THEMES_DIR="${ZSH_CUSTOM_DIR}/themes"
 
 APT_EXTRA_REPOS=()
 
