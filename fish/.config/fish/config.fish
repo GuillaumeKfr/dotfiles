@@ -7,6 +7,9 @@ set fish_greeting
 fish_add_path ~/bin
 fish_add_path ~/.local/bin
 
+# Make / shared instead of private
+wsl.exe -u root -e mount --make-rshared /
+
 # Homebrew
 set HOMEBREW_PREFIX "/home/linuxbrew/.linuxbrew"
 eval ($HOMEBREW_PREFIX/bin/brew shellenv)
