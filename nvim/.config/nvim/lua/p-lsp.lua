@@ -93,6 +93,13 @@ require("mason-lspconfig").setup_handlers({
     end,
 })
 
+require("lspconfig").tsserver.setup({
+  capabilities = capabilities,
+  on_attach = function(client)
+    client.server_capabilities.document_formatting = false
+  end,
+})
+
 lsp.setup()
 
 local null_ls = require("null-ls")
@@ -105,6 +112,19 @@ null_ls.setup({
         null_ls.builtins.diagnostics.sqlfluff,
         null_ls.builtins.diagnostics.shellcheck.with({ filetypes = { "sh", "zsh" } }),
         null_ls.builtins.formatting.shfmt.with({ filetypes = { "sh", "zsh" }, args = { "-filename", "$FILENAME", "-i", "4" } }),
+        null_ls.builtins.formatting.prettier.with({
+            filetypes = {
+                "javascript",
+                "typescript",
+                "json",
+                "yaml",
+                "markdown",
+                "graphql",
+                "md",
+                "txt",
+            },
+            only_local = "node_modules/.bin",
+        }),
     },
 })
 
