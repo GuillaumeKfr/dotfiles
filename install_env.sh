@@ -42,6 +42,7 @@ BREW_INSTALLS=(
     jq
     neovim
     podman
+    podman-compose
     python
     shellcheck
     starship
