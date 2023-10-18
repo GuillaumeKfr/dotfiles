@@ -19,7 +19,6 @@ APT_DEPS=(
     libsystemd-dev
     pkg-config
     python3-pip
-    ripgrep
     stow
     uidmap
 )
@@ -44,6 +43,7 @@ BREW_INSTALLS=(
     podman
     podman-compose
     python
+    ripgrep
     shellcheck
     starship
     tldr
