@@ -34,7 +34,7 @@ BREW_INSTALLS=(
     asdf
     ansible
     bat
-    exa
+    eza
     fish
     fzf
     git-delta
