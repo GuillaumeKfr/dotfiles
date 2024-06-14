@@ -62,6 +62,7 @@ PIP_INSTALLS=(
 )
 
 STOW_DIRS=(
+    containers
     fish
     fzf
     git
