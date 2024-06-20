@@ -34,29 +34,24 @@ BREW_INSTALLS=(
     asdf
     ansible
     bat
+    black
     eza
     fish
     fzf
     git-delta
     jq
     neovim
+    pre-commit
     python
     ripgrep
     shellcheck
+    sqlfluff
     starship
     tldr
     tmux
     unzip
     zoxide
     zsh
-)
-
-PIP_INSTALLS=(
-    pip
-    black
-    pip-review
-    pre-commit
-    sqlfluff
 )
 
 STOW_DIRS=(
@@ -79,8 +74,6 @@ steps::deps "${APT_DEPS[@]}"
 steps::clean_preinstalled "${APT_TO_REMOVE[@]}"
 
 steps::brew_installs "${BREW_INSTALLS[@]}"
-
-steps::pip_installs "${PIP_INSTALLS[@]}"
 
 steps::setup_stow "${STOW_DIRS[@]}"
 
