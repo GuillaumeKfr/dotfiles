@@ -24,10 +24,6 @@ if command -q bat
     alias cat=bat
 end
 
-if command -q podman
-    alias docker="podman"
-end
-
 function mkdir -d "Create a directory and set CWD"
     command mkdir -pv $argv
     if test $status = 0

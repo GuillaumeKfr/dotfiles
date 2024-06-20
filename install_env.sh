@@ -40,8 +40,6 @@ BREW_INSTALLS=(
     git-delta
     jq
     neovim
-    podman
-    podman-compose
     python
     ripgrep
     shellcheck
