@@ -21,7 +21,7 @@ if command -q eza
 end
 
 if command -q bat
-    alias cat=bat
+    alias cat="bat --style=plain"
 end
 
 function mkdir -d "Create a directory and set CWD"
