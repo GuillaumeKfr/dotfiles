@@ -47,6 +47,7 @@ BREW_INSTALLS=(
     shellcheck
     sqlfluff
     starship
+    thefuck
     tldr
     tmux
     unzip
