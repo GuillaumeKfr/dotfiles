@@ -35,6 +35,7 @@ BREW_INSTALLS=(
     ansible
     bat
     black
+    btop
     eza
     fish
     fzf
@@ -56,6 +57,7 @@ BREW_INSTALLS=(
 )
 
 STOW_DIRS=(
+    btop
     containers
     fish
     fzf
