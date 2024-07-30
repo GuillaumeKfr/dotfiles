@@ -8,6 +8,10 @@ disabled = true
 [aws]
 disabled = true
 
+[git_branch]
+symbol = ""
+format = "[$symbol $branch ]($style)"
+
 [git_metrics]
 disabled = true
 
