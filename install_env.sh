@@ -57,6 +57,7 @@ BREW_INSTALLS=(
 )
 
 STOW_DIRS=(
+    bat
     btop
     containers
     fish
