@@ -30,3 +30,6 @@ style = 'white'
 
 [python]
 symbol = " "
+
+[lua]
+symbol = " "
