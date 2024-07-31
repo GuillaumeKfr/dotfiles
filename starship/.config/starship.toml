@@ -27,3 +27,6 @@ modified = '[!$count](yellow)'
 deleted = '[-$count](red)'
 untracked = '[?$count](blue)'
 style = 'white'
+
+[python]
+symbol = " "
