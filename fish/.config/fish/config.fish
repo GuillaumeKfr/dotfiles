@@ -31,6 +31,9 @@ eval ($HOMEBREW_PREFIX/bin/brew shellenv)
 # ASDF
 source /home/linuxbrew/.linuxbrew/opt/asdf/libexec/asdf.fish
 
+# FZF
+fzf --fish | source
+
 # Starship
 starship init fish | source
 

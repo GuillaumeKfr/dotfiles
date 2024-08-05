@@ -1,1 +1,0 @@
-/home/gkaiffer/.fzf/shell/key-bindings.fish
