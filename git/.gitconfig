@@ -1,45 +1,46 @@
 [core]
-    editor = nvim
-    pager = delta
+editor = nvim
+pager = delta
 
 [init]
-	defaultBranch = main
+defaultBranch = main
 
 [interactive]
-    diffFilter = delta --color-only --features=navigate
+diffFilter = delta --color-only --features=navigate
 
 [delta]
-    navigate = true    # use n and N to move between diff sections
-    light = false
-    line-numbers = true
-    side-by-side = true
-    true-color = always
-    features = villsau
+navigate = true    # use n and N to move between diff sections
+light = false
+line-numbers = true
+side-by-side = true
+true-color = always
+features = villsau
 
 [merge]
-    conflictstyle = diff3
+conflictstyle = diff3
 
 [diff]
-    colorMoved = default
+colorMoved = default
 
 [delta "villsau"]
-    dark = true
-    file-style = omit
-    hunk-header-decoration-style = omit
-    hunk-header-file-style = magenta
-    hunk-header-line-number-style = dim magenta
-    hunk-header-style = file line-number syntax
-    line-numbers = false
-    minus-emph-style = bold red 52
-    minus-empty-line-marker-style = normal "#3f0001"
-    minus-non-emph-style = dim red
-    minus-style = bold red
-    plus-emph-style = bold green 22
-    plus-empty-line-marker-style = normal "#002800"
-    plus-non-emph-style = dim green
-    plus-style = bold green
-    syntax-theme = OneHalfDark
-    whitespace-error-style = reverse red
-    zero-style = dim syntax
+dark = true
+file-style = omit
+hunk-header-decoration-style = omit
+hunk-header-file-style = magenta
+hunk-header-line-number-style = dim magenta
+hunk-header-style = file line-number syntax
+line-numbers = false
+minus-emph-style = bold red 52
+minus-empty-line-marker-style = normal "#3f0001"
+minus-non-emph-style = dim red
+minus-style = bold red
+plus-emph-style = bold green 22
+plus-empty-line-marker-style = normal "#002800"
+plus-non-emph-style = dim green
+plus-style = bold green
+syntax-theme = OneHalfDark
+whitespace-error-style = reverse red
+zero-style = dim syntax
+
 [credential]
-	helper = store
+helper = store
