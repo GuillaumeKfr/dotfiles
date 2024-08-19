@@ -4,7 +4,6 @@ abbr --add tf terraform
 abbr --add calc bc -l
 alias top="btop"
 alias rm="rm -I --preserve-root"
-abbr --add update "sudo apt update && sudo apt upgrade"
 abbr --add ping ping -c 5
 
 if test -n WSL_DISTRO_NAME
