@@ -41,6 +41,7 @@ BREW_INSTALLS=(
     fzf
     git-delta
     jq
+    markdownlint-cli2
     neovim
     pre-commit
     python
