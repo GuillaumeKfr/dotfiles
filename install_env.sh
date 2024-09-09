@@ -13,6 +13,7 @@ APT_EXTRA_REPOS=()
 
 APT_DEPS=(
     build-essential
+    curl
     libcairo2-dev
     libdbus-glib-1-dev
     libgirepository1.0-dev
