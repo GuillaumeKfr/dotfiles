@@ -40,6 +40,7 @@ BREW_INSTALLS=(
     eza
     fish
     fzf
+    gh
     git-delta
     jq
     markdownlint-cli2
