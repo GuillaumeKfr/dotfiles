@@ -184,6 +184,13 @@ steps::custom_installs() {
     fi
 
     logging::success "[custom] Installed Snowflake SQL"
+
+    logging::info "[custom] Rebuilding bat's cache"
+    if ! bat cache --build; then
+        logging::err "[custom] Rebuild failed"
+        return
+    fi
+    logging::success "[custom] Rebuilt bat's cache"
 }
 
 # Params:
