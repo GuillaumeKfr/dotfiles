@@ -4,4 +4,5 @@ function update
     sudo apt autoremove
     brew update
     brew upgrade
+    brew cleanup
 end
