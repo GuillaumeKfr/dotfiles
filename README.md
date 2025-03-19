@@ -2,6 +2,18 @@
 
 To install, run the `install_env.sh` script.
 
+### Neovim
+
+Neovim's config is managed in a separate repo, declared here as a submodule.
+
+To init the repo with the config:
+
+`git submodule update --init --recursive`
+
+To update the repo with the latest version:
+
+`git submodule foreach git pull --ff-only origin master`
+
 ### GitConfig
 
 Create a `~/.gitconfig_custom` file with content:
