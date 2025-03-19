@@ -154,7 +154,7 @@ steps::pip_installs() {
     logging::success "[pip] Upgraded all packages"
 }
 
-steps::custom_installs() {
+steps::install_snowsql() {
     logging::info "[custom] Installing Snowflake SQL ..."
     local snowsql_bootstrap_version="1.2"
     local snowsql_version="${snowsql_bootstrap_version}.27"
@@ -184,6 +184,31 @@ steps::custom_installs() {
     fi
 
     logging::success "[custom] Installed Snowflake SQL"
+}
+
+steps::install_docker() {
+    # Add Docker's official GPG key:
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+    # Add the repository to Apt sources:
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+
+    # Install docker
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+    # Setup rootless exec
+    sudo groupadd docker
+    sudo usermod -aG docker "$USER"
+}
+
+steps::custom_installs() {
+    steps::install_docker
 
     logging::info "[custom] Rebuilding bat's cache"
     if ! bat cache --build; then

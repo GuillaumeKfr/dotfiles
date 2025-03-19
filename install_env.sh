@@ -13,6 +13,7 @@ APT_EXTRA_REPOS=()
 
 APT_DEPS=(
     build-essential
+    ca-certificates
     curl
     libcairo2-dev
     libdbus-glib-1-dev
