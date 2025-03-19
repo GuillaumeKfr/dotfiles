@@ -52,7 +52,7 @@ BREW_INSTALLS=(
     shellcheck
     sqlfluff
     starship
-    tldr
+    tlrc
     tmux
     unzip
     zoxide
