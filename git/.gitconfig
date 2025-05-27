@@ -5,6 +5,9 @@ pager = delta
 [init]
 defaultBranch = main
 
+[push]
+autoSetupRemote = true
+
 [interactive]
 diffFilter = delta --color-only --features=navigate
 
