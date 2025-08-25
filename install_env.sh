@@ -33,8 +33,6 @@ APT_TO_REMOVE=(
 )
 
 BREW_INSTALLS=(
-    asdf
-    ansible
     bat
     black
     btop
@@ -52,9 +50,11 @@ BREW_INSTALLS=(
     shellcheck
     sqlfluff
     starship
+    stow
     tlrc
     tmux
     unzip
+    uv
     zoxide
     zsh
 )
