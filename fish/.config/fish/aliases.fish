@@ -3,7 +3,7 @@ abbr --add py python3
 abbr --add tf terraform
 abbr --add calc bc -l
 alias top="btop"
-alias rm="rm -I --preserve-root"
+alias rm="rm -I"
 abbr --add ping ping -c 5
 
 if test -n WSL_DISTRO_NAME
