@@ -3,6 +3,11 @@
 # Params:
 #  - 1: List of APT repos
 steps::sys_setup() {
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        logging::info "[sys] MACOS detected, skipping step"
+        return 0
+    fi
+
     local repos_list=("${@}")
 
     logging::info "[sys] Upgrading packages..."
@@ -32,6 +37,11 @@ steps::sys_setup() {
 # Params:
 #   - 1: List of APT dependencies
 steps::deps() {
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        logging::info "[sys] MACOS detected, skipping step"
+        return 0
+    fi
+
     local deps_list=("${@}")
 
     logging::info "[deps] Installing apt dependencies..."
@@ -59,6 +69,11 @@ steps::deps() {
 # Params:
 #   -1: List of APT packages to remove
 steps::clean_preinstalled() {
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        logging::info "[sys] MACOS detected, skipping step"
+        return 0
+    fi
+
     local packages=("${@}")
 
     logging::info "[clean] Removing packages..."
@@ -154,62 +169,7 @@ steps::pip_installs() {
     logging::success "[pip] Upgraded all packages"
 }
 
-steps::install_snowsql() {
-    logging::info "[custom] Installing Snowflake SQL ..."
-    local snowsql_bootstrap_version="1.2"
-    local snowsql_version="${snowsql_bootstrap_version}.27"
-    local archi="linux_x86_64"
-    local snowsql_bootstrap_url="https://sfc-repo.azure.snowflakecomputing.com/snowsql/bootstrap"
-    local snowsql_dl_url="${snowsql_bootstrap_url}/${snowsql_bootstrap_version}/${archi}/snowsql-${snowsql_version}-${archi}"
-
-    # Download installer & signature
-    curl -O "${snowsql_dl_url}.bash"
-    # curl -O "${snowsql_dl_url}.bash.sig"
-
-    # Get public key
-    # gpg --keyserver hkp://keyserver.ubuntu.com --recv-keys 630D9F3CAB551AF3
-
-    # Check signature
-    # if ! gpg --verify snowsql-${snowsql_version}-${archi}.bash.sig snowsql-${snowsql_version}-${archi}.bash; then
-    #     logging::err "[custom] Failed to validate downloaded snowsql installer"
-    #     return
-    # fi
-    #
-    # gpg --delete-key "Snowflake Computing"
-
-    # Install snowsql
-    if ! SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-${snowsql_version}-${archi}.bash; then
-        logging::err "[custom] Installation failed"
-        return
-    fi
-
-    logging::success "[custom] Installed Snowflake SQL"
-}
-
-steps::install_docker() {
-    # Add Docker's official GPG key:
-    sudo install -m 0755 -d /etc/apt/keyrings
-    sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
-    sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-    # Add the repository to Apt sources:
-    echo \
-      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
-      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    sudo apt-get update
-
-    # Install docker
-    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-    # Setup rootless exec
-    sudo groupadd docker
-    sudo usermod -aG docker "$USER"
-}
-
 steps::custom_installs() {
-    steps::install_docker
-
     logging::info "[custom] Rebuilding bat's cache"
     if ! bat cache --build; then
         logging::err "[custom] Rebuild failed"
