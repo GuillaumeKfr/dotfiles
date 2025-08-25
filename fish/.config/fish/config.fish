@@ -42,6 +42,9 @@ fzf --fish | source
 # Starship
 starship init fish | source
 
+# uv
+uv generate-shell-completion fish | source
+
 # Zoxide
 zoxide init fish | source
 
