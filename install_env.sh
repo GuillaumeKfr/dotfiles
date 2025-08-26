@@ -69,6 +69,7 @@ STOW_DIRS=(
     fish
     fzf
     git
+    kitty
     nvim
     starship
     tmux
