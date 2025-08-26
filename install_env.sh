@@ -36,6 +36,9 @@ BREW_INSTALLS=(
     bat
     black
     btop
+    colima
+    direnv
+    docker
     eza
     fish
     fzf
