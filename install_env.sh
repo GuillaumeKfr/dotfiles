@@ -88,7 +88,7 @@ steps::brew_installs "${BREW_INSTALLS[@]}"
 
 steps::setup_stow "${STOW_DIRS[@]}"
 
-steps::custom_installs
+steps::custom_setup
 
 steps::ssh_config
 

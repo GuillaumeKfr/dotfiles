@@ -145,31 +145,7 @@ steps::brew_installs() {
     logging::success "[brew] Installed all formulae"
 }
 
-# Params:
-#   - 1: List of packages
-steps::pip_installs() {
-    local to_install=("${@}")
-
-    logging::info "[pip] Installing packages..."
-
-    if ! python3 -m pip install --quiet --upgrade "${to_install[@]}"; then
-        logging::err "[pip] Install failed"
-        exit 1
-    fi
-
-    logging::success "[pip] Installed all packages"
-
-    logging::info "[pip] Upgrading pip packages..."
-
-    if ! ~/.local/bin/pip-review --auto --quiet; then
-        logging::err "[pip] Upgrade failed"
-        return
-    fi
-
-    logging::success "[pip] Upgraded all packages"
-}
-
-steps::custom_installs() {
+steps::custom_setup() {
     logging::info "[custom] Rebuilding bat's cache"
     if ! bat cache --build; then
         logging::err "[custom] Rebuild failed"
