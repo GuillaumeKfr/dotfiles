@@ -105,21 +105,22 @@ run = 'layout floating'
     cmd-comma = 'layout accordion horizontal vertical'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-    cmd-h = 'focus left'
-    cmd-j = 'focus down'
-    cmd-k = 'focus up'
-    cmd-l = 'focus right'
-
-    cmd-shift-left = 'join-with left'
-    cmd-shift-down = 'join-with down'
-    cmd-shift-up = 'join-with up'
-    cmd-shift-right = 'join-with right'
+    cmd-left = 'focus left'
+    cmd-down = 'focus down'
+    cmd-up = 'focus up'
+    cmd-right = 'focus right'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move
-    cmd-shift-h = 'move left'
-    cmd-shift-j = 'move down'
-    cmd-shift-k = 'move up'
-    cmd-shift-l = 'move right'
+    cmd-shift-left = 'move left'
+    cmd-shift-down = 'move down'
+    cmd-shift-up = 'move up'
+    cmd-shift-right = 'move right'
+
+    cmd-alt-shift-left = 'join-with left'
+    cmd-alt-shift-down = 'join-with down'
+    cmd-alt-shift-up = 'join-with up'
+    cmd-alt-shift-right = 'join-with right'
+
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#resize
     cmd-minus = 'resize smart -50'
@@ -142,7 +143,8 @@ run = 'layout floating'
     cmd-shift-6 = 'move-node-to-workspace 6 --focus-follows-window'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
-    alt-tab = 'workspace-back-and-forth'
+    cmd-alt-right = 'workspace --wrap-around next'
+    cmd-alt-left = 'workspace --wrap-around prev'
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
     cmd-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
