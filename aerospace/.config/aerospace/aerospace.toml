@@ -40,8 +40,40 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 automatically-unhide-macos-hidden-apps = false
 
 [[on-window-detected]]
-if.app-name-regex-substring = 'finder'
-run = 'layout floating'
+    if.app-name-regex-substring = 'finder'
+    run = 'layout floating'
+
+[[on-window-detected]]
+    if.app-name-regex-substring = 'zoom'
+    run = 'layout floating'
+
+[[on-window-detected]]
+    if.app-name-regex-substring = 'kitty'
+    run = ['move-node-to-workspace 1 --focus-follows-window']
+
+[[on-window-detected]]
+    if.app-name-regex-substring = 'cursor'
+    run = ['move-node-to-workspace 2 --focus-follows-window']
+
+[[on-window-detected]]
+    if.app-name-regex-substring = 'code'
+    run = ['move-node-to-workspace 2 --focus-follows-window']
+
+[[on-window-detected]]
+    if.app-name-regex-substring = 'firefox'
+    run = ['move-node-to-workspace 3 --focus-follows-window']
+
+[[on-window-detected]]
+    if.app-name-regex-substring = 'slack'
+    run = ['move-node-to-workspace 4 --focus-follows-window']
+
+[[on-window-detected]]
+    if.app-name-regex-substring = 'teams'
+    run = ['move-node-to-workspace 4 --focus-follows-window']
+
+[[on-window-detected]]
+    if.app-name-regex-substring = 'outlook'
+    run = ['move-node-to-workspace 5 --focus-follows-window']
 
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
