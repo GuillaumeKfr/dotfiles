@@ -89,12 +89,12 @@ automatically-unhide-macos-hidden-apps = false
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-    inner.horizontal = 8
-    inner.vertical =   8
-    outer.left =       8
-    outer.bottom =     8
-    outer.top =        8
-    outer.right =      8
+    inner.horizontal = 6
+    inner.vertical =   6
+    outer.left =       6
+    outer.bottom =     6
+    outer.top =        6
+    outer.right =      6
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -133,20 +133,20 @@ automatically-unhide-macos-hidden-apps = false
     cmd-ctrl-f = 'layout floating tiling'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
-    cmd-semicolon = 'layout tiles horizontal vertical'
-    cmd-comma = 'layout accordion horizontal vertical'
+    alt-f =  'layout tiling floating'
+    alt-q =  'layout tiles accordion' # Binds to A on AZERTY
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-    cmd-left = 'focus left'
-    cmd-down = 'focus down'
-    cmd-up = 'focus up'
-    cmd-right = 'focus right'
+    alt-left = 'focus left'
+    alt-down = 'focus down'
+    alt-up = 'focus up'
+    alt-right = 'focus right'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move
-    cmd-shift-left = 'move left'
-    cmd-shift-down = 'move down'
-    cmd-shift-up = 'move up'
-    cmd-shift-right = 'move right'
+    alt-shift-left = 'move left'
+    alt-shift-down = 'move down'
+    alt-shift-up = 'move up'
+    alt-shift-right = 'move right'
 
     cmd-alt-shift-left = 'join-with left'
     cmd-alt-shift-down = 'join-with down'
@@ -159,20 +159,20 @@ automatically-unhide-macos-hidden-apps = false
     cmd-equal = 'resize smart +50'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-    cmd-1 = 'workspace 1'
-    cmd-2 = 'workspace 2'
-    cmd-3 = 'workspace 3'
-    cmd-4 = 'workspace 4'
-    cmd-5 = 'workspace 5'
-    cmd-6 = 'workspace 6'
+    alt-1 = 'workspace 1'
+    alt-2 = 'workspace 2'
+    alt-3 = 'workspace 3'
+    alt-4 = 'workspace 4'
+    alt-5 = 'workspace 5'
+    alt-6 = 'workspace 6'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-    cmd-shift-1 = 'move-node-to-workspace 1 --focus-follows-window'
-    cmd-shift-2 = 'move-node-to-workspace 2 --focus-follows-window'
-    cmd-shift-3 = 'move-node-to-workspace 3 --focus-follows-window'
-    cmd-shift-4 = 'move-node-to-workspace 4 --focus-follows-window'
-    cmd-shift-5 = 'move-node-to-workspace 5 --focus-follows-window'
-    cmd-shift-6 = 'move-node-to-workspace 6 --focus-follows-window'
+    alt-shift-1 = 'move-node-to-workspace 1 --focus-follows-window'
+    alt-shift-2 = 'move-node-to-workspace 2 --focus-follows-window'
+    alt-shift-3 = 'move-node-to-workspace 3 --focus-follows-window'
+    alt-shift-4 = 'move-node-to-workspace 4 --focus-follows-window'
+    alt-shift-5 = 'move-node-to-workspace 5 --focus-follows-window'
+    alt-shift-6 = 'move-node-to-workspace 6 --focus-follows-window'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
     cmd-alt-right = 'workspace --wrap-around next'
@@ -180,12 +180,8 @@ automatically-unhide-macos-hidden-apps = false
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
     cmd-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
-    alt-f =  ['layout tiling floating']
-    alt-q =  ['layout tiles accordion'] # Binds to A on AZERTY
-    alt-v =  ['join-with left']
-
     # See: https://nikitabobko.github.io/AeroSpace/commands#mode
-    cmd-shift-semicolon = 'mode service'
+    alt-shift-semicolon = 'mode service'
 
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
