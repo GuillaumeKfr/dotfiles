@@ -129,56 +129,55 @@ automatically-unhide-macos-hidden-apps = false
     # end tell'
     # '''
 
-    cmd-ctrl-shift-f = 'fullscreen'
-    cmd-ctrl-f = 'layout floating tiling'
+    ctrl-shift-f = 'fullscreen'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
-    alt-f =  'layout tiling floating'
-    alt-q =  'layout tiles accordion' # Binds to A on AZERTY
+    ctrl-f =  'layout tiling floating'
+    ctrl-q =  'layout tiles accordion' # Binds to A on AZERTY
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-    alt-left = 'focus left'
-    alt-down = 'focus down'
-    alt-up = 'focus up'
-    alt-right = 'focus right'
+    ctrl-left = 'focus left'
+    ctrl-down = 'focus down'
+    ctrl-up = 'focus up'
+    ctrl-right = 'focus right'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move
-    alt-shift-left = 'move left'
-    alt-shift-down = 'move down'
-    alt-shift-up = 'move up'
-    alt-shift-right = 'move right'
+    ctrl-shift-left = 'move left'
+    ctrl-shift-down = 'move down'
+    ctrl-shift-up = 'move up'
+    ctrl-shift-right = 'move right'
 
-    cmd-alt-shift-left = 'join-with left'
-    cmd-alt-shift-down = 'join-with down'
-    cmd-alt-shift-up = 'join-with up'
-    cmd-alt-shift-right = 'join-with right'
+    ctrl-alt-shift-left = 'join-with left'
+    ctrl-alt-shift-down = 'join-with down'
+    ctrl-alt-shift-up = 'join-with up'
+    ctrl-alt-shift-right = 'join-with right'
 
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#resize
-    cmd-minus = 'resize smart -50'
-    cmd-equal = 'resize smart +50'
+    ctrl-minus = 'resize smart -50'
+    ctrl-equal = 'resize smart +50'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-    alt-1 = 'workspace 1'
-    alt-2 = 'workspace 2'
-    alt-3 = 'workspace 3'
-    alt-4 = 'workspace 4'
-    alt-5 = 'workspace 5'
-    alt-6 = 'workspace 6'
+    ctrl-1 = 'workspace 1'
+    ctrl-2 = 'workspace 2'
+    ctrl-3 = 'workspace 3'
+    ctrl-4 = 'workspace 4'
+    ctrl-5 = 'workspace 5'
+    ctrl-6 = 'workspace 6'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-    alt-shift-1 = 'move-node-to-workspace 1 --focus-follows-window'
-    alt-shift-2 = 'move-node-to-workspace 2 --focus-follows-window'
-    alt-shift-3 = 'move-node-to-workspace 3 --focus-follows-window'
-    alt-shift-4 = 'move-node-to-workspace 4 --focus-follows-window'
-    alt-shift-5 = 'move-node-to-workspace 5 --focus-follows-window'
-    alt-shift-6 = 'move-node-to-workspace 6 --focus-follows-window'
+    ctrl-shift-1 = 'move-node-to-workspace 1 --focus-follows-window'
+    ctrl-shift-2 = 'move-node-to-workspace 2 --focus-follows-window'
+    ctrl-shift-3 = 'move-node-to-workspace 3 --focus-follows-window'
+    ctrl-shift-4 = 'move-node-to-workspace 4 --focus-follows-window'
+    ctrl-shift-5 = 'move-node-to-workspace 5 --focus-follows-window'
+    ctrl-shift-6 = 'move-node-to-workspace 6 --focus-follows-window'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
-    cmd-alt-right = 'workspace --wrap-around next'
-    cmd-alt-left = 'workspace --wrap-around prev'
+    ctrl-alt-right = 'workspace --wrap-around next'
+    ctrl-alt-left = 'workspace --wrap-around prev'
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
-    cmd-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+    ctrl-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#mode
     alt-shift-semicolon = 'mode service'
