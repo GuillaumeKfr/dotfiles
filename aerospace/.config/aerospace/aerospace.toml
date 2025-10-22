@@ -93,7 +93,7 @@ automatically-unhide-macos-hidden-apps = false
     inner.vertical =   6
     outer.left =       6
     outer.bottom =     6
-    outer.top =        0
+    outer.top =        3
     outer.right =      6
 
 # 'main' binding mode declaration
@@ -181,6 +181,8 @@ automatically-unhide-macos-hidden-apps = false
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#mode
     alt-shift-semicolon = 'mode service'
+
+    ctrl-e = 'exec-and-forget open $HOME'
 
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
