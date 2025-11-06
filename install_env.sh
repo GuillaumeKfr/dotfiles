@@ -58,6 +58,7 @@ BREW_INSTALLS=(
     tmux
     unzip
     uv
+    yazi
     zoxide
     zsh
 )
