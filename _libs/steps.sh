@@ -29,7 +29,7 @@ steps::sys_setup() {
     fi
 
     if ! sudo apt-add-repository "${APT_EXTRA_REPOS[@]}"; then
-        logging::error "[sys] Issue when adding repos"
+        logging::err "[sys] Issue when adding repos"
         exit 1
     fi
 
@@ -91,7 +91,7 @@ steps::clean_preinstalled() {
         logging::info "[clean] [${package}] Removing ..."
 
         if ! sudo apt -qq remove -y "${package}"; then
-            logging::error "[clean] [${package}] Remove failed"
+            logging::err "[clean] [${package}] Remove failed"
             exit 1
         fi
 
@@ -168,8 +168,8 @@ steps::setup_stow() {
         logging::info "[stow] [${dir}] Stowing ..."
 
         if ! stow -D "${dir}" || ! stow "${dir}"; then
-            logging::error "[stow] [${dir}] Stow failed"
-            exit
+            logging::err "[stow] [${dir}] Stow failed"
+            exit 1
         fi
 
         logging::success "[stow] [${dir}] Stowed"
