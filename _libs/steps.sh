@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # Params:
 #  - 1: List of APT repos
 steps::sys_setup() {
