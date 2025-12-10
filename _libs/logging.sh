@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 __fmt_reset=$(tput sgr 0)
 

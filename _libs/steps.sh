@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # Params:
 #  - 1: List of APT repos
