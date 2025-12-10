@@ -130,7 +130,7 @@ steps::brew_installs() {
             continue
         fi
 
-        if ! brew outdated "${formula}" &>/dev/null; then
+        if brew outdated "${formula}" &>/dev/null; then
             logging::info "[brew] [${formula}] Upgrading..."
 
             if ! brew upgrade -q "${formula}"; then
@@ -139,9 +139,9 @@ steps::brew_installs() {
             fi
 
             logging::success "[brew] [${formula}] Upgraded"
+        else
+            logging::info "[brew] [${formula}] Already up to date"
         fi
-
-        logging::info "[brew] [${formula}] Nothing to do"
     done
 
     logging::success "[brew] Installed all formulae"
