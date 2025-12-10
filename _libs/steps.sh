@@ -25,7 +25,7 @@ steps::sys_setup() {
 
     if [[ ${#repos_list[@]} = 0 ]]; then
         logging::warn "[sys] No extra repo to add"
-        return
+        return 0
     fi
 
     if ! sudo apt-add-repository "${APT_EXTRA_REPOS[@]}"; then
@@ -148,12 +148,18 @@ steps::brew_installs() {
 }
 
 steps::custom_setup() {
+    if ! command -v bat &>/dev/null; then
+        logging::warn "[custom] bat not found, skipping cache rebuild"
+        return 0
+    fi
+
     logging::info "[custom] Rebuilding bat's cache"
     if ! bat cache --build; then
         logging::err "[custom] Rebuild failed"
-        return
+        return 1
     fi
     logging::success "[custom] Rebuilt bat's cache"
+    return 0
 }
 
 # Params:
@@ -185,7 +191,7 @@ steps::ssh_config() {
 
     if [[ -d ~/.ssh ]]; then
         logging::warn "[ssh] Config already existing. Skipping section."
-        return
+        return 0
     fi
 
     logging::info "[ssh] No existing SSH config found. Generating key."
