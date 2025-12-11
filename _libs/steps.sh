@@ -166,9 +166,14 @@ steps::custom_setup() {
 #   - 1: List of folders to stow
 steps::setup_stow() {
     local to_stow=("${@}")
+    local script_dir
+
+    # Calculate repo root directory (one level up from _libs/)
+    script_dir="$(cd "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+
     logging::info "[stow] Stowing configuration folders..."
 
-    pushd "${SCRIPT_DIR}" || exit 1
+    pushd "${script_dir}" || exit 1
 
     for dir in "${to_stow[@]}"; do
         logging::info "[stow] [${dir}] Stowing ..."
