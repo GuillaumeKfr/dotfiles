@@ -21,6 +21,8 @@ abbr --add gd git diff
 
 abbr --add gl git pull
 
+abbr --add gf git fetch --all --prune --tags
+
 alias glog="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset'"
 
 abbr --add gm git merge
