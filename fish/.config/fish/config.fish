@@ -29,10 +29,11 @@ if test -f /etc/wsl.conf
     wsl.exe -u root -e mount --make-rshared /
 end
 
-# Linuxbrew
-if test -f /home/linuxbrew/.linuxbrew
-    set HOMEBREW_PREFIX "/home/linuxbrew/.linuxbrew"
-    eval ($HOMEBREW_PREFIX/bin/brew shellenv)
+# Homebrew
+if test -d /opt/homebrew
+    eval (/opt/homebrew/bin/brew shellenv)
+else if test -d /home/linuxbrew/.linuxbrew
+    eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 end
 
 # direnv
