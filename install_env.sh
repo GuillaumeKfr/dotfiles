@@ -60,6 +60,7 @@ BREW_INSTALLS=(
     tmux
     unzip
     uv
+    worktrunk
     yazi
     zoxide
     zsh
@@ -71,6 +72,7 @@ STOW_DIRS=(
     containers
     fish
     fzf
+    gh-dash
     git
     kitty
     nvim
@@ -79,13 +81,13 @@ STOW_DIRS=(
     zsh
 )
 
-sudo --validate
-
-steps::sys_setup "${APT_EXTRA_REPOS[@]}"
-
-steps::deps "${APT_DEPS[@]}"
-
-steps::clean_preinstalled "${APT_TO_REMOVE[@]}"
+if steps::is_sudo; then
+    steps::sys_setup "${APT_EXTRA_REPOS[@]}"
+    steps::deps "${APT_DEPS[@]}"
+    steps::clean_preinstalled "${APT_TO_REMOVE[@]}"
+else
+    logging::warn "[install] Skipping sys_setup, deps, and clean_preinstalled (no sudo)"
+fi
 
 steps::brew_installs "${BREW_INSTALLS[@]}"
 
@@ -95,6 +97,10 @@ steps::custom_setup
 
 steps::ssh_config
 
-steps::setup_shell
+if steps::is_sudo; then
+    steps::setup_shell
+else
+    logging::warn "[install] Skipping shell setup (requires sudo for chsh/etc/shells)"
+fi
 
 logging::success "Installation complete."

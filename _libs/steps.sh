@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+steps::is_sudo() {
+    sudo -n true 2>/dev/null
+}
+
 # Params:
 #  - 1: List of APT repos
 steps::sys_setup() {
@@ -148,17 +152,28 @@ steps::brew_installs() {
 }
 
 steps::custom_setup() {
-    if ! command -v bat &>/dev/null; then
+    if command -v bat &>/dev/null; then
+        logging::info "[custom] Rebuilding bat's cache"
+        if ! bat cache --build; then
+            logging::err "[custom] Rebuild failed"
+        else
+            logging::success "[custom] Rebuilt bat's cache"
+        fi
+    else
         logging::warn "[custom] bat not found, skipping cache rebuild"
-        return 0
     fi
 
-    logging::info "[custom] Rebuilding bat's cache"
-    if ! bat cache --build; then
-        logging::err "[custom] Rebuild failed"
-        return 1
+    if command -v wt &>/dev/null; then
+        logging::info "[custom] Installing worktrunk shell integration"
+        if ! wt config shell install --yes; then
+            logging::err "[custom] Worktrunk shell integration failed"
+        else
+            logging::success "[custom] Installed worktrunk shell integration"
+        fi
+    else
+        logging::warn "[custom] worktrunk not found, skipping shell integration"
     fi
-    logging::success "[custom] Rebuilt bat's cache"
+
     return 0
 }
 
