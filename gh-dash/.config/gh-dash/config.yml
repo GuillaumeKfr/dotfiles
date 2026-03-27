@@ -88,7 +88,7 @@ keybindings:
     - key: C
       name: code review
       command: >
-        wt switch pr:{{.PrNumber}} -x "cursor-agent 'Review this PR. Check for bugs, security issues, and suggest improvements.'"
+        wt switch pr:{{.PrNumber}} -x "cursor-agent 'Use the review-pr skill to review this PR.'"
     - key: O
       name: checkout
       builtin: checkout
