@@ -70,6 +70,7 @@ STOW_DIRS=(
     bat
     btop
     containers
+    cursor
     fish
     fzf
     gh-dash

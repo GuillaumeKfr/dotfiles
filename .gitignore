@@ -2,6 +2,9 @@
 packer_compiled.lua
 fish/.config/fish/fish_variables
 
+# Override global gitignore for stow packages that contain .cursor/
+!cursor/.cursor/
+
 ### macOS ###
 # General
 .DS_Store
