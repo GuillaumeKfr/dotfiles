@@ -93,17 +93,6 @@ keybindings:
       name: review comments
       command: >
         wt switch pr:{{.PrNumber}} -x "cursor-agent 'Use the review-pr-comments skill to review and address comments on this PR.'"
-    - key: O
-      name: checkout
-      builtin: checkout
-    - key: m
-      name: merge
-      command: >
-        gh pr merge --repo {{.RepoName}} {{.PrNumber}}
-    - key: v
-      name: approve
-      command: >
-        gh pr review --repo {{.RepoName}} --approve {{.PrNumber}}
 theme:
   colors:
     text:
