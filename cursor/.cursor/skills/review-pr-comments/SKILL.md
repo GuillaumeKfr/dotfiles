@@ -49,21 +49,20 @@ Filter out comments authored by the current user. Group threaded comments by `in
 
 Use a TodoWrite checklist to track progress across comments. For **each** comment thread:
 
-### 3a. Present the comment
+### 3a. Present the comment and ask whether to tackle it
 
 Show the user:
 - **Author** and link to the comment
 - **File & line** (if it's a review comment)
 - **Comment body** (full text)
-- The **current code** at that location (read the file)
 
-Then ask: **"Do you want to address this comment? (yes / skip)"**
+Then ask: **"Do you want to tackle this comment? (yes / skip)"**
 
-If the user says **skip**, move to the next comment.
+If the user says **skip**, move to the next comment. **Do not read code, analyze relevance, or propose any changes until the user confirms "yes".**
 
 ### 3b. Analyze relevance
 
-Read the referenced file and surrounding context. Determine if the comment is relevant:
+Only after the user confirms they want to tackle the comment, read the referenced file and surrounding context. Determine if the comment is relevant:
 
 - **Relevant**: the comment identifies a real issue (bug, style violation, performance concern, missing test, security issue, logic error, etc.) or requests a valid change.
 - **Not relevant**: the comment is based on a misunderstanding, is outdated, conflicts with project conventions, or the code is already correct.
@@ -92,18 +91,18 @@ EOF
 )"
 ```
 
-5. Capture the commit SHA:
+5. Capture the short commit SHA:
 
 ```bash
-git rev-parse HEAD
+git rev-parse --short HEAD
 ```
 
-6. Reply to the PR comment:
+6. Reply to the PR comment using the **short SHA**:
 
 ```bash
 gh api repos/{owner}/{repo}/pulls/comments/<comment_id>/replies \
   -f body="$(cat <<'EOF'
-Fixed in <commit_sha>.
+Fixed in <short_commit_sha>.
 
 <Brief explanation of the change made and why it addresses the feedback.>
 EOF
