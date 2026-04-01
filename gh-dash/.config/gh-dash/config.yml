@@ -68,11 +68,15 @@ keybindings:
     - key: C
       name: code review
       command: >
-        wt switch pr:{{.PrNumber}} -x "cursor-agent 'Use the review-pr skill to review this PR.'"
+        tmux new-window -n '{{.HeadRefName}}' 'wt switch pr:{{.PrNumber}} -x "cursor-agent '\''Use the review-pr skill to review this PR.'\''"'
     - key: c
       name: review comments
       command: >
-        wt switch pr:{{.PrNumber}} -x "cursor-agent 'Use the review-pr-comments skill to review and address comments on this PR.'"
+        tmux new-window -n '{{.HeadRefName}}' 'wt switch pr:{{.PrNumber}} -x "cursor-agent '\''Use the review-pr-comments skill to review and address comments on this PR.'\''"'
+    - key: O
+      name: open in tmux
+      command: >
+        tmux new-window -n '{{.HeadRefName}}' 'wt switch pr:{{.PrNumber}} && $SHELL'
 
 theme:
   colors:
