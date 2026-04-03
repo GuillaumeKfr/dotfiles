@@ -76,7 +76,11 @@ keybindings:
     - key: O
       name: open in tmux
       command: >
-        tmux new-window -n '{{.HeadRefName}}' 'wt switch pr:{{.PrNumber}} && $SHELL'
+        tmux new-window -n '{{.HeadRefName}}' 'wt switch pr:{{.PrNumber}} && nvim' \;
+        split-window 'wt switch pr:{{.PrNumber}} && cursor-agent' \;
+        split-window 'wt switch pr:{{.PrNumber}} && $SHELL' \;
+        select-layout main-vertical \;
+        select-pane -t 0
 
 theme:
   colors:
