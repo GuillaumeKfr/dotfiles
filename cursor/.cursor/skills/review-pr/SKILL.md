@@ -9,6 +9,8 @@ description: >
 
 # Review PR
 
+When formulating and posting review feedback, apply the `receiving-code-review` skill.
+
 ## Prerequisites
 
 - `gh` CLI authenticated and available in PATH

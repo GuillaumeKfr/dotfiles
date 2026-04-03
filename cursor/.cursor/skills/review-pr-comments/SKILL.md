@@ -9,6 +9,8 @@ description: >
 
 # Review PR Comments
 
+When evaluating and responding to comments, apply the `receiving-code-review` skill.
+
 ## Prerequisites
 
 - `gh` CLI authenticated and available in PATH
@@ -62,10 +64,7 @@ If the user says **skip**, move to the next comment. **Do not read code, analyze
 
 ### 3b. Analyze relevance
 
-Only after the user confirms they want to tackle the comment, read the referenced file and surrounding context. Determine if the comment is relevant:
-
-- **Relevant**: the comment identifies a real issue (bug, style violation, performance concern, missing test, security issue, logic error, etc.) or requests a valid change.
-- **Not relevant**: the comment is based on a misunderstanding, is outdated, conflicts with project conventions, or the code is already correct.
+Only after the user confirms they want to tackle the comment, read the referenced file and surrounding context. Determine if the comment is relevant or not.
 
 ### 3c. If RELEVANT -- propose a fix
 
@@ -123,11 +122,7 @@ EOF
 ```bash
 gh api repos/{owner}/{repo}/pulls/comments/<comment_id>/replies \
   -f body="$(cat <<'EOF'
-Thanks for the feedback! After reviewing, I believe this doesn't need a change because:
-
-<Clear, polite explanation of why the comment is not applicable.>
-
-Happy to discuss further if you see it differently.
+<Factual explanation of why the comment is not applicable, with supporting evidence.>
 EOF
 )"
 ```
