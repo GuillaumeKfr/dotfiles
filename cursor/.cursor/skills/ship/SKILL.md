@@ -31,7 +31,33 @@ git checkout -b <branch-name>
 
 If already on a feature branch, continue on it.
 
-## Step 2: Create small atomic commits
+## Step 2: Pre-flight checks
+
+Before committing anything, run all applicable tests and checks to catch issues early.
+
+1. Detect which tools are configured in the repo (look for config files, scripts, `package.json` scripts, `Makefile` targets, `pyproject.toml` sections, `.pre-commit-config.yaml`, etc.).
+
+2. Run every applicable check. Common examples — adapt to what the repo actually uses:
+
+| Tool / Config detected | Command to run |
+| --- | --- |
+| `pre-commit` config | `pre-commit run --all-files` |
+| `dbt` project | `dbt build` (or `dbt test` if models are already built) |
+| `sqlfluff` config | `sqlfluff lint .` |
+| `pytest` / `pyproject.toml [tool.pytest]` | `pytest` |
+| `npm test` / `vitest` / `jest` | `npm test` (or equivalent) |
+| `eslint` config | `npx eslint .` |
+| `Makefile` with `lint` / `check` targets | `make lint check` |
+| `cargo` project | `cargo clippy && cargo test` |
+| `go.mod` | `go vet ./... && go test ./...` |
+
+3. Collect all failures and warnings.
+
+4. **Fix every issue** found — apply code changes, re-run the failing check to confirm the fix, and repeat until all checks pass.
+
+5. Only proceed to Step 3 once every check passes cleanly.
+
+## Step 3: Create small atomic commits
 
 Analyze all pending changes (staged + unstaged + untracked):
 
@@ -84,7 +110,7 @@ Repeat until all changes are committed.
 - `refactor(scope):` — code restructuring
 - `docs(scope):` — documentation only
 
-## Step 3: Push
+## Step 4: Push
 
 ```bash
 git push -u origin HEAD
@@ -96,7 +122,7 @@ If the push is rejected (e.g., diverged history), pull with rebase first:
 git pull --rebase origin <branch> && git push -u origin HEAD
 ```
 
-## Step 4: Create or update the PR
+## Step 5: Create or update the PR
 
 Check if a PR already exists for this branch:
 
@@ -134,7 +160,7 @@ EOF
 
 ### If a PR exists — update its description
 
-The push in step 3 already updated the PR code. Now ensure the description reflects the latest changes.
+The push in step 4 already updated the PR code. Now ensure the description reflects the latest changes.
 
 1. Fetch the current PR body and the full commit log:
 
@@ -155,7 +181,7 @@ EOF
 )"
 ```
 
-## Step 5: Wait for CI checks
+## Step 6: Wait for CI checks
 
 Watch check status until all checks complete or one fails:
 
@@ -184,7 +210,7 @@ gh run view <run-id> --log-failed
 
 3. Analyze the failure and fix the issue in the code.
 
-4. Commit the fix following the same atomic commit conventions from step 2.
+4. Commit the fix following the same atomic commit conventions from step 3.
 
 5. Push and re-check:
 
