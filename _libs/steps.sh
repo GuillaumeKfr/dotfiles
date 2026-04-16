@@ -8,12 +8,7 @@ steps::is_sudo() {
 
 # Params:
 #  - 1: List of APT repos
-steps::sys_setup() {
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        logging::info "[sys] MACOS detected, skipping step"
-        return 0
-    fi
-
+steps::apt_setup() {
     local repos_list=("${@}")
 
     logging::info "[sys] Upgrading packages..."
@@ -42,12 +37,7 @@ steps::sys_setup() {
 
 # Params:
 #   - 1: List of APT dependencies
-steps::deps() {
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        logging::info "[sys] MACOS detected, skipping step"
-        return 0
-    fi
-
+steps::apt_deps() {
     local deps_list=("${@}")
 
     logging::info "[deps] Installing apt dependencies..."
@@ -58,28 +48,35 @@ steps::deps() {
     fi
 
     logging::success "[deps] Installed apt dependencies"
+}
 
-    logging::info "[deps] Installing Homebrew..."
+steps::install_homebrew() {
+    if [[ "$(command -v brew)" ]]; then
+        logging::info "[brew] Homebrew already installed"
+        return 0
+    fi
+
+    logging::info "[brew] Installing Homebrew..."
 
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+    if [[ -d /opt/homebrew ]]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [[ -d /home/linuxbrew/.linuxbrew ]]; then
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    fi
 
     if [[ ! "$(command -v brew)" ]]; then
-        logging::err "[deps] Install failed"
+        logging::err "[brew] Homebrew install failed"
         exit 1
     fi
 
-    logging::success "[deps] Installed Homebrew"
+    logging::success "[brew] Installed Homebrew"
 }
 
 # Params:
 #   -1: List of APT packages to remove
 steps::clean_preinstalled() {
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        logging::info "[sys] MACOS detected, skipping step"
-        return 0
-    fi
-
     local packages=("${@}")
 
     logging::info "[clean] Removing packages..."
@@ -112,8 +109,8 @@ steps::clean_preinstalled() {
     logging::success "[clean] Removed all packages"
 }
 
-steps::custom_setup() {
-    if command -v bat &>/dev/null; then
+steps::post_install() {
+    if [[ "$(command -v bat)" ]]; then
         logging::info "[custom] Rebuilding bat's cache"
         if ! bat cache --build; then
             logging::err "[custom] Rebuild failed"
@@ -124,7 +121,7 @@ steps::custom_setup() {
         logging::warn "[custom] bat not found, skipping cache rebuild"
     fi
 
-    if command -v wt &>/dev/null; then
+    if [[ "$(command -v wt)" ]]; then
         logging::info "[custom] Installing worktrunk shell integration"
         if ! wt config shell install --yes; then
             logging::err "[custom] Worktrunk shell integration failed"
@@ -167,17 +164,6 @@ steps::setup_stow() {
     logging::success "[stow] Stowed all config folders"
 }
 
-steps::ssh_config() {
-    logging::info "[ssh] Configuring SSH connectivity..."
-
-    if [[ -d ~/.ssh ]]; then
-        logging::warn "[ssh] Config already existing. Skipping section."
-        return 0
-    fi
-
-    logging::info "[ssh] No existing SSH config found. Generating key."
-    logging::info "[ssh] <To be implemented>"
-}
 
 __setup_zsh() {
     logging::info "[zsh] Setting up configuration..."
@@ -209,7 +195,7 @@ __setup_zsh() {
 
     logging::info "[zsh] Setting ZSH as default"
 
-    if ! chsh -s "$(which zsh)"; then
+    if ! chsh -s "$(command -v zsh)"; then
         logging::err "[zsh] Failed to set ZSH as default"
         exit 1
     fi
@@ -227,13 +213,13 @@ __setup_fish() {
 
     logging::info "[fish] Setting fish as valid shell..."
 
-    which fish | sudo tee -a /etc/shells >/dev/null
+    command -v fish | sudo tee -a /etc/shells >/dev/null
 
     logging::success "[fish] Set up as valid"
 
     logging::info "[fish] Setting FISH as default"
 
-    if ! chsh -s "$(which fish)"; then
+    if ! chsh -s "$(command -v fish)"; then
         logging::err "[fish] Failed to set FISH as default"
         exit 1
     fi
