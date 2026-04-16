@@ -58,9 +58,18 @@ Categorize each finding:
 
 Use TodoWrite to track all findings as a checklist.
 
+After analysis, present a **short summary only** — list each finding with its category, file, and a one-line description. Do NOT show code snippets or suggested fixes yet. Example:
+
+> Found 3 findings:
+> 1. **BUG** — `src/auth.py` — missing null check on user lookup
+> 2. **SECURITY** — `src/api.py` — SQL query built with string concatenation
+> 3. **IMPROVEMENT** — `src/utils.py` — redundant loop can be replaced with list comprehension
+
 ## Step 4: Present findings one by one
 
-For **each** finding, show the user:
+> **CRITICAL: Present exactly ONE finding per message. After showing the finding and asking for approval, STOP your response and WAIT for the user to reply. Do NOT present the next finding until the user has responded.**
+
+For the **next pending** finding, show the user:
 
 - **Category** (BUG / SECURITY / IMPROVEMENT)
 - **File & line range**
@@ -70,13 +79,17 @@ For **each** finding, show the user:
 
 Then ask: **"Post this as a PR comment? (approve / revise / skip)"**
 
-- **approve** — post the comment on the PR
-- **revise** — user provides adjustments, re-present
-- **skip** — move to next finding
+Wait for the user's response before continuing.
 
-## Step 5: Post approved comments
+When the user responds:
 
-Get the head commit SHA:
+- **approve** — post the comment on the PR immediately (see below), mark the TodoWrite item as completed, then present the next finding
+- **revise** — user provides adjustments, re-present the revised finding and ask again
+- **skip** — mark the TodoWrite item as completed, then present the next finding
+
+### Posting an approved comment
+
+Get the head commit SHA (once, cache for subsequent postings):
 
 ```bash
 gh pr view <PR_NUMBER> --json headRefOid --jq '.headRefOid'
@@ -107,7 +120,7 @@ Example comment body:
 
 For broader observations that don't map to a single code replacement, just write the explanation without a suggestion block.
 
-## Step 6: Summary
+## Step 5: Summary
 
 After all findings are processed, present:
 
