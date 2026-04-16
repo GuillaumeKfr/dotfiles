@@ -1,6 +1,6 @@
 ## Installation
 
-To install, run the `install_env.sh` script.
+From the repo root, run `make` for a full install, or `make help` to list targets (for example `make stow` to re-link configs only).
 
 ### Neovim
 
