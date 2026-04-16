@@ -1,6 +1,3 @@
-# Taps
-tap "nikitabobko/tap"
-
 # Formulae
 brew "bat"
 brew "black"
@@ -32,8 +29,9 @@ brew "yazi"
 brew "zoxide"
 brew "zsh"
 
-# Casks (macOS only)
+# macOS only
 if OS.mac?
+  tap "nikitabobko/tap"
   cask "kitty"
   cask "nikitabobko/tap/aerospace"
 end
