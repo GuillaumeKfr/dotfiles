@@ -34,39 +34,8 @@ APT_TO_REMOVE=(
     python3.10-minimal
 )
 
-BREW_INSTALLS=(
-    bat
-    black
-    btop
-    colima
-    direnv
-    docker
-    eza
-    fish
-    fzf
-    gh
-    git-delta
-    jq
-    markdownlint-cli2
-    neovim
-    pre-commit
-    python
-    ripgrep
-    shellcheck
-    sqlfluff
-    starship
-    stow
-    tlrc
-    tmux
-    unzip
-    uv
-    worktrunk
-    yazi
-    zoxide
-    zsh
-)
-
 STOW_DIRS=(
+    aerospace
     bat
     btop
     containers
@@ -76,6 +45,7 @@ STOW_DIRS=(
     gh-dash
     git
     kitty
+    lazygit
     nvim
     starship
     tmux
@@ -90,7 +60,12 @@ else
     logging::warn "[install] Skipping sys_setup, deps, and clean_preinstalled (no sudo)"
 fi
 
-steps::brew_installs "${BREW_INSTALLS[@]}"
+logging::info "[brew] Installing from Brewfile..."
+if ! brew bundle --file="${SCRIPT_DIR}/Brewfile"; then
+    logging::err "[brew] brew bundle failed"
+    exit 1
+fi
+logging::success "[brew] Installed all packages from Brewfile"
 
 steps::setup_stow "${STOW_DIRS[@]}"
 

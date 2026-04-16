@@ -1,0 +1,39 @@
+# Taps
+tap "nikitabobko/tap"
+
+# Formulae
+brew "bat"
+brew "black"
+brew "btop"
+brew "colima"
+brew "direnv"
+brew "docker"
+brew "eza"
+brew "fish"
+brew "fzf"
+brew "gh"
+brew "git-delta"
+brew "jq"
+brew "markdownlint-cli2"
+brew "neovim"
+brew "pre-commit"
+brew "python"
+brew "ripgrep"
+brew "shellcheck"
+brew "sqlfluff"
+brew "starship"
+brew "stow"
+brew "tlrc"
+brew "tmux"
+brew "unzip"
+brew "uv"
+brew "worktrunk"
+brew "yazi"
+brew "zoxide"
+brew "zsh"
+
+# Casks (macOS only)
+if OS.mac?
+  cask "kitty"
+  cask "nikitabobko/tap/aerospace"
+end

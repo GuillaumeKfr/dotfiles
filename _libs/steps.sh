@@ -112,45 +112,6 @@ steps::clean_preinstalled() {
     logging::success "[clean] Removed all packages"
 }
 
-# Params:
-#   - 1: List of formulae
-steps::brew_installs() {
-    local to_install=("${@}")
-
-    logging::info "[brew] Installing formulae..."
-
-    for formula in "${to_install[@]}"; do
-        logging::info "[brew] [${formula}] Checking formula..."
-
-        if ! brew list "${formula}" &>/dev/null; then
-            logging::info "[brew] [${formula}] Installing..."
-
-            if ! brew install -q "${formula}"; then
-                logging::err "[brew] [${formula}] Install failed"
-                exit 1
-            fi
-
-            logging::success "[brew] [${formula}] Installed"
-            continue
-        fi
-
-        if brew outdated "${formula}" &>/dev/null; then
-            logging::info "[brew] [${formula}] Upgrading..."
-
-            if ! brew upgrade -q "${formula}"; then
-                logging::err "[brew] [${formula}] Upgrade failed"
-                exit 1
-            fi
-
-            logging::success "[brew] [${formula}] Upgraded"
-        else
-            logging::info "[brew] [${formula}] Already up to date"
-        fi
-    done
-
-    logging::success "[brew] Installed all formulae"
-}
-
 steps::custom_setup() {
     if command -v bat &>/dev/null; then
         logging::info "[custom] Rebuilding bat's cache"
