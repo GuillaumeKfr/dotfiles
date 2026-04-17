@@ -27,7 +27,7 @@ steps::apt_setup() {
         return 0
     fi
 
-    if ! sudo apt-add-repository "${APT_EXTRA_REPOS[@]}"; then
+    if ! sudo apt-add-repository "${repos_list[@]}"; then
         logging::err "[sys] Issue when adding repos"
         exit 1
     fi
@@ -213,7 +213,12 @@ __setup_fish() {
 
     logging::info "[fish] Setting fish as valid shell..."
 
-    command -v fish | sudo tee -a /etc/shells >/dev/null
+    local fish_path
+    fish_path="$(command -v fish)"
+
+    if ! grep -qx "$fish_path" /etc/shells; then
+        echo "$fish_path" | sudo tee -a /etc/shells >/dev/null
+    fi
 
     logging::success "[fish] Set up as valid"
 
