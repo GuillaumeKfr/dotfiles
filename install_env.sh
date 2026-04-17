@@ -119,6 +119,11 @@ cmd::system_setup() {
 }
 
 cmd::brew() {
+    if [[ ! "$(command -v brew)" ]]; then
+        logging::err "[brew] Homebrew is not installed. Run './install_env.sh system' first."
+        exit 1
+    fi
+
     logging::info "[brew] Installing from Brewfile..."
     if ! brew bundle --file="${SCRIPT_DIR}/Brewfile"; then
         logging::err "[brew] brew bundle failed"
@@ -153,7 +158,7 @@ cmd::all() {
 }
 
 cmd::help() {
-    grep '^#/' "$0" | sed 's/^#\/\($\| \)//' >&2
+    grep '^#/' "${BASH_SOURCE[0]}" | sed 's/^#\/\($\| \)//' >&2
 }
 
 case "${1:-all}" in
