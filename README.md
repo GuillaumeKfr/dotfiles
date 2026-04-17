@@ -1,6 +1,8 @@
 ## Installation
 
-To install, run the `install_env.sh` script.
+Run `./install_env.sh` to perform a full install (same as `./install_env.sh all`).
+
+You can also run individual steps, for example `./install_env.sh brew` or `./install_env.sh stow`. See `./install_env.sh help` for all commands.
 
 ### Neovim
 
