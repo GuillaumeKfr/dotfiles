@@ -1,6 +1,6 @@
 [core]
 editor = nvim
-pager = delta
+pager = delta --side-by-side
 excludesfile = ~/.gitignore
 
 [init]
@@ -14,26 +14,15 @@ diffFilter = delta --color-only --features=navigate
 
 [delta]
 navigate = true    # use n and N to move between diff sections
-light = false
-line-numbers = true
-side-by-side = true
-true-color = always
-features = villsau
-
-[merge]
-conflictstyle = diff3
-
-[diff]
-colorMoved = default
-
-[delta "villsau"]
 dark = true
+true-color = always
+line-numbers = true
+line-numbers-right-format = "│ "
 file-style = omit
 hunk-header-decoration-style = omit
 hunk-header-file-style = magenta
 hunk-header-line-number-style = dim magenta
 hunk-header-style = file line-number syntax
-line-numbers = false
 minus-emph-style = bold red 52
 minus-empty-line-marker-style = normal "#3f0001"
 minus-non-emph-style = dim red
@@ -42,7 +31,7 @@ plus-emph-style = bold green 22
 plus-empty-line-marker-style = normal "#002800"
 plus-non-emph-style = dim green
 plus-style = bold green
-syntax-theme = OneHalfDark
+syntax-theme = Catppuccin Mocha
 whitespace-error-style = reverse red
 zero-style = dim syntax
 
