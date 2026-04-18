@@ -29,6 +29,7 @@ brew "zsh"
 # macOS only
 if OS.mac?
   tap "nikitabobko/tap"
+  cask "font-jetbrains-mono-nerd-font"
   cask "kitty"
   cask "nikitabobko/tap/aerospace"
 end
