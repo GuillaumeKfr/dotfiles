@@ -9,15 +9,13 @@ or `./install_env.sh stow`. See `./install_env.sh help` for all commands.
 
 ### Neovim
 
-Neovim's config is managed in a separate repo, declared here as a submodule.
+Config based on [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim),
+managed as a git subtree. To pull upstream updates:
 
-To init the repo with the config:
-
-`git submodule update --init --recursive`
-
-To update the repo with the latest version:
-
-`git submodule foreach git pull --ff-only origin master`
+```bash
+git subtree pull --prefix=nvim/.config/nvim \
+  https://github.com/nvim-lua/kickstart.nvim.git master --squash
+```
 
 ### GitConfig
 
