@@ -125,7 +125,6 @@ Neovim config based on [kickstart.nvim](https://github.com/nvim-lua/kickstart.nv
 | [guess-indent.nvim](https://github.com/NMAC427/guess-indent.nvim) | Automatic indentation detection |
 | [lazy.nvim](https://github.com/folke/lazy.nvim) | Plugin manager |
 | [LuaSnip](https://github.com/L3MON4D3/LuaSnip) | Snippet engine |
-| [markview.nvim](https://github.com/OXY2DEV/markview.nvim) | Markdown previewer in-buffer |
 | [mason.nvim](https://github.com/mason-org/mason.nvim) | LSP/tool installer |
 | [mason-tool-installer.nvim](https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim) | Auto-install Mason tools |
 | [mini.nvim](https://github.com/nvim-mini/mini.nvim) | Collection of small modules |
