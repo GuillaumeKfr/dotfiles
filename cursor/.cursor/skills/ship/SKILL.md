@@ -231,9 +231,9 @@ After CI checks pass, scan the PR for code quality issues using the SonarCloud M
 Find the SonarCloud project key using this lookup order:
 
 1. `.sonarlint/connectedMode.json` — use the `projectKey` field
-2. Root config files (`sonar-project.properties`, `pom.xml`, `build.gradle`, `package.json`) — look for `sonar.projectKey`
-3. CI/CD pipeline files (`.github/workflows/*.yml`, `Jenkinsfile`, `.gitlab-ci.yml`, etc.) — look for `sonar.projectKey`
-4. Fallback: call `search_my_sonarqube_projects` to discover it
+2. Root config files — look for `sonar.projectKey` in `sonar-project.properties`, `pom.xml`, `build.gradle`, `package.json`, or look for `sonarqube.org/project-key` in `catalog-info.yaml`
+
+If no project key is found, skip Step 7 entirely and print a success summary with the PR URL.
 
 ### 7b. Query issues on the PR
 
