@@ -2,8 +2,9 @@
 name: ship
 description: >
   Ship current changes: create a branch if on main, make small atomic commits,
-  push, create or update a PR, and monitor CI checks — fixing failures
-  automatically. Use when the user says "ship", "ship it", "send a PR",
+  push, create or update a PR, monitor CI checks — fixing failures
+  automatically — then scan SonarCloud for code quality issues and fix those
+  too. Use when the user says "ship", "ship it", "send a PR",
   "push and create PR", or wants to land their current work.
 ---
 
@@ -13,6 +14,7 @@ description: >
 
 - `gh` CLI authenticated and available in PATH
 - Git repo with uncommitted or staged changes (or recent unpushed commits)
+- SonarCloud MCP server configured (for Step 7)
 
 ## Step 1: Ensure a feature branch
 
@@ -191,7 +193,7 @@ gh pr checks --watch --fail-fast
 
 ### If checks pass
 
-Print a success summary with the PR URL. Done.
+Proceed to Step 7 (SonarCloud scan).
 
 ### If checks fail
 
@@ -219,6 +221,59 @@ git push
 ```
 
 6. Go back to the polling loop. Repeat until checks pass or you've attempted **3 fix cycles** — after that, present the remaining failures to the user and stop.
+
+## Step 7: SonarCloud code quality scan
+
+After CI checks pass, scan the PR for code quality issues using the SonarCloud MCP.
+
+### 7a. Resolve the project key
+
+Find the SonarCloud project key using this lookup order:
+
+1. `.sonarlint/connectedMode.json` — use the `projectKey` field
+2. Root config files (`sonar-project.properties`, `pom.xml`, `build.gradle`, `package.json`) — look for `sonar.projectKey`
+3. CI/CD pipeline files (`.github/workflows/*.yml`, `Jenkinsfile`, `.gitlab-ci.yml`, etc.) — look for `sonar.projectKey`
+4. Fallback: call `search_my_sonarqube_projects` to discover it
+
+### 7b. Query issues on the PR
+
+Use the PR number from Step 5 and call `search_sonar_issues_in_projects` with:
+
+- `pullRequestId`: the GitHub PR number (as a string)
+- `issueStatuses`: `["OPEN"]`
+- `projects`: `["<project-key>"]`
+
+Filter out TODO/FIXME tracker rules client-side — skip any issue whose rule key ends with `:S1135` or is otherwise a TODO/FIXME tag tracker.
+
+### 7c. If no issues — done
+
+Print a success summary with the PR URL and a note that SonarCloud found no issues. Done.
+
+### 7d. Fix each issue
+
+For each remaining issue:
+
+1. Call `show_rule` with the issue's rule key to understand what the rule expects.
+2. Read the affected file and locate the problematic code using the issue's component (file path) and line/textRange information.
+3. Apply the fix.
+
+Once all issues in the batch are fixed:
+
+1. Commit the fixes following the same atomic commit conventions from Step 3 (e.g., `fix(sonar): resolve null pointer dereference in parser`).
+2. Push:
+
+```bash
+git push
+```
+
+### 7e. Loop
+
+After pushing SonarCloud fixes:
+
+1. Go back to **Step 6** — wait for CI checks to pass again (CI retries follow Step 6's own 3-cycle cap).
+2. Once CI passes, re-run **Step 7b** to check for remaining SonarCloud issues.
+3. Repeat until SonarCloud is clean or you've attempted **3 SonarCloud fix cycles**.
+4. After 3 cycles, if issues still remain, present the remaining issues to the user and stop.
 
 ## Safety Rules
 
