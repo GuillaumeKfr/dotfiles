@@ -1,0 +1,6 @@
+# https://worktrunk.dev/config/
+
+pre-start = [
+  "wt step copy-ignored",
+  "direnv allow",
+]

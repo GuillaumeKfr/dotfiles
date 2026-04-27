@@ -58,6 +58,7 @@ STOW_DIRS=(
     nvim
     starship
     tmux
+    worktrunk
     zsh
 )
 
