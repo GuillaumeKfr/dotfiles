@@ -18,6 +18,7 @@ set -euo pipefail
 SCRIPT_DIR="$(dirname -- "${BASH_SOURCE[0]}")"
 
 source "${SCRIPT_DIR}/_libs/logging.sh"
+source "${SCRIPT_DIR}/_libs/config.sh"
 source "${SCRIPT_DIR}/_libs/steps.sh"
 
 # --- OS detection ---
@@ -43,47 +44,19 @@ OS="$(detect_os)"
 ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 ZSH_PLUGINS_DIR="${ZSH_CUSTOM_DIR}/plugins"
 
-STOW_DIRS=(
-    aerospace
-    bat
-    btop
-    containers
-    cursor
-    fish
-    fzf
-    gh-dash
-    git
-    kitty
-    lazygit
-    nvim
-    starship
-    tmux
-    worktrunk
-    zsh
-)
+CONF="${SCRIPT_DIR}/install.conf"
+
+STOW_DIRS=()
+while IFS= read -r line; do STOW_DIRS+=("$line"); done < <(config::read_section "$CONF" "stow")
 
 APT_EXTRA_REPOS=()
+while IFS= read -r line; do APT_EXTRA_REPOS+=("$line"); done < <(config::read_section "$CONF" "apt-repos")
 
-APT_DEPS=(
-    build-essential
-    ca-certificates
-    curl
-    libcairo2-dev
-    libdbus-glib-1-dev
-    libgirepository1.0-dev
-    libsystemd-dev
-    pkg-config
-    python3-pip
-    stow
-    uidmap
-)
+APT_DEPS=()
+while IFS= read -r line; do APT_DEPS+=("$line"); done < <(config::read_section "$CONF" "apt-deps")
 
-APT_TO_REMOVE=(
-    python3
-    python3.10
-    python3-minimal
-    python3.10-minimal
-)
+APT_TO_REMOVE=()
+while IFS= read -r line; do APT_TO_REMOVE+=("$line"); done < <(config::read_section "$CONF" "apt-remove")
 
 cmd::debian_setup() {
     if steps::is_sudo; then
