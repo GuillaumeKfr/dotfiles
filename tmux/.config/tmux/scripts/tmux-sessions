@@ -86,6 +86,11 @@ build_list() {
     local current_session
     current_session=$(tmux display-message -p '#S')
 
+    local -a names=()
+    local -a prios=()
+    local -a dots_arr=()
+    local max_len=0
+
     while IFS= read -r session_name; do
         local dots=""
         local max_priority=$STATE_NONE
@@ -100,17 +105,33 @@ build_list() {
             fi
         done < <(tmux list-panes -s -t "=$session_name" -F '#{pane_id}	#{pane_pid}' 2>/dev/null)
 
-        local display
-        if [[ "$session_name" == "$current_session" ]]; then
-            display="${CLR_BOLD}* ${session_name}${CLR_RESET}"
-        else
-            display="  ${session_name}"
+        names+=("$session_name")
+        prios+=("$max_priority")
+        dots_arr+=("$dots")
+        [[ "${#session_name}" -gt "$max_len" ]] && max_len=${#session_name}
+    done < <(tmux list-sessions -F '#S' 2>/dev/null)
+
+    local col=$((max_len + 4))
+
+    for i in "${!names[@]}"; do
+        local sn="${names[$i]}"
+        local visible="  ${sn}"
+        if [[ "$sn" == "$current_session" ]]; then
+            visible="* ${sn}"
         fi
 
-        [[ -n "$dots" ]] && display+="   ${dots}"
+        local pad=$((col - ${#visible}))
+        local gap=$(printf '%*s' "$pad" "")
 
-        printf '%d\t%s\t%s\n' "$max_priority" "$session_name" "$display"
-    done < <(tmux list-sessions -F '#S' 2>/dev/null)
+        local display
+        if [[ "$sn" == "$current_session" ]]; then
+            display="${CLR_BOLD}${visible}${CLR_RESET}${gap}${dots_arr[$i]}"
+        else
+            display="${visible}${gap}${dots_arr[$i]}"
+        fi
+
+        printf '%d\t%s\t%s\n' "${prios[$i]}" "$sn" "$display"
+    done
 }
 
 create_session() {
@@ -151,10 +172,10 @@ kill_session() {
 }
 
 main() {
-    local legend="${CLR_RED}${DOT}${CLR_RESET}err ${CLR_YELLOW}${DOT}${CLR_RESET}approve ${CLR_BLUE}${DOT}${CLR_RESET}done ${CLR_GREEN}${DOT}${CLR_RESET}work ${CLR_DIM}${DOT}${CLR_RESET}idle"
-    local bindings="enter:switch  ctrl-n:new  ctrl-x:kill"
+    local legend="  ${CLR_RED}${DOT}${CLR_RESET} err   ${CLR_YELLOW}${DOT}${CLR_RESET} approve   ${CLR_BLUE}${DOT}${CLR_RESET} done   ${CLR_GREEN}${DOT}${CLR_RESET} work   ${CLR_DIM}${DOT}${CLR_RESET} idle"
+    local bindings="  ${CLR_DIM}enter:switch  ctrl-n:new  ctrl-x:kill${CLR_RESET}"
     local header
-    header=$(printf '%s\n%s' "$legend" "$bindings")
+    header=$(printf '%s\n%s\n' "$legend" "$bindings")
 
     while true; do
         local list
@@ -168,7 +189,7 @@ main() {
             --delimiter=$'\t' \
             --with-nth=3 \
             --expect=ctrl-n,ctrl-x \
-            --prompt="Sessions: " \
+            --prompt=" " \
             --height=100% \
             --layout=reverse \
             --border \
