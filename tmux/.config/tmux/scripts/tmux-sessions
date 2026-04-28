@@ -1,12 +1,18 @@
 #!/usr/bin/env bash
 set -uo pipefail
 
-# Catppuccin Mocha palette (24-bit truecolor)
-CLR_RED=$'\033[38;2;243;139;168m'
-CLR_YELLOW=$'\033[38;2;249;226;175m'
-CLR_GREEN=$'\033[38;2;166;227;161m'
-CLR_BLUE=$'\033[38;2;137;180;250m'
-CLR_DIM=$'\033[38;2;108;112;134m'
+tmux_color() {
+    local hex
+    hex=$(tmux show-options -gv "$1" 2>/dev/null)
+    hex="${hex#\#}"
+    printf '\033[38;2;%d;%d;%dm' "0x${hex:0:2}" "0x${hex:2:2}" "0x${hex:4:2}"
+}
+
+CLR_RED=$(tmux_color @thm_red)
+CLR_YELLOW=$(tmux_color @thm_yellow)
+CLR_GREEN=$(tmux_color @thm_green)
+CLR_BLUE=$(tmux_color @thm_blue)
+CLR_DIM=$(tmux_color @thm_overlay_0)
 CLR_BOLD=$'\033[1m'
 CLR_RESET=$'\033[0m'
 
