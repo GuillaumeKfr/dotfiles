@@ -1,6 +1,17 @@
 #!/usr/bin/env bash
 set -uo pipefail
 
+if [[ "${1:-}" == "--popup" ]]; then
+    count=$(tmux list-sessions -F '#{session_name}' 2>/dev/null | wc -l | tr -d ' ')
+    max_name=$(tmux list-sessions -F '#{session_name}' 2>/dev/null | awk '{l=length; if(l>m) m=l} END{print m}')
+    h=$((count + 8))
+    w=$((max_name + 18))
+    [[ $h -lt 12 ]] && h=12
+    [[ $w -lt 35 ]] && w=35
+    tmux display-popup -w "$w" -h "$h" -E "$0"
+    exit 0
+fi
+
 tmux_color() {
     local hex
     hex=$(tmux show-options -gv "$1" 2>/dev/null)
