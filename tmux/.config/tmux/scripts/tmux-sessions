@@ -60,48 +60,37 @@ build_list() {
     local current_session
     current_session=$(tmux display-message -p '#S')
 
-    # Single ps call → set of PIDs that are (or parent) a cursor-agent process
     local agent_pids
     agent_pids=" $(ps -eo pid=,ppid=,args= 2>/dev/null \
         | awk '/cursor-agent/ {print $1; print $2}' | tr '\n' ' ') "
 
-    # Single tmux call for all panes across all sessions
-    local -a names=() prios=() dots_arr=()
+    local -a names=() activities=() prios=() dots_arr=()
     local max_len=0
-    local prev_session="" dots="" max_priority=$STATE_NONE
+
+    while IFS=$'\t' read -r sn act; do
+        names+=("$sn")
+        activities+=("$act")
+        prios+=("$STATE_NONE")
+        dots_arr+=("")
+        [[ "${#sn}" -gt "$max_len" ]] && max_len=${#sn}
+    done < <(tmux list-sessions -F '#{session_name}	#{session_activity}' 2>/dev/null)
 
     while IFS=$'\t' read -r session pane_id pane_pid; do
-        if [[ "$session" != "$prev_session" ]]; then
-            if [[ -n "$prev_session" ]]; then
-                names+=("$prev_session")
-                prios+=("$max_priority")
-                dots_arr+=("$dots")
-                [[ "${#prev_session}" -gt "$max_len" ]] && max_len=${#prev_session}
-            fi
-            dots=""
-            max_priority=$STATE_NONE
-            prev_session="$session"
-        fi
-
-        if [[ "$agent_pids" == *" ${pane_pid} "* ]]; then
-            detect_agent_state "$pane_id"
+        [[ "$agent_pids" != *" ${pane_pid} "* ]] && continue
+        detect_agent_state "$pane_id"
+        for idx in "${!names[@]}"; do
+            [[ "${names[$idx]}" != "$session" ]] && continue
             case "$_state" in
-                "$STATE_ERROR")    dots+="${CLR_RED}${DOT}${CLR_RESET}" ;;
-                "$STATE_APPROVAL") dots+="${CLR_YELLOW}${DOT}${CLR_RESET}" ;;
-                "$STATE_FOLLOWUP") dots+="${CLR_BLUE}${DOT}${CLR_RESET}" ;;
-                "$STATE_WORKING")  dots+="${CLR_GREEN}${DOT}${CLR_RESET}" ;;
-                "$STATE_IDLE")     dots+="${CLR_DIM}${DOT}${CLR_RESET}" ;;
+                "$STATE_ERROR")    dots_arr[$idx]+="${CLR_RED}${DOT}${CLR_RESET}" ;;
+                "$STATE_APPROVAL") dots_arr[$idx]+="${CLR_YELLOW}${DOT}${CLR_RESET}" ;;
+                "$STATE_FOLLOWUP") dots_arr[$idx]+="${CLR_BLUE}${DOT}${CLR_RESET}" ;;
+                "$STATE_WORKING")  dots_arr[$idx]+="${CLR_GREEN}${DOT}${CLR_RESET}" ;;
+                "$STATE_IDLE")     dots_arr[$idx]+="${CLR_DIM}${DOT}${CLR_RESET}" ;;
             esac
-            [[ "$_state" -lt "$max_priority" ]] && max_priority=$_state
-        fi
+            [[ "$_state" -lt "${prios[$idx]}" ]] && prios[$idx]=$_state
+            break
+        done
     done < <(tmux list-panes -a -F '#{session_name}	#{pane_id}	#{pane_pid}' 2>/dev/null)
-
-    if [[ -n "$prev_session" ]]; then
-        names+=("$prev_session")
-        prios+=("$max_priority")
-        dots_arr+=("$dots")
-        [[ "${#prev_session}" -gt "$max_len" ]] && max_len=${#prev_session}
-    fi
 
     local col=$((max_len + 4))
 
@@ -122,7 +111,7 @@ build_list() {
             display="${visible}${gap}${dots_arr[$i]}"
         fi
 
-        printf '%d\t%s\t%s\n' "${prios[$i]}" "$sn" "$display"
+        printf '%d\t%s\t%s\t%s\n' "${prios[$i]}" "${activities[$i]}" "$sn" "$display"
     done
 }
 
@@ -171,7 +160,7 @@ main() {
 
     while true; do
         local list
-        list=$(build_list | sort -t$'\t' -k1,1n)
+        list=$(build_list | sort -t$'\t' -k1,1n -k2,2rn)
 
         [[ -z "$list" ]] && exit 0
 
@@ -179,7 +168,7 @@ main() {
         result=$(printf '%s\n' "$list" | fzf \
             --ansi \
             --delimiter=$'\t' \
-            --with-nth=3 \
+            --with-nth=4 \
             --expect=ctrl-n,ctrl-x \
             --prompt=" " \
             --height=100% \
@@ -199,13 +188,13 @@ main() {
                 ;;
             ctrl-x)
                 if [[ -n "$selection" ]]; then
-                    kill_session "$(printf '%s' "$selection" | cut -f2)"
+                    kill_session "$(printf '%s' "$selection" | cut -f3)"
                 fi
                 ;;
             *)
                 [[ -z "$selection" ]] && continue
                 local session_name
-                session_name=$(printf '%s' "$selection" | cut -f2)
+                session_name=$(printf '%s' "$selection" | cut -f3)
                 tmux switch-client -t "=$session_name" 2>/dev/null
                 exit 0
                 ;;
