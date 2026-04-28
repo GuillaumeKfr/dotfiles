@@ -1,0 +1,203 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+# Catppuccin Mocha palette (24-bit truecolor)
+CLR_RED=$'\033[38;2;243;139;168m'
+CLR_YELLOW=$'\033[38;2;249;226;175m'
+CLR_GREEN=$'\033[38;2;166;227;161m'
+CLR_BLUE=$'\033[38;2;137;180;250m'
+CLR_DIM=$'\033[38;2;108;112;134m'
+CLR_BOLD=$'\033[1m'
+CLR_RESET=$'\033[0m'
+
+DOT="●"
+
+STATE_ERROR=1
+STATE_APPROVAL=2
+STATE_FOLLOWUP=3
+STATE_WORKING=4
+STATE_IDLE=5
+STATE_NONE=9
+
+is_cursor_agent() {
+    local pane_pid="$1"
+    local args
+
+    args=$(ps -o args= -p "$pane_pid" 2>/dev/null) || return 1
+    [[ "$args" == *cursor-agent* ]] && return 0
+
+    local child_pid
+    while IFS= read -r child_pid; do
+        [[ -z "$child_pid" ]] && continue
+        args=$(ps -o args= -p "$child_pid" 2>/dev/null) || continue
+        [[ "$args" == *cursor-agent* ]] && return 0
+    done < <(pgrep -P "$pane_pid" 2>/dev/null)
+
+    return 1
+}
+
+detect_agent_state() {
+    local pane_id="$1"
+    local content
+    content=$(tmux capture-pane -t "$pane_id" -p 2>/dev/null) || {
+        echo $STATE_WORKING
+        return
+    }
+
+    if printf '%s' "$content" | grep -q "CLI hang:"; then
+        echo $STATE_ERROR
+        return
+    fi
+
+    if printf '%s' "$content" | grep -qE 'Run this (command|MCP tool)\?|Delete this file\?|Write to this file\?|outside the sandbox\?|Ready to build\?'; then
+        echo $STATE_APPROVAL
+        return
+    fi
+
+    if printf '%s' "$content" | grep -qE 'Thinking.*[0-9]+\.[0-9]+%'; then
+        echo $STATE_WORKING
+        return
+    fi
+
+    if printf '%s' "$content" | grep -qE 'ctrl\+r to review|Add a follow-up|ctrl-r to respond'; then
+        echo $STATE_FOLLOWUP
+        return
+    fi
+
+    if printf '%s' "$content" | grep -q 'Plan, search, build anything'; then
+        echo $STATE_IDLE
+        return
+    fi
+
+    echo $STATE_WORKING
+}
+
+state_dot() {
+    case "$1" in
+        "$STATE_ERROR")    printf '%s' "${CLR_RED}${DOT}${CLR_RESET}" ;;
+        "$STATE_APPROVAL") printf '%s' "${CLR_YELLOW}${DOT}${CLR_RESET}" ;;
+        "$STATE_FOLLOWUP") printf '%s' "${CLR_BLUE}${DOT}${CLR_RESET}" ;;
+        "$STATE_WORKING")  printf '%s' "${CLR_GREEN}${DOT}${CLR_RESET}" ;;
+        "$STATE_IDLE")     printf '%s' "${CLR_DIM}${DOT}${CLR_RESET}" ;;
+    esac
+}
+
+build_list() {
+    local current_session
+    current_session=$(tmux display-message -p '#S')
+
+    while IFS= read -r session_name; do
+        local dots=""
+        local max_priority=$STATE_NONE
+
+        while IFS=$'\t' read -r pane_id pane_pid; do
+            [[ -z "$pane_pid" ]] && continue
+            if is_cursor_agent "$pane_pid"; then
+                local state
+                state=$(detect_agent_state "$pane_id")
+                dots+=$(state_dot "$state")
+                [[ "$state" -lt "$max_priority" ]] && max_priority=$state
+            fi
+        done < <(tmux list-panes -s -t "=$session_name" -F '#{pane_id}	#{pane_pid}' 2>/dev/null)
+
+        local display
+        if [[ "$session_name" == "$current_session" ]]; then
+            display="${CLR_BOLD}* ${session_name}${CLR_RESET}"
+        else
+            display="  ${session_name}"
+        fi
+
+        [[ -n "$dots" ]] && display+="   ${dots}"
+
+        printf '%d\t%s\t%s\n' "$max_priority" "$session_name" "$display"
+    done < <(tmux list-sessions -F '#S' 2>/dev/null)
+}
+
+create_session() {
+    if ! command -v zoxide &>/dev/null; then
+        return 1
+    fi
+
+    local dir
+    dir=$(zoxide query -l 2>/dev/null | fzf \
+        --prompt="Directory: " \
+        --height=100% \
+        --layout=reverse \
+        --border \
+        --no-info) || return 1
+
+    [[ -z "$dir" ]] && return 1
+
+    local name
+    name=$(basename "$dir" | sed 's/^\.//; s/[./]/-/g')
+
+    if tmux has-session -t "=$name" 2>/dev/null; then
+        tmux switch-client -t "=$name"
+    else
+        tmux new-session -d -s "$name" -c "$dir"
+        tmux switch-client -t "=$name"
+    fi
+}
+
+kill_session() {
+    local target="$1"
+    local current_session
+    current_session=$(tmux display-message -p '#S')
+
+    [[ "$target" == "$current_session" ]] && return 0
+
+    tmux kill-session -t "=$target" 2>/dev/null
+    return 0
+}
+
+main() {
+    local legend="${CLR_RED}${DOT}${CLR_RESET}err ${CLR_YELLOW}${DOT}${CLR_RESET}approve ${CLR_BLUE}${DOT}${CLR_RESET}done ${CLR_GREEN}${DOT}${CLR_RESET}work ${CLR_DIM}${DOT}${CLR_RESET}idle"
+    local bindings="enter:switch  ctrl-n:new  ctrl-x:kill"
+    local header
+    header=$(printf '%s\n%s' "$legend" "$bindings")
+
+    while true; do
+        local list
+        list=$(build_list | sort -t$'\t' -k1,1n)
+
+        [[ -z "$list" ]] && exit 0
+
+        local result
+        result=$(printf '%s\n' "$list" | fzf \
+            --ansi \
+            --delimiter=$'\t' \
+            --with-nth=3 \
+            --expect=ctrl-n,ctrl-x \
+            --prompt="Sessions: " \
+            --height=100% \
+            --layout=reverse \
+            --border \
+            --no-info \
+            --header="$header" \
+            --header-first) || exit 0
+
+        local key selection
+        key=$(head -1 <<< "$result")
+        selection=$(sed -n '2p' <<< "$result")
+
+        case "$key" in
+            ctrl-n)
+                create_session && exit 0
+                ;;
+            ctrl-x)
+                if [[ -n "$selection" ]]; then
+                    kill_session "$(printf '%s' "$selection" | cut -f2)"
+                fi
+                ;;
+            *)
+                [[ -z "$selection" ]] && continue
+                local session_name
+                session_name=$(printf '%s' "$selection" | cut -f2)
+                tmux switch-client -t "=$session_name" 2>/dev/null
+                exit 0
+                ;;
+        esac
+    done
+}
+
+main
