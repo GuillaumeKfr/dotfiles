@@ -25,97 +25,83 @@ STATE_WORKING=4
 STATE_IDLE=5
 STATE_NONE=9
 
-is_cursor_agent() {
-    local pane_pid="$1"
-    local args
-
-    args=$(ps -o args= -p "$pane_pid" 2>/dev/null) || return 1
-    [[ "$args" == *cursor-agent* ]] && return 0
-
-    local child_pid
-    while IFS= read -r child_pid; do
-        [[ -z "$child_pid" ]] && continue
-        args=$(ps -o args= -p "$child_pid" 2>/dev/null) || continue
-        [[ "$args" == *cursor-agent* ]] && return 0
-    done < <(pgrep -P "$pane_pid" 2>/dev/null)
-
-    return 1
-}
-
 detect_agent_state() {
     local pane_id="$1"
-    local content
-    content=$(tmux capture-pane -t "$pane_id" -p 2>/dev/null) || {
-        echo $STATE_WORKING
-        return
+    local c
+    c=$(tmux capture-pane -t "$pane_id" -p 2>/dev/null) || {
+        _state=$STATE_WORKING; return
     }
 
-    if printf '%s' "$content" | grep -q "CLI hang:"; then
-        echo $STATE_ERROR
-        return
+    [[ "$c" == *"CLI hang:"* ]] && { _state=$STATE_ERROR; return; }
+
+    if [[ "$c" == *"Run this command?"* ]] || \
+       [[ "$c" == *"Run this MCP tool?"* ]] || \
+       [[ "$c" == *"Delete this file?"* ]] || \
+       [[ "$c" == *"Write to this file?"* ]] || \
+       [[ "$c" == *"outside the sandbox?"* ]] || \
+       [[ "$c" == *"Ready to build?"* ]]; then
+        _state=$STATE_APPROVAL; return
     fi
 
-    if printf '%s' "$content" | grep -qE 'Run this (command|MCP tool)\?|Delete this file\?|Write to this file\?|outside the sandbox\?|Ready to build\?'; then
-        echo $STATE_APPROVAL
-        return
+    [[ "$c" =~ Thinking.*[0-9]+\.[0-9]+% ]] && { _state=$STATE_WORKING; return; }
+
+    if [[ "$c" == *"ctrl+r to review"* ]] || \
+       [[ "$c" == *"Add a follow-up"* ]] || \
+       [[ "$c" == *"ctrl-r to respond"* ]]; then
+        _state=$STATE_FOLLOWUP; return
     fi
 
-    if printf '%s' "$content" | grep -qE 'Thinking.*[0-9]+\.[0-9]+%'; then
-        echo $STATE_WORKING
-        return
-    fi
+    [[ "$c" == *"Plan, search, build anything"* ]] && { _state=$STATE_IDLE; return; }
 
-    if printf '%s' "$content" | grep -qE 'ctrl\+r to review|Add a follow-up|ctrl-r to respond'; then
-        echo $STATE_FOLLOWUP
-        return
-    fi
-
-    if printf '%s' "$content" | grep -q 'Plan, search, build anything'; then
-        echo $STATE_IDLE
-        return
-    fi
-
-    echo $STATE_WORKING
-}
-
-state_dot() {
-    case "$1" in
-        "$STATE_ERROR")    printf '%s' "${CLR_RED}${DOT}${CLR_RESET}" ;;
-        "$STATE_APPROVAL") printf '%s' "${CLR_YELLOW}${DOT}${CLR_RESET}" ;;
-        "$STATE_FOLLOWUP") printf '%s' "${CLR_BLUE}${DOT}${CLR_RESET}" ;;
-        "$STATE_WORKING")  printf '%s' "${CLR_GREEN}${DOT}${CLR_RESET}" ;;
-        "$STATE_IDLE")     printf '%s' "${CLR_DIM}${DOT}${CLR_RESET}" ;;
-    esac
+    _state=$STATE_WORKING
 }
 
 build_list() {
     local current_session
     current_session=$(tmux display-message -p '#S')
 
-    local -a names=()
-    local -a prios=()
-    local -a dots_arr=()
+    # Single ps call → set of PIDs that are (or parent) a cursor-agent process
+    local agent_pids
+    agent_pids=" $(ps -eo pid=,ppid=,args= 2>/dev/null \
+        | awk '/cursor-agent/ {print $1; print $2}' | tr '\n' ' ') "
+
+    # Single tmux call for all panes across all sessions
+    local -a names=() prios=() dots_arr=()
     local max_len=0
+    local prev_session="" dots="" max_priority=$STATE_NONE
 
-    while IFS= read -r session_name; do
-        local dots=""
-        local max_priority=$STATE_NONE
-
-        while IFS=$'\t' read -r pane_id pane_pid; do
-            [[ -z "$pane_pid" ]] && continue
-            if is_cursor_agent "$pane_pid"; then
-                local state
-                state=$(detect_agent_state "$pane_id")
-                dots+=$(state_dot "$state")
-                [[ "$state" -lt "$max_priority" ]] && max_priority=$state
+    while IFS=$'\t' read -r session pane_id pane_pid; do
+        if [[ "$session" != "$prev_session" ]]; then
+            if [[ -n "$prev_session" ]]; then
+                names+=("$prev_session")
+                prios+=("$max_priority")
+                dots_arr+=("$dots")
+                [[ "${#prev_session}" -gt "$max_len" ]] && max_len=${#prev_session}
             fi
-        done < <(tmux list-panes -s -t "=$session_name" -F '#{pane_id}	#{pane_pid}' 2>/dev/null)
+            dots=""
+            max_priority=$STATE_NONE
+            prev_session="$session"
+        fi
 
-        names+=("$session_name")
+        if [[ "$agent_pids" == *" ${pane_pid} "* ]]; then
+            detect_agent_state "$pane_id"
+            case "$_state" in
+                "$STATE_ERROR")    dots+="${CLR_RED}${DOT}${CLR_RESET}" ;;
+                "$STATE_APPROVAL") dots+="${CLR_YELLOW}${DOT}${CLR_RESET}" ;;
+                "$STATE_FOLLOWUP") dots+="${CLR_BLUE}${DOT}${CLR_RESET}" ;;
+                "$STATE_WORKING")  dots+="${CLR_GREEN}${DOT}${CLR_RESET}" ;;
+                "$STATE_IDLE")     dots+="${CLR_DIM}${DOT}${CLR_RESET}" ;;
+            esac
+            [[ "$_state" -lt "$max_priority" ]] && max_priority=$_state
+        fi
+    done < <(tmux list-panes -a -F '#{session_name}	#{pane_id}	#{pane_pid}' 2>/dev/null)
+
+    if [[ -n "$prev_session" ]]; then
+        names+=("$prev_session")
         prios+=("$max_priority")
         dots_arr+=("$dots")
-        [[ "${#session_name}" -gt "$max_len" ]] && max_len=${#session_name}
-    done < <(tmux list-sessions -F '#S' 2>/dev/null)
+        [[ "${#prev_session}" -gt "$max_len" ]] && max_len=${#prev_session}
+    fi
 
     local col=$((max_len + 4))
 
