@@ -97,7 +97,6 @@ Neovim config based on [kickstart.nvim](https://github.com/nvim-lua/kickstart.nv
 
 | Project | Description |
 | --- | --- |
-| [Fisher](https://github.com/jorgebucaran/fisher) | Fish plugin manager |
 | [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) | Zsh configuration framework |
 | [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) | Fish-like autosuggestions for Zsh |
 | [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting) | Shell syntax highlighting for Zsh |
