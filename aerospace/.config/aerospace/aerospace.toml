@@ -3,9 +3,7 @@
 
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
-after-startup-command = [
-      'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0'
-]
+after-startup-command = []
 
 # Start AeroSpace at login
 start-at-login = true
@@ -140,21 +138,21 @@ automatically-unhide-macos-hidden-apps = false
     ctrl-q =  'layout tiles accordion' # Binds to A on AZERTY
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-    ctrl-left = 'focus left'
-    ctrl-down = 'focus down'
-    ctrl-up = 'focus up'
-    ctrl-right = 'focus right'
+    ctrl-alt-h = 'focus left'
+    ctrl-alt-j = 'focus down'
+    ctrl-alt-k = 'focus up'
+    ctrl-alt-l = 'focus right'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move
-    ctrl-shift-left = 'move left'
-    ctrl-shift-down = 'move down'
-    ctrl-shift-up = 'move up'
-    ctrl-shift-right = 'move right'
+    ctrl-alt-shift-h = 'move left'
+    ctrl-alt-shift-j = 'move down'
+    ctrl-alt-shift-k = 'move up'
+    ctrl-alt-shift-l = 'move right'
 
-    ctrl-alt-shift-left = 'join-with left'
-    ctrl-alt-shift-down = 'join-with down'
-    ctrl-alt-shift-up = 'join-with up'
-    ctrl-alt-shift-right = 'join-with right'
+    ctrl-shift-h = 'join-with left'
+    ctrl-shift-j = 'join-with down'
+    ctrl-shift-k = 'join-with up'
+    ctrl-shift-l = 'join-with right'
 
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#resize
@@ -184,8 +182,8 @@ automatically-unhide-macos-hidden-apps = false
     ctrl-shift-9 = 'move-node-to-workspace 9 --focus-follows-window'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
-    ctrl-alt-right = 'workspace --wrap-around next'
-    ctrl-alt-left = 'workspace --wrap-around prev'
+    ctrl-alt-n = 'workspace --wrap-around next'
+    ctrl-alt-p = 'workspace --wrap-around prev'
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
     ctrl-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
