@@ -1,16 +1,12 @@
 #!/bin/bash
 
-set -euo pipefail
-
 # Initialize color codes only if terminal supports colors
 if [[ -t 1 ]] && command -v tput &>/dev/null; then
-    set +e  # Temporarily disable exit on error for tput commands
     __fmt_reset=$(tput sgr0 2>/dev/null || echo '')
     __fmt_red=$(tput setaf 1 2>/dev/null || echo '')
     __fmt_green=$(tput setaf 2 2>/dev/null || echo '')
     __fmt_yellow=$(tput setaf 3 2>/dev/null || echo '')
     __fmt_blue=$(tput setaf 4 2>/dev/null || echo '')
-    set -e  # Re-enable exit on error
 else
     __fmt_reset=''
     __fmt_red=''
@@ -20,17 +16,17 @@ else
 fi
 
 logging::warn() {
-    printf "${__fmt_yellow}[!] $1${__fmt_reset}\n" >&2
+    printf '%s[!] %s%s\n' "${__fmt_yellow}" "$1" "${__fmt_reset}" >&2
 }
 
 logging::info() {
-    printf "${__fmt_blue}[i] $1${__fmt_reset}\n"
+    printf '%s[i] %s%s\n' "${__fmt_blue}" "$1" "${__fmt_reset}"
 }
 
 logging::success() {
-    printf "${__fmt_green}[✓] $1${__fmt_reset}\n"
+    printf '%s[✓] %s%s\n' "${__fmt_green}" "$1" "${__fmt_reset}"
 }
 
 logging::err() {
-    printf "${__fmt_red}[⨯] $1${__fmt_reset}\n" >&2
+    printf '%s[⨯] %s%s\n' "${__fmt_red}" "$1" "${__fmt_reset}" >&2
 }

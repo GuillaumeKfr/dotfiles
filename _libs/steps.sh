@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -euo pipefail
-
 steps::is_sudo() {
     sudo -n true 2>/dev/null
 }
@@ -151,7 +149,7 @@ steps::setup_stow() {
     for dir in "${to_stow[@]}"; do
         logging::info "[stow] [${dir}] Stowing ..."
 
-        if ! stow -D "${dir}" || ! stow "${dir}"; then
+        if ! stow -R "${dir}"; then
             logging::err "[stow] [${dir}] Stow failed"
             exit 1
         fi
@@ -173,25 +171,43 @@ __setup_zsh() {
         exit 1
     fi
 
-    logging::info "[zsh] Installing OMZ..."
+    # Install Oh My Zsh
+    if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+        logging::info "[zsh] Installing Oh My Zsh..."
+        if ! ZSH=~/.oh-my-zsh sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended; then
+            logging::err "[zsh] Oh My Zsh installation failed"
+            exit 1
+        fi
+        logging::success "[zsh] Oh My Zsh installed"
+    else
+        logging::info "[zsh] Oh My Zsh already installed, skipping"
+    fi
 
-    ZSH=~/.oh-my-zsh sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-
-    logging::success "[zsh] Installed OMZ"
-
-    logging::info "[zsh] Installing plugins"
-
+    # Install plugins (pull if already cloned, clone if not)
     mkdir -p "${ZSH_PLUGINS_DIR}"
 
-    rm -rf "${ZSH_PLUGINS_DIR}"/zsh-autosuggestions
-    rm -rf "${ZSH_PLUGINS_DIR}"/zsh-syntax-highlighting
-    rm -rf "${ZSH_PLUGINS_DIR}"/zsh-z
+    local plugins=(
+        "zsh-users/zsh-autosuggestions"
+        "zsh-users/zsh-syntax-highlighting"
+        "agkozak/zsh-z"
+    )
 
-    git clone --quiet "https://github.com/zsh-users/zsh-autosuggestions.git" "${ZSH_PLUGINS_DIR}"/zsh-autosuggestions
-    git clone --quiet "https://github.com/zsh-users/zsh-syntax-highlighting.git" "${ZSH_PLUGINS_DIR}"/zsh-syntax-highlighting
-    git clone --quiet "https://github.com/agkozak/zsh-z" "${ZSH_PLUGINS_DIR}"/zsh-z
+    for plugin_repo in "${plugins[@]}"; do
+        local plugin_name="${plugin_repo##*/}"
+        local plugin_dir="${ZSH_PLUGINS_DIR}/${plugin_name}"
 
-    logging::success "[zsh] Installed plugins"
+        if [[ -d "${plugin_dir}" ]]; then
+            logging::info "[zsh] [${plugin_name}] Already installed, pulling latest..."
+            git -C "${plugin_dir}" pull --quiet || logging::warn "[zsh] [${plugin_name}] Pull failed, continuing with existing version"
+        else
+            logging::info "[zsh] [${plugin_name}] Cloning..."
+            if ! git clone --quiet "https://github.com/${plugin_repo}.git" "${plugin_dir}"; then
+                logging::err "[zsh] [${plugin_name}] Clone failed"
+                exit 1
+            fi
+        fi
+        logging::success "[zsh] [${plugin_name}] Ready"
+    done
 
     logging::info "[zsh] Setting ZSH as default"
 

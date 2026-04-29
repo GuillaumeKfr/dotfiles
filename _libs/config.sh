@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -euo pipefail
-
 # Reads items from a section in an INI-style config file.
 # Params:
 #   $1 - config file path
