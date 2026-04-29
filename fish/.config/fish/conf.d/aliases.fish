@@ -6,7 +6,7 @@ alias top="btop"
 alias rm="rm -I"
 abbr --add ping ping -c 5
 
-if test -n WSL_DISTRO_NAME
+if test -n "$WSL_DISTRO_NAME"
     function clip
         cat $argv | clip.exe
     end
@@ -57,6 +57,6 @@ function bind_dollar
 end
 
 function fish_user_key_bindings
-    bind ! bind_bang
-    bind '$' bind_dollar
+    bind -M insert ! bind_bang
+    bind -M insert '$' bind_dollar
 end
