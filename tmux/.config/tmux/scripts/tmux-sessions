@@ -49,12 +49,11 @@ detect_agent_state() {
        [[ "$c" == *"Run this MCP tool?"* ]] || \
        [[ "$c" == *"Delete this file?"* ]] || \
        [[ "$c" == *"Write to this file?"* ]] || \
+       [[ "$c" == *"Edit this file?"* ]] || \
        [[ "$c" == *"outside the sandbox?"* ]] || \
        [[ "$c" == *"Ready to build?"* ]]; then
         _state=$STATE_APPROVAL; return
     fi
-
-    [[ "$c" =~ Thinking.*[0-9]+\.[0-9]+% ]] && { _state=$STATE_WORKING; return; }
 
     if [[ "$c" == *"ctrl+r to review"* ]] || \
        [[ "$c" == *"Add a follow-up"* ]] || \
@@ -63,6 +62,8 @@ detect_agent_state() {
     fi
 
     [[ "$c" == *"Plan, search, build anything"* ]] && { _state=$STATE_IDLE; return; }
+
+    [[ "$c" =~ Thinking.*[0-9]+% ]] && { _state=$STATE_WORKING; return; }
 
     _state=$STATE_WORKING
 }
