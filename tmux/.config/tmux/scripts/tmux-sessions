@@ -75,7 +75,7 @@ build_list() {
     agent_pids=" $(ps -eo pid=,ppid=,args= 2>/dev/null \
         | awk '/cursor-agent/ {print $1; print $2}' | tr '\n' ' ') "
 
-    local -a names=() activities=() prios=() dots_arr=()
+    local -a names=() activities=() prios=() dots_arr=() dot_counts=()
     local max_len=0
 
     while IFS=$'\t' read -r sn act; do
@@ -83,6 +83,7 @@ build_list() {
         activities+=("$act")
         prios+=("$STATE_NONE")
         dots_arr+=("")
+        dot_counts+=(0)
         [[ "${#sn}" -gt "$max_len" ]] && max_len=${#sn}
     done < <(tmux list-sessions -F '#{session_name}	#{session_activity}' 2>/dev/null)
 
@@ -98,28 +99,29 @@ build_list() {
                 "$STATE_WORKING")  dots_arr[$idx]+="${CLR_GREEN}${DOT}${CLR_RESET}" ;;
                 "$STATE_IDLE")     dots_arr[$idx]+="${CLR_DIM}${DOT}${CLR_RESET}" ;;
             esac
+            dot_counts[$idx]=$(( ${dot_counts[$idx]} + 1 ))
             [[ "$_state" -lt "${prios[$idx]}" ]] && prios[$idx]=$_state
             break
         done
     done < <(tmux list-panes -a -F '#{session_name}	#{pane_id}	#{pane_pid}' 2>/dev/null)
 
-    local col=$((max_len + 4))
+    local line_width=$(($(tput cols) - 4))
 
     for i in "${!names[@]}"; do
         local sn="${names[$i]}"
-        local visible="  ${sn}"
-        if [[ "$sn" == "$current_session" ]]; then
-            visible="* ${sn}"
-        fi
+        local prefix="  "
+        [[ "$sn" == "$current_session" ]] && prefix="* "
 
-        local pad=$((col - ${#visible}))
-        local gap=$(printf '%*s' "$pad" "")
+        local dc=${dot_counts[$i]}
+        local gap_width=$((line_width - ${#prefix} - ${#sn} - dc))
+        [[ $gap_width -lt 2 ]] && gap_width=2
+        local gap=$(printf '%*s' "$gap_width" "")
 
         local display
         if [[ "$sn" == "$current_session" ]]; then
-            display="${CLR_BOLD}${visible}${CLR_RESET}${gap}${dots_arr[$i]}"
+            display="${CLR_BOLD}${prefix}${sn}${CLR_RESET}${gap}${dots_arr[$i]}"
         else
-            display="${visible}${gap}${dots_arr[$i]}"
+            display="${prefix}${sn}${gap}${dots_arr[$i]}"
         fi
 
         printf '%d\t%s\t%s\t%s\n' "${prios[$i]}" "${activities[$i]}" "$sn" "$display"
@@ -164,7 +166,7 @@ kill_session() {
 }
 
 main() {
-    local legend="  ${CLR_RED}${DOT}${CLR_RESET} err   ${CLR_YELLOW}${DOT}${CLR_RESET} approve   ${CLR_BLUE}${DOT}${CLR_RESET} done   ${CLR_GREEN}${DOT}${CLR_RESET} work   ${CLR_DIM}${DOT}${CLR_RESET} idle"
+    local legend="  ${CLR_RED}${DOT}${CLR_RESET} err   ${CLR_YELLOW}${DOT}${CLR_RESET} approve   ${CLR_BLUE}${DOT}${CLR_RESET} done   ${CLR_GREEN}${DOT}${CLR_RESET} work"
     local bindings="  ${CLR_DIM}enter:switch  ctrl-n:new  ctrl-x:kill${CLR_RESET}"
     local header
     header=$(printf '%s\n%s\n' "$legend" "$bindings")
