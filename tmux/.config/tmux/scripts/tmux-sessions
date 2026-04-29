@@ -105,7 +105,7 @@ build_list() {
         done
     done < <(tmux list-panes -a -F '#{session_name}	#{pane_id}	#{pane_pid}' 2>/dev/null)
 
-    local line_width=$(($(tput cols) - 4))
+    local line_width=$(($(tput cols) - 8))
 
     for i in "${!names[@]}"; do
         local sn="${names[$i]}"
