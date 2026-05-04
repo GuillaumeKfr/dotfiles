@@ -59,12 +59,11 @@ defaults:
         hidden: false
 
 keybindings:
-  universal:
+  prs:
     - key: g
       name: lazygit
       command: >
-        cd {{.RepoPath}} && lazygit
-  prs:
+        lazygit -p {{.RepoPath}}
     - key: C
       name: code review
       command: >
