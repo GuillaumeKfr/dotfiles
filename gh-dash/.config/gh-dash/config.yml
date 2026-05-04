@@ -22,7 +22,7 @@ repo:
 
 defaults:
   preview:
-    open: true
+    open: false
     width: 70
   prApproveComment: LGTM
   layout:
@@ -32,7 +32,8 @@ defaults:
       createdAt:
         width: 5
       repo:
-        hidden: true
+        hidden: false
+        width: 40
       author:
         width: 15
       authorIcon:
