@@ -68,16 +68,16 @@ keybindings:
     - key: C
       name: code review
       command: >
-        tmux new-window -n '{{.HeadRefName}}' 'wt -C {{.RepoPath}} switch pr:{{.PrNumber}} -x "cursor-agent '\''Use the review-pr skill to review this PR.'\''"'
+        tmux new-window -n '{{.HeadRefName}}' 'wt -C {{.RepoPath}} switch pr:{{.PrNumber}} -x "opencode --prompt '\''Use the review-pr skill to review this PR.'\''"'
     - key: c
       name: review comments
       command: >
-        tmux new-window -n '{{.HeadRefName}}' 'wt -C {{.RepoPath}} switch pr:{{.PrNumber}} -x "cursor-agent '\''Use the review-pr-comments skill to review and address comments on this PR.'\''"'
+        tmux new-window -n '{{.HeadRefName}}' 'wt -C {{.RepoPath}} switch pr:{{.PrNumber}} -x "opencode --prompt '\''Use the review-pr-comments skill to review and address comments on this PR.'\''"'
     - key: O
       name: open in tmux
       command: >
         tmux new-window -n '{{.HeadRefName}}' 'wt -C {{.RepoPath}} switch pr:{{.PrNumber}} && nvim' \;
-        split-window 'wt -C {{.RepoPath}} switch pr:{{.PrNumber}} && cursor-agent' \;
+        split-window 'wt -C {{.RepoPath}} switch pr:{{.PrNumber}} && opencode' \;
         split-window 'wt -C {{.RepoPath}} switch pr:{{.PrNumber}} && $SHELL' \;
         select-layout main-vertical \;
         select-pane -t 0
