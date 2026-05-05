@@ -56,7 +56,7 @@ Categorize each finding:
 | `SECURITY`    | Security vulnerability / concern |
 | `IMPROVEMENT` | Enhancement suggestion           |
 
-Use TodoWrite to track all findings as a checklist.
+Track all findings as a checklist.
 
 After analysis, present a **short summary only** — list each finding with its category, file, and a one-line description. Do NOT show code snippets or suggested fixes yet. Example:
 
@@ -83,9 +83,9 @@ Wait for the user's response before continuing.
 
 When the user responds:
 
-- **approve** — post the comment on the PR immediately (see below), mark the TodoWrite item as completed, then present the next finding
+- **approve** — post the comment on the PR immediately (see below), mark the finding as completed, then present the next finding
 - **revise** — user provides adjustments, re-present the revised finding and ask again
-- **skip** — mark the TodoWrite item as completed, then present the next finding
+- **skip** — mark the finding as completed, then present the next finding
 
 ### Posting an approved comment
 
