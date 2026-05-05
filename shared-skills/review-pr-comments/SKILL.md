@@ -49,7 +49,7 @@ Filter out comments authored by the current user. Group threaded comments by `in
 
 ## Step 3: Process each comment
 
-Use a TodoWrite checklist to track progress across comments. For **each** comment thread:
+Track progress across comments as a checklist. For **each** comment thread:
 
 ### 3a. Present the comment and ask whether to tackle it
 
