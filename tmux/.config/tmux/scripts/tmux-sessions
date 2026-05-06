@@ -2,8 +2,9 @@
 set -uo pipefail
 
 if [[ "${1:-}" == "--popup" ]]; then
-    count=$(tmux list-sessions -F '#{session_name}' 2>/dev/null | wc -l | tr -d ' ')
-    max_name=$(tmux list-sessions -F '#{session_name}' 2>/dev/null | awk '{l=length; if(l>m) m=l} END{print m}')
+    read -r count max_name < <(
+        tmux list-sessions -F '#{session_name}' 2>/dev/null \
+            | awk '{n++; l=length; if(l>m) m=l} END{print n+0, m+0}')
     h=$((count + 10))
     w=$((max_name + 20))
     [[ $h -lt 15 ]] && h=15
@@ -19,51 +20,72 @@ tmux_color() {
     printf '\033[38;2;%d;%d;%dm' "0x${hex:0:2}" "0x${hex:2:2}" "0x${hex:4:2}"
 }
 
-CLR_RED=$(tmux_color @thm_red)
 CLR_YELLOW=$(tmux_color @thm_yellow)
 CLR_GREEN=$(tmux_color @thm_green)
-CLR_BLUE=$(tmux_color @thm_blue)
 CLR_DIM=$(tmux_color @thm_overlay_0)
 CLR_BOLD=$'\033[1m'
 CLR_RESET=$'\033[0m'
 
 DOT="●"
 
-STATE_ERROR=1
-STATE_APPROVAL=2
-STATE_FOLLOWUP=3
-STATE_WORKING=4
-STATE_IDLE=5
+STATE_WAITING=1
+STATE_WORKING=2
+STATE_IDLE=3
 STATE_NONE=9
 
-detect_agent_state() {
+detect_cursor_state() {
     local pane_id="$1"
     local c
     c=$(tmux capture-pane -t "$pane_id" -p 2>/dev/null) || {
         _state=$STATE_WORKING; return
     }
 
-    [[ "$c" == *"CLI hang:"* ]] && { _state=$STATE_ERROR; return; }
-
-    if [[ "$c" == *"Run this command?"* ]] || \
+    if [[ "$c" == *"CLI hang:"* ]] || \
+       [[ "$c" == *"Run this command?"* ]] || \
        [[ "$c" == *"Run this MCP tool?"* ]] || \
        [[ "$c" == *"Delete this file?"* ]] || \
        [[ "$c" == *"Write to this file?"* ]] || \
        [[ "$c" == *"Edit this file?"* ]] || \
        [[ "$c" == *"outside the sandbox?"* ]] || \
        [[ "$c" == *"Ready to build?"* ]]; then
-        _state=$STATE_APPROVAL; return
+        _state=$STATE_WAITING; return
     fi
+
+    local think_line=0 followup_line=0
 
     if [[ "$c" == *"ctrl+r to review"* ]] || \
        [[ "$c" == *"Add a follow-up"* ]] || \
-       [[ "$c" == *"ctrl-r to respond"* ]]; then
-        _state=$STATE_FOLLOWUP; return
+       [[ "$c" == *"ctrl-r to respond"* ]] || \
+       [[ "$c" =~ Thinking.*[0-9]+% ]]; then
+        read -r followup_line think_line < <(printf '%s\n' "$c" | awk '
+            /ctrl\+r to review|Add a follow-up|ctrl-r to respond/ { f=NR }
+            /Thinking.*[0-9]+%/ { t=NR }
+            END { print f+0, t+0 }')
+    fi
+
+    if (( followup_line > 0 && (think_line == 0 || followup_line > think_line) )); then
+        _state=$STATE_WAITING; return
     fi
 
     [[ "$c" == *"Plan, search, build anything"* ]] && { _state=$STATE_IDLE; return; }
 
-    [[ "$c" =~ Thinking.*[0-9]+% ]] && { _state=$STATE_WORKING; return; }
+    _state=$STATE_WORKING
+}
+
+detect_opencode_state() {
+    local pane_id="$1"
+    local c
+    c=$(tmux capture-pane -t "$pane_id" -p 2>/dev/null) || {
+        _state=$STATE_WORKING; return
+    }
+
+    if [[ "$c" == *"Allow once"* ]] || \
+       [[ "$c" == *"Allow always"* ]] || \
+       [[ "$c" == *"Reject"* ]]; then
+        _state=$STATE_WAITING; return
+    fi
+
+    [[ "$c" == *"Ask anything"* ]] && { _state=$STATE_IDLE; return; }
 
     _state=$STATE_WORKING
 }
@@ -72,9 +94,11 @@ build_list() {
     local current_session
     current_session=$(tmux display-message -p '#S')
 
-    local agent_pids
-    agent_pids=" $(ps -eo pid=,ppid=,args= 2>/dev/null \
-        | awk '/cursor-agent/ {print $1; print $2}' | tr '\n' ' ') "
+    local cursor_pids opencode_pids
+    IFS=$'\t' read -r cursor_pids opencode_pids < <(ps -eo pid=,ppid=,args= 2>/dev/null | awk '
+        /cursor-agent/ { c=c " " $1 " " $2 }
+        /opencode/ && !/awk/ { o=o " " $1 " " $2 }
+        END { printf " %s \t %s \n", c, o }')
 
     local -a names=() activities=() prios=() dots_arr=() dot_counts=()
     local max_len=0
@@ -89,16 +113,19 @@ build_list() {
     done < <(tmux list-sessions -F '#{session_name}	#{session_activity}' 2>/dev/null)
 
     while IFS=$'\t' read -r session pane_id pane_pid; do
-        [[ "$agent_pids" != *" ${pane_pid} "* ]] && continue
-        detect_agent_state "$pane_id"
+        if [[ "$cursor_pids" == *" ${pane_pid} "* ]]; then
+            detect_cursor_state "$pane_id"
+        elif [[ "$opencode_pids" == *" ${pane_pid} "* ]]; then
+            detect_opencode_state "$pane_id"
+        else
+            continue
+        fi
         for idx in "${!names[@]}"; do
             [[ "${names[$idx]}" != "$session" ]] && continue
             case "$_state" in
-                "$STATE_ERROR")    dots_arr[$idx]+="${CLR_RED}${DOT}${CLR_RESET}" ;;
-                "$STATE_APPROVAL") dots_arr[$idx]+="${CLR_YELLOW}${DOT}${CLR_RESET}" ;;
-                "$STATE_FOLLOWUP") dots_arr[$idx]+="${CLR_BLUE}${DOT}${CLR_RESET}" ;;
-                "$STATE_WORKING")  dots_arr[$idx]+="${CLR_GREEN}${DOT}${CLR_RESET}" ;;
-                "$STATE_IDLE")     dots_arr[$idx]+="${CLR_DIM}${DOT}${CLR_RESET}" ;;
+                "$STATE_WAITING") dots_arr[$idx]+="${CLR_YELLOW}${DOT}${CLR_RESET}" ;;
+                "$STATE_WORKING") dots_arr[$idx]+="${CLR_GREEN}${DOT}${CLR_RESET}" ;;
+                "$STATE_IDLE")    dots_arr[$idx]+="${CLR_DIM}${DOT}${CLR_RESET}" ;;
             esac
             dot_counts[$idx]=$(( ${dot_counts[$idx]} + 1 ))
             [[ "$_state" -lt "${prios[$idx]}" ]] && prios[$idx]=$_state
@@ -167,7 +194,7 @@ kill_session() {
 }
 
 main() {
-    local legend="  ${CLR_RED}${DOT}${CLR_RESET} err   ${CLR_YELLOW}${DOT}${CLR_RESET} approve   ${CLR_BLUE}${DOT}${CLR_RESET} done   ${CLR_GREEN}${DOT}${CLR_RESET} work"
+    local legend="  ${CLR_DIM}${DOT}${CLR_RESET} idle   ${CLR_GREEN}${DOT}${CLR_RESET} work   ${CLR_YELLOW}${DOT}${CLR_RESET} waiting"
     local bindings="  ${CLR_DIM}enter:switch  ctrl-n:new  ctrl-x:kill${CLR_RESET}"
     local header
     header=$(printf '%s\n%s\n' "$legend" "$bindings")
