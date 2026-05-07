@@ -76,11 +76,12 @@ keybindings:
     - key: O
       name: open in tmux
       command: >
-        tmux new-window -n '{{.HeadRefName}}' 'wt -C {{.RepoPath}} switch pr:{{.PrNumber}} && nvim' \;
-        split-window 'wt -C {{.RepoPath}} switch pr:{{.PrNumber}} && opencode' \;
-        split-window 'wt -C {{.RepoPath}} switch pr:{{.PrNumber}} && $SHELL' \;
-        select-layout main-vertical \;
-        select-pane -t 0
+        bash -c '
+        set -e;
+        wt -C {{.RepoPath}} switch --no-cd pr:{{.PrNumber}};
+        WT_PATH=$(git -C {{.RepoPath}} worktree list --porcelain | awk -v b=refs/heads/{{.HeadRefName}} "/^worktree / {p=\$2} \$1==\"branch\" && \$2==b {print p; exit}");
+        tmux new-window -n "{{.HeadRefName}}" -c "$WT_PATH" nvim \; split-window -c "$WT_PATH" opencode \; split-window -c "$WT_PATH" \; select-layout main-vertical \; select-pane -t 0
+        '
 
 theme:
   colors:
