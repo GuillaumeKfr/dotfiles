@@ -183,7 +183,7 @@ kill_session() {
 
 main() {
     local legend="  ${CLR_DIM}${DOT}${CLR_RESET} idle   ${CLR_GREEN}${DOT}${CLR_RESET} work   ${CLR_YELLOW}${DOT}${CLR_RESET} waiting"
-    local bindings="  ${CLR_DIM}enter:switch  ctrl-n:new  ctrl-x:kill${CLR_RESET}"
+    local bindings="  ${CLR_DIM}󰌑: switch  󰘴-n: new  󰘴-x: kill${CLR_RESET}"
     local header
     header=$(printf '%s\n%s\n' "$legend" "$bindings")
 
