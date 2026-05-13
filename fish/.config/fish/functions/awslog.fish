@@ -13,8 +13,15 @@ function awslog
 
     # Present a menu of AWS profiles from ~/.aws/credentials
     set account (grep '\[.*\]' ~/.aws/credentials | tr -d '[]' | fzf)
+    or return
 
-    # Login using saml2aws and set AWS_PROFILE
-    saml2aws login -a $account -p $account --force $skip_prompt
+    # Skip saml2aws login if the profile already has valid credentials
+    if aws sts get-caller-identity --profile $account >/dev/null 2>&1
+        echo "Already authenticated as $account; skipping saml2aws login."
+    else
+        saml2aws login -a $account -p $account --force $skip_prompt
+        or return
+    end
+
     set -gx AWS_PROFILE $account
 end
