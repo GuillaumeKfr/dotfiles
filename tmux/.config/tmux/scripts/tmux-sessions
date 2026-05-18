@@ -1,0 +1,234 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+tmux_color() {
+    local hex
+    hex=$(tmux show-options -gv "$1" 2>/dev/null)
+    hex="${hex#\#}"
+    printf '\033[38;2;%d;%d;%dm' "0x${hex:0:2}" "0x${hex:2:2}" "0x${hex:4:2}"
+}
+
+CLR_YELLOW=$(tmux_color @thm_yellow)
+CLR_GREEN=$(tmux_color @thm_green)
+CLR_DIM=$(tmux_color @thm_overlay_0)
+CLR_BOLD=$'\033[1m'
+CLR_RESET=$'\033[0m'
+
+DOT="●"
+
+STATE_WAITING=1
+STATE_WORKING=2
+STATE_IDLE=3
+STATE_NONE=9
+
+detect_cursor_state() {
+    local pane_id="$1"
+    local c
+    c=$(tmux capture-pane -t "$pane_id" -p 2>/dev/null) || {
+        _state=$STATE_WORKING; return
+    }
+
+    if [[ "$c" == *"CLI hang:"* ]] || \
+       [[ "$c" == *"Run this command?"* ]] || \
+       [[ "$c" == *"Run this MCP tool?"* ]] || \
+       [[ "$c" == *"Delete this file?"* ]] || \
+       [[ "$c" == *"Write to this file?"* ]] || \
+       [[ "$c" == *"Edit this file?"* ]] || \
+       [[ "$c" == *"outside the sandbox?"* ]] || \
+       [[ "$c" == *"Ready to build?"* ]]; then
+        _state=$STATE_WAITING; return
+    fi
+
+    local think_line=0 followup_line=0
+
+    if [[ "$c" == *"ctrl+r to review"* ]] || \
+       [[ "$c" == *"Add a follow-up"* ]] || \
+       [[ "$c" == *"ctrl-r to respond"* ]] || \
+       [[ "$c" =~ Thinking.*[0-9]+% ]]; then
+        read -r followup_line think_line < <(printf '%s\n' "$c" | awk '
+            /ctrl\+r to review|Add a follow-up|ctrl-r to respond/ { f=NR }
+            /Thinking.*[0-9]+%/ { t=NR }
+            END { print f+0, t+0 }')
+    fi
+
+    if (( followup_line > 0 && (think_line == 0 || followup_line > think_line) )); then
+        _state=$STATE_WAITING; return
+    fi
+
+    [[ "$c" == *"Plan, search, build anything"* ]] && { _state=$STATE_IDLE; return; }
+
+    _state=$STATE_WORKING
+}
+
+detect_opencode_state() {
+    local pane_id="$1"
+    local c
+    c=$(tmux capture-pane -t "$pane_id" -p 2>/dev/null) || {
+        _state=$STATE_WORKING; return
+    }
+
+    if [[ "$c" == *"Allow once"* ]] || \
+       [[ "$c" == *"Allow always"* ]] || \
+       [[ "$c" == *"Reject"* ]]; then
+        _state=$STATE_WAITING; return
+    fi
+
+    [[ "$c" == *"Ask anything"* ]] && { _state=$STATE_IDLE; return; }
+
+    _state=$STATE_WORKING
+}
+
+build_list() {
+    local current_session
+    current_session=$(tmux display-message -p '#S')
+
+    local cursor_pids opencode_pids
+    IFS=$'\t' read -r cursor_pids opencode_pids < <(ps -eo pid=,ppid=,args= 2>/dev/null | awk '
+        /cursor-agent/ { c=c " " $1 " " $2 }
+        /opencode/ && !/awk/ { o=o " " $1 " " $2 }
+        END { printf " %s \t %s \n", c, o }')
+
+    local -a names=() activities=() prios=() dots_arr=() dot_counts=()
+    local max_len=0
+
+    while IFS=$'\t' read -r sn act; do
+        names+=("$sn")
+        activities+=("$act")
+        prios+=("$STATE_NONE")
+        dots_arr+=("")
+        dot_counts+=(0)
+        [[ "${#sn}" -gt "$max_len" ]] && max_len=${#sn}
+    done < <(tmux list-sessions -F '#{session_name}	#{session_activity}' 2>/dev/null)
+
+    while IFS=$'\t' read -r session pane_id pane_pid; do
+        if [[ "$cursor_pids" == *" ${pane_pid} "* ]]; then
+            detect_cursor_state "$pane_id"
+        elif [[ "$opencode_pids" == *" ${pane_pid} "* ]]; then
+            detect_opencode_state "$pane_id"
+        else
+            continue
+        fi
+        for idx in "${!names[@]}"; do
+            [[ "${names[$idx]}" != "$session" ]] && continue
+            case "$_state" in
+                "$STATE_WAITING") dots_arr[$idx]+="${CLR_YELLOW}${DOT}${CLR_RESET}" ;;
+                "$STATE_WORKING") dots_arr[$idx]+="${CLR_GREEN}${DOT}${CLR_RESET}" ;;
+                "$STATE_IDLE")    dots_arr[$idx]+="${CLR_DIM}${DOT}${CLR_RESET}" ;;
+            esac
+            dot_counts[$idx]=$(( ${dot_counts[$idx]} + 1 ))
+            [[ "$_state" -lt "${prios[$idx]}" ]] && prios[$idx]=$_state
+            break
+        done
+    done < <(tmux list-panes -a -F '#{session_name}	#{pane_id}	#{pane_pid}' 2>/dev/null)
+
+    local line_width=$(($(tput cols) - 8))
+
+    for i in "${!names[@]}"; do
+        local sn="${names[$i]}"
+        local prefix="  "
+        [[ "$sn" == "$current_session" ]] && prefix="* "
+
+        local dc=${dot_counts[$i]}
+        local gap_width=$((line_width - ${#prefix} - ${#sn} - dc))
+        [[ $gap_width -lt 2 ]] && gap_width=2
+        local gap=$(printf '%*s' "$gap_width" "")
+
+        local display
+        if [[ "$sn" == "$current_session" ]]; then
+            display="${CLR_BOLD}${prefix}${sn}${CLR_RESET}${gap}${dots_arr[$i]}"
+        else
+            display="${prefix}${sn}${gap}${dots_arr[$i]}"
+        fi
+
+        printf '%d\t%s\t%s\t%s\n' "${prios[$i]}" "${activities[$i]}" "$sn" "$display"
+    done
+}
+
+create_session() {
+    if ! command -v zoxide &>/dev/null; then
+        return 1
+    fi
+
+    local dir
+    dir=$(zoxide query -l 2>/dev/null | fzf \
+        --prompt="Directory: " \
+        --height=100% \
+        --layout=reverse \
+        --border \
+        --no-info) || return 1
+
+    [[ -z "$dir" ]] && return 1
+
+    local name
+    name=$(basename "$dir" | sed 's/^\.//; s/[./]/-/g')
+
+    if tmux has-session -t "=$name" 2>/dev/null; then
+        tmux switch-client -t "=$name"
+    else
+        tmux new-session -d -s "$name" -c "$dir"
+        tmux switch-client -t "=$name"
+    fi
+}
+
+kill_session() {
+    local target="$1"
+    local current_session
+    current_session=$(tmux display-message -p '#S')
+
+    [[ "$target" == "$current_session" ]] && return 0
+
+    tmux kill-session -t "=$target" 2>/dev/null
+    return 0
+}
+
+main() {
+    local legend="  ${CLR_DIM}${DOT}${CLR_RESET} idle   ${CLR_GREEN}${DOT}${CLR_RESET} work   ${CLR_YELLOW}${DOT}${CLR_RESET} waiting"
+    local bindings="  ${CLR_DIM}󰌑: switch  󰘴-n: new  󰘴-x: kill${CLR_RESET}"
+    local header
+    header=$(printf '%s\n%s\n' "$legend" "$bindings")
+
+    while true; do
+        local list
+        list=$(build_list | sort -t$'\t' -k1,1n -k2,2rn)
+
+        [[ -z "$list" ]] && exit 0
+
+        local result
+        result=$(printf '%s\n' "$list" | fzf \
+            --ansi \
+            --delimiter=$'\t' \
+            --with-nth=4 \
+            --expect=ctrl-n,ctrl-x \
+            --prompt=" " \
+            --height=100% \
+            --layout=reverse \
+            --border \
+            --no-info \
+            --header="$header" \
+            --header-first) || exit 0
+
+        local key selection
+        key=$(head -1 <<< "$result")
+        selection=$(sed -n '2p' <<< "$result")
+
+        case "$key" in
+            ctrl-n)
+                create_session && exit 0
+                ;;
+            ctrl-x)
+                if [[ -n "$selection" ]]; then
+                    kill_session "$(printf '%s' "$selection" | cut -f3)"
+                fi
+                ;;
+            *)
+                [[ -z "$selection" ]] && continue
+                local session_name
+                session_name=$(printf '%s' "$selection" | cut -f3)
+                tmux switch-client -t "=$session_name" 2>/dev/null
+                exit 0
+                ;;
+        esac
+    done
+}
+
+main
