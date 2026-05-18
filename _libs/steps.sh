@@ -107,6 +107,30 @@ steps::clean_preinstalled() {
     logging::success "[clean] Removed all packages"
 }
 
+steps::install_git_hooks() {
+    local script_dir
+    script_dir="$(cd "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+
+    if [[ ! "$(command -v pre-commit)" ]]; then
+        logging::err "[hooks] pre-commit not found. Run './install_env.sh brew' first."
+        exit 1
+    fi
+
+    logging::info "[hooks] Installing pre-commit hooks in dotfiles repo..."
+
+    pushd "${script_dir}" >/dev/null || exit 1
+
+    if ! pre-commit install --hook-type pre-commit; then
+        logging::err "[hooks] pre-commit install failed"
+        popd >/dev/null || true
+        exit 1
+    fi
+
+    popd >/dev/null || exit 1
+
+    logging::success "[hooks] Installed pre-commit hooks"
+}
+
 steps::post_install() {
     if [[ "$(command -v bat)" ]]; then
         logging::info "[custom] Rebuilding bat's cache"

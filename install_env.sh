@@ -9,6 +9,7 @@
 #/   system        OS-specific package setup + Homebrew install
 #/   brew          Install packages from Brewfile
 #/   stow          Symlink configuration files
+#/   hooks         Install git pre-commit hooks (detect-secrets) for this repo
 #/   post-install  Run post-install setup (bat cache, worktrunk)
 #/   shell         Configure default shell (requires sudo)
 #/   help          Show this help message
@@ -110,6 +111,10 @@ cmd::stow() {
     steps::setup_stow "${STOW_DIRS[@]}"
 }
 
+cmd::hooks() {
+    steps::install_git_hooks
+}
+
 cmd::post_install() {
     steps::post_install
 }
@@ -126,6 +131,7 @@ cmd::all() {
     cmd::system_setup
     cmd::brew
     cmd::stow
+    cmd::hooks
     cmd::post_install
     cmd::shell
     logging::success "Installation complete."
@@ -140,6 +146,7 @@ case "${1:-all}" in
     system)       cmd::system_setup ;;
     brew)         cmd::brew ;;
     stow)         cmd::stow ;;
+    hooks)        cmd::hooks ;;
     post-install) cmd::post_install ;;
     shell)        cmd::shell ;;
     help|-h|--help) cmd::help ;;

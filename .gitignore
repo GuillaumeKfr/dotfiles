@@ -14,3 +14,8 @@ fish/.config/fish/fish_variables
 # Thumbnails
 ._*
 
+# opencode local secrets — never commit
+opencode/.config/opencode/secrets.json
+**/secrets.json
+**/*.secret.json
+
