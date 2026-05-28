@@ -42,6 +42,8 @@ function ot
         return 1
     end
 
+    git -C $repo_path fetch --quiet 2>/dev/null
+
     set -l create_flag
     if not git -C $repo_path show-ref --verify --quiet refs/heads/$branch
         and not git -C $repo_path for-each-ref --format='%(refname:lstrip=3)' refs/remotes \
