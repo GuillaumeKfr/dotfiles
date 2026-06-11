@@ -78,15 +78,44 @@ detect_opencode_state() {
     _state=$STATE_WORKING
 }
 
+detect_claude_state() {
+    local pane_id="$1"
+    local c
+    c=$(tmux capture-pane -t "$pane_id" -p 2>/dev/null) || {
+        _state=$STATE_WORKING; return
+    }
+
+    if [[ "$c" == *"Allow once"* ]] || \
+       [[ "$c" == *"Allow always"* ]] || \
+       [[ "$c" == *"Reject"* ]]; then
+        _state=$STATE_WAITING; return
+    fi
+
+    [[ "$c" == *"Plan, search, build anything"* ]] && { _state=$STATE_IDLE; return; }
+
+    _state=$STATE_WORKING
+}
+
 build_list() {
     local current_session
     current_session=$(tmux display-message -p '#S')
 
-    local cursor_pids opencode_pids
-    IFS=$'\t' read -r cursor_pids opencode_pids < <(ps -eo pid=,ppid=,args= 2>/dev/null | awk '
-        /cursor-agent/ { c=c " " $1 " " $2 }
-        /opencode/ && !/awk/ { o=o " " $1 " " $2 }
-        END { printf " %s \t %s \n", c, o }')
+    declare -A agent_pids
+    while IFS=$'\t' read -r name pids; do
+        agent_pids["$name"]="$pids"
+    done < <(ps -eo pid=,ppid=,args= 2>/dev/null | awk '
+        !/awk/ && $3 ~ /(\/|^)cursor-agent( |$)/ { c=c " " $1 " " $2 }
+        !/awk/ && $3 ~ /(\/|^)opencode( |$)/     { o=o " " $1 " " $2 }
+        !/awk/ && $3 ~ /(\/|^)claude( |$)/       { cl=cl " " $1 " " $2 }
+        END {
+            printf "cursor-agent\t%s \n", c
+            printf "opencode\t%s \n", o
+            printf "claude\t%s \n", cl
+        }')
+
+    local cursor_pids="${agent_pids[cursor-agent]}"
+    local opencode_pids="${agent_pids[opencode]}"
+    local claude_pids="${agent_pids[claude]}"
 
     local -a names=() activities=() prios=() dots_arr=() dot_counts=()
     local max_len=0
@@ -105,6 +134,8 @@ build_list() {
             detect_cursor_state "$pane_id"
         elif [[ "$opencode_pids" == *" ${pane_pid} "* ]]; then
             detect_opencode_state "$pane_id"
+        elif [[ "$claude_pids" == *" ${pane_pid} "* ]]; then
+            detect_claude_state "$pane_id"
         else
             continue
         fi

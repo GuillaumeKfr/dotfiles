@@ -47,3 +47,5 @@ nohup.out
 
 # Cursor
 .cursor/
+
+**/.claude/settings.local.json

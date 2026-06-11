@@ -1,5 +1,5 @@
 #/ Open a worktree for the given branch in a new tmux window
-#/ with nvim, opencode, and a shell (main-vertical layout).
+#/ with nvim, claude, and a shell (main-vertical layout).
 #/
 #/ Usage: ot [-C <repo-path>] <branch>
 #/   -C <path>   Treat <path> as the repository root (like git -C / wt -C).
@@ -68,7 +68,7 @@ function ot
     end
 
     tmux new-window -n $branch -c $wt_path nvim \; \
-        split-window -c $wt_path opencode \; \
+        split-window -c $wt_path claude \; \
         split-window -c $wt_path \; \
         select-layout main-vertical \; \
         select-pane -t 0
