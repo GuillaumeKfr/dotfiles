@@ -1,3 +1,6 @@
+-- Personal options and keymaps.
+require 'custom.options'
+
 local file_exists = function(name)
   local f = io.open(name, 'r')
   if f ~= nil then
