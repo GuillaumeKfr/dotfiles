@@ -1,7 +1,5 @@
 -- Seamlessly navigate between tmux panes and Neovim splits with <C-h/j/k/l>.
-local gh = function(repo) return 'https://github.com/' .. repo end
-
-vim.pack.add { gh 'christoomey/vim-tmux-navigator' }
+vim.pack.add { 'https://github.com/christoomey/vim-tmux-navigator' }
 
 -- Override the default window-only navigation keymaps so they also move
 -- across tmux panes.
