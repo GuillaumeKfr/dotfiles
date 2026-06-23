@@ -767,7 +767,7 @@ do
     'shellcheck',
     'shfmt',
     'prettier',
-    'markdownlint-cli2',
+    'markdownlint',
     'bash-language-server', -- Bash Language server (bashls)
   })
 
