@@ -768,6 +768,7 @@ do
     'shfmt',
     'prettier',
     'markdownlint',
+    'tflint',
     'bash-language-server', -- Bash Language server (bashls)
   })
 

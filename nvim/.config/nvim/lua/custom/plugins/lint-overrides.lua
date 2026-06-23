@@ -6,3 +6,4 @@ local lint = require 'lint'
 lint.linters_by_ft['sh'] = { 'shellcheck' }
 lint.linters_by_ft['sql'] = { 'sqlfluff' }
 lint.linters_by_ft['python'] = { 'ruff' }
+lint.linters_by_ft['terraform'] = { 'tflint' }
