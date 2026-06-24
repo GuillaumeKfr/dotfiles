@@ -499,7 +499,14 @@ do
     --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
     --   },
     -- },
-    -- pickers = {}
+    pickers = {
+      find_files = {
+        -- Show hidden (dot) files; .gitignore is still respected by fd/rg.
+        hidden = true,
+        -- but never surface the .git directory's internals.
+        file_ignore_patterns = { '%.git/' },
+      },
+    },
     extensions = {
       ['ui-select'] = { require('telescope.themes').get_dropdown() },
     },
