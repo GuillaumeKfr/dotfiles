@@ -506,6 +506,16 @@ do
         -- but never surface the .git directory's internals.
         file_ignore_patterns = { '%.git/' },
       },
+      live_grep = {
+        -- Grep hidden (dot) files too; .gitignore is still respected by rg.
+        additional_args = { '--hidden' },
+        -- but never surface the .git directory's internals.
+        file_ignore_patterns = { '%.git/' },
+      },
+      grep_string = {
+        additional_args = { '--hidden' },
+        file_ignore_patterns = { '%.git/' },
+      },
     },
     extensions = {
       ['ui-select'] = { require('telescope.themes').get_dropdown() },
