@@ -1,14 +1,8 @@
 {
-  "env": {
-    "CLAUDE_CODE_USE_BEDROCK": "1",
-    "AWS_REGION": "eu-west-1",
-    "AWS_PROFILE": "mns-accelerator-dev"
-  },
   "attribution": {
     "commit": "",
     "pr": ""
   },
-  "model": "eu.anthropic.claude-opus-4-8",
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline-command.sh"
