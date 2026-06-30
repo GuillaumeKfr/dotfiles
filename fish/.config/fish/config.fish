@@ -28,6 +28,8 @@ end
 # Homebrew
 if test -d /opt/homebrew
     eval (/opt/homebrew/bin/brew shellenv)
+    # Install casks into ~/Applications to avoid requiring admin permissions
+    set -gx HOMEBREW_CASK_OPTS "--appdir=$HOME/Applications"
 else if test -d /home/linuxbrew/.linuxbrew
     eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 end

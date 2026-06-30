@@ -99,6 +99,12 @@ cmd::brew() {
         exit 1
     fi
 
+    # Casks install into ~/Applications (mirrors HOMEBREW_CASK_OPTS in config.fish) to avoid admin perms
+    if [[ "$OS" == "macos" ]]; then
+        mkdir -p "$HOME/Applications"
+        export HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications"
+    fi
+
     logging::info "[brew] Installing from Brewfile..."
     if ! brew bundle --file="${SCRIPT_DIR}/Brewfile"; then
         logging::err "[brew] brew bundle failed"
