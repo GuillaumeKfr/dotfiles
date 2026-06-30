@@ -32,6 +32,7 @@ if OS.mac?
   tap "nikitabobko/tap"
   cask "claude-code"
   cask "font-jetbrains-mono-nerd-font"
+  cask "hammerspoon"
   cask "kitty"
   cask "nikitabobko/tap/aerospace"
 end
