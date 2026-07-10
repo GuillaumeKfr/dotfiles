@@ -2,6 +2,7 @@ set -g fish_key_bindings fish_vi_key_bindings
 set -gx XDG_CONFIG_HOME $HOME/.config
 set -gx EDITOR nvim
 set -gx VISUAL nvim
+set -gx CLAUDE_CODE_SUBAGENT_MODEL haiku
 
 function fish_greeting
     echo '
