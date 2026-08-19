@@ -24,5 +24,18 @@
   "effortLevel": "medium",
   "awaySummaryEnabled": false,
   "theme": "auto",
-  "switchModelsOnFlag": true
+  "switchModelsOnFlag": true,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude"
+          }
+        ]
+      }
+    ]
+  }
 }
