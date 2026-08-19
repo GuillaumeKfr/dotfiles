@@ -36,3 +36,7 @@ function mkdir -d "Create a directory and set CWD"
         end
     end
 end
+
+if command -q npx
+    alias ccusage="npx ccusage@latest"
+end

@@ -56,5 +56,17 @@ if [ -n "$used" ]; then
   ctx=$(printf ' ctx:%.0f%%' "$used")
 fi
 
-printf '%s%s\033[34m%s\033[0m%s%s \033[90m[%s%s]\033[0m' \
-  "$jobspart" "$hostpart" "$dir" "$gitpart" "$venvpart" "$model" "$ctx"
+# this month's cost, via ccusage, colored by % of $500 monthly budget
+budget=500
+costpart=""
+cost=$(npx --yes ccusage@latest monthly --json --last 1 2>/dev/null | jq -r '.totals.totalCost // empty')
+if [ -n "$cost" ]; then
+  pct=$(awk -v c="$cost" -v b="$budget" 'BEGIN { printf "%.0f", (c / b) * 100 }')
+  color=32
+  [ "$pct" -ge 50 ] && color=33
+  [ "$pct" -ge 80 ] && color=31
+  costpart=$(printf ' \033[%sm$%.2f\033[0m' "$color" "$cost")
+fi
+
+printf '%s%s\033[34m%s\033[0m%s%s \033[90m[%s%s]\033[0m%s' \
+  "$jobspart" "$hostpart" "$dir" "$gitpart" "$venvpart" "$model" "$ctx" "$costpart"
