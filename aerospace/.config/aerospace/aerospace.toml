@@ -50,10 +50,6 @@ automatically-unhide-macos-hidden-apps = false
     run = ['move-node-to-workspace 1 --focus-follows-window']
 
 [[on-window-detected]]
-    if.app-name-regex-substring = 'cursor'
-    run = ['move-node-to-workspace 2 --focus-follows-window']
-
-[[on-window-detected]]
     if.app-name-regex-substring = 'code'
     run = ['move-node-to-workspace 2 --focus-follows-window']
 
