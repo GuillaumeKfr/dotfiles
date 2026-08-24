@@ -7,3 +7,16 @@ lint.linters_by_ft['sh'] = { 'shellcheck' }
 lint.linters_by_ft['sql'] = { 'sqlfluff' }
 lint.linters_by_ft['python'] = { 'ruff' }
 lint.linters_by_ft['terraform'] = { 'tflint' }
+--
+-- sqlfluff reads stdin, which has no path, so config resolution falls back to
+-- nvim's cwd and misses the per-directory .sqlfluff files. Tell it the real path.
+lint.linters.sqlfluff.args = {
+  'lint',
+  '--format=json',
+  '--stdin-filename',
+  function()
+    local name = vim.api.nvim_buf_get_name(0)
+    return name ~= '' and name or vim.fn.getcwd() .. '/stdin.sql'
+  end,
+  '-',
+}
