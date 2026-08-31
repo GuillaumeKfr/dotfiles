@@ -1,6 +1,6 @@
 {
   "env": {
-    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-haiku-5",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "haiku",
     "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1"
   },
   "attribution": {
