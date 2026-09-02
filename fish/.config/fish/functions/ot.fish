@@ -1,5 +1,5 @@
-#/ Open a worktree for the given branch in a new tmux window
-#/ with nvim, claude, and a shell (main-vertical layout).
+#/ Open a worktree for the given branch in a new herdr tab
+#/ with nvim, claude, and a shell (nvim main pane, claude+shell on the side).
 #/
 #/ Usage: ot [-C <repo-path>] <branch>
 #/   -C <path>   Treat <path> as the repository root (like git -C / wt -C).
@@ -21,8 +21,8 @@ function ot
     end
     set -l branch $argv[1]
 
-    if not set -q TMUX
-        echo "ot: must be run inside a tmux session" >&2
+    if test "$HERDR_ENV" != 1
+        echo "ot: must be run inside a herdr session" >&2
         return 1
     end
 
@@ -44,32 +44,45 @@ function ot
 
     git -C $repo_path fetch --quiet 2>/dev/null
 
-    set -l create_flag
-    if not git -C $repo_path show-ref --verify --quiet refs/heads/$branch
-        and not git -C $repo_path for-each-ref --format='%(refname:lstrip=3)' refs/remotes \
-            | string match -q -- $branch
-        read -P "ot: branch '$branch' does not exist. Create it? [y/N] " -l answer
-        if not string match -qi 'y' -- $answer
-            return 1
-        end
-        set create_flag --create
+    # A tab we opened earlier for this branch lives in the current workspace already.
+    set -l existing_tab (herdr tab list --workspace $HERDR_WORKSPACE_ID | jq -r --arg b $branch '.result.tabs[] | select(.label == $b) | .tab_id')
+    if test -n "$existing_tab"
+        herdr tab focus $existing_tab >/dev/null
+        return 0
     end
 
-    wt -C $repo_path switch --no-cd $create_flag $branch
-    or return $status
+    set -l result (herdr worktree open --cwd $repo_path --branch $branch --no-focus 2>/dev/null)
+    if test $status -ne 0
+        set -l create_args --cwd $repo_path --branch $branch --no-focus
+        if not git -C $repo_path show-ref --verify --quiet refs/heads/$branch
+            # Branch doesn't exist locally yet: track a same-named remote branch if there is one.
+            set -l remote_ref (git -C $repo_path for-each-ref --format='%(refname)' "refs/remotes/*/$branch")
+            if test -n "$remote_ref"
+                set create_args $create_args --base $remote_ref
+            else
+                read -P "ot: branch '$branch' does not exist. Create it? [y/N] " -l answer
+                if not string match -qi 'y' -- $answer
+                    return 1
+                end
+            end
+        end
+        set result (herdr worktree create $create_args)
+        or return $status
+    end
 
-    set -l wt_path (
-        git -C $repo_path worktree list --porcelain \
-        | awk -v b=refs/heads/$branch '/^worktree / {p=$2} $1=="branch" && $2==b {print p; exit}'
-    )
-    if test -z "$wt_path"
-        echo "ot: could not locate worktree for $branch" >&2
+    set -l root_pane (echo $result | jq -r '.result.root_pane.pane_id')
+    set -l wt_path (echo $result | jq -r '.result.worktree.path')
+    if test -z "$root_pane" -o "$root_pane" = null
+        echo "ot: could not locate worktree pane for $branch" >&2
         return 1
     end
 
-    tmux new-window -n $branch -c $wt_path nvim \; \
-        split-window -c $wt_path claude \; \
-        split-window -c $wt_path \; \
-        select-layout main-vertical \; \
-        select-pane -t 0
+    set -l moved (herdr pane move $root_pane --new-tab --workspace $HERDR_WORKSPACE_ID --label $branch --focus)
+    or return $status
+    set -l nvim_pane (echo $moved | jq -r '.result.move_result.pane.pane_id')
+
+    herdr pane run $nvim_pane nvim >/dev/null
+    set -l claude_pane (herdr pane split $nvim_pane --direction right --ratio 0.5 --cwd $wt_path --no-focus | jq -r '.result.pane.pane_id')
+    herdr agent start claude --kind claude --pane $claude_pane >/dev/null
+    herdr pane split $claude_pane --direction down --cwd $wt_path --no-focus >/dev/null
 end
