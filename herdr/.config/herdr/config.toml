@@ -1,0 +1,60 @@
+onboarding = false
+# herdr configuration — mirrors ~/dotfiles/tmux/.config/tmux/tmux.conf
+
+[theme]
+name = "catppuccin"
+
+[ui]
+# tmux-style shared borders instead of gapped panes -> equal, minimal padding
+pane_gaps = false
+agent_panel_sort = "spaces"
+
+[ui.sound.agents]
+claude = "off"
+
+[keys]
+prefix = "ctrl+s"
+
+# free up "o" (default: open_notification_target) for the goto navigator below
+open_notification_target = ""
+new_worktree = ""
+
+# prefix+o = fuzzy "goto" navigator, type to filter workspaces/tabs by name
+# (tmux: bind o -> tmux-sessions popup). workspace_picker stays on prefix+w.
+goto = "prefix+o"
+
+# ctrl+hjkl pane navigation without prefix (tmux: vim-tmux-navigator)
+focus_pane_left = ["prefix+h", "ctrl+h"]
+focus_pane_down = ["prefix+j", "ctrl+j"]
+focus_pane_up = ["prefix+k", "ctrl+k"]
+focus_pane_right = ["prefix+l", "ctrl+l"]
+
+# tmux: bind v -> split -h (side by side), bind V -> split -v (stacked)
+split_vertical = "prefix+v"
+split_horizontal = ["prefix+minus", "prefix+shift+v"]
+
+[[keys.command]]
+key = "prefix+g"
+type = "popup"
+command = "lazygit"
+width = "80%"
+height = "80%"
+
+[[keys.command]]
+key = "prefix+t"
+type = "popup"
+command = "fish"
+width = "75%"
+height = "75%"
+
+[[keys.command]]
+key = "prefix+f"
+type = "popup"
+command = "yazi"
+width = "90%"
+height = "90%"
+
+[[keys.command]]
+key = "prefix+shift+g"
+type = "shell"
+command = "set -- $(herdr tab create --focus --label 'gh dash' | jq -r '.result.root_pane.pane_id + \" \" + .result.tab.tab_id'); herdr pane run \"$1\" \"gh dash; herdr tab close $2\""
