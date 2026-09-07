@@ -23,15 +23,34 @@ new_worktree = ""
 # (tmux: bind o -> tmux-sessions popup). workspace_picker stays on prefix+w.
 goto = "prefix+o"
 
-# ctrl+hjkl pane navigation without prefix (tmux: vim-tmux-navigator)
-focus_pane_left = ["prefix+h", "ctrl+h"]
-focus_pane_down = ["prefix+j", "ctrl+j"]
-focus_pane_up = ["prefix+k", "ctrl+k"]
-focus_pane_right = ["prefix+l", "ctrl+l"]
+focus_pane_left = "prefix+h"
+focus_pane_down = "prefix+j"
+focus_pane_up = "prefix+k"
+focus_pane_right = "prefix+l"
 
 # tmux: bind v -> split -h (side by side), bind V -> split -v (stacked)
 split_vertical = "prefix+v"
 split_horizontal = ["prefix+minus", "prefix+shift+v"]
+
+[[keys.command]]
+key = "ctrl+h"
+type = "plugin_action"
+command = "vim-herdr-navigation.left"
+
+[[keys.command]]
+key = "ctrl+j"
+type = "plugin_action"
+command = "vim-herdr-navigation.down"
+
+[[keys.command]]
+key = "ctrl+k"
+type = "plugin_action"
+command = "vim-herdr-navigation.up"
+
+[[keys.command]]
+key = "ctrl+l"
+type = "plugin_action"
+command = "vim-herdr-navigation.right"
 
 [[keys.command]]
 key = "prefix+g"
