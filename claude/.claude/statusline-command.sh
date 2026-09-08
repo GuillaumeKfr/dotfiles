@@ -78,10 +78,17 @@ budget=500
 sessionpart=""
 [ -n "$session_cost" ] && sessionpart=$(printf '\033[90m$%.2f\033[0m' "$session_cost")
 
+# working days in the month, and how many have elapsed so far (today inclusive)
+working_days=$(cal -h | cut -c 4-17 | tail -n +3 | wc -w | tr -d ' ')
+worked_days=0
+for d in $(seq -w 1 "$(date +%d)"); do
+  dow=$(date -j -f '%Y-%m-%d' "$(date +%Y-%m)-$d" +%u)
+  [ "$dow" -lt 6 ] && worked_days=$((worked_days + 1))
+done
+
 daypart=""
 day_cost=$(npx --yes ccusage@latest daily --json --last 1 2>/dev/null | jq -r '.totals.totalCost // empty')
 if [ -n "$day_cost" ]; then
-  working_days=$(cal -h | cut -c 4-17 | tail -n +3 | wc -w | tr -d ' ')
   dpct=$(awk -v c="$day_cost" -v b="$budget" -v d="$working_days" 'BEGIN { printf "%.0f", (c / (b / d)) * 100 }')
   color=32
   [ "$dpct" -ge 50 ] && color=33
@@ -92,7 +99,7 @@ fi
 monthpart=""
 month_cost=$(npx --yes ccusage@latest monthly --json --last 1 2>/dev/null | jq -r '.totals.totalCost // empty')
 if [ -n "$month_cost" ]; then
-  mpct=$(awk -v c="$month_cost" -v b="$budget" 'BEGIN { printf "%.0f", (c / b) * 100 }')
+  mpct=$(awk -v c="$month_cost" -v b="$budget" -v w="$worked_days" -v d="$working_days" 'BEGIN { printf "%.0f", (c / (b * w / d)) * 100 }')
   color=32
   [ "$mpct" -ge 50 ] && color=33
   [ "$mpct" -ge 80 ] && color=31
