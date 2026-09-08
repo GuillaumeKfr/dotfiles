@@ -1,12 +1,13 @@
 #/ Open a worktree for the given branch in a new herdr tab
 #/ with nvim, claude, and a shell (nvim main pane, claude+shell on the side).
 #/
-#/ Usage: ot [-C <repo-path>] <branch>
+#/ Usage: ot [-C <repo-path>] [-x <cmd>] <branch>
 #/   -C <path>   Treat <path> as the repository root (like git -C / wt -C).
 #/               Defaults to `git rev-parse --show-toplevel` in the current cwd.
+#/   -x <cmd>    Run <cmd> in the new tab instead of the default nvim+claude layout.
 #/   -h/--help   Display this help.
 function ot
-    argparse h/help 'C=' -- $argv
+    argparse h/help 'C=' 'x=' -- $argv
     or return 2
 
     if set -q _flag_help
@@ -81,8 +82,13 @@ function ot
     or return $status
     set -l nvim_pane (echo $moved | jq -r '.result.move_result.pane.pane_id')
 
-    herdr pane run $nvim_pane nvim >/dev/null
-    set -l claude_pane (herdr pane split $nvim_pane --direction right --ratio 0.5 --cwd $wt_path --no-focus | jq -r '.result.pane.pane_id')
-    herdr agent start claude --kind claude --pane $claude_pane >/dev/null
-    herdr pane split $claude_pane --direction down --cwd $wt_path --no-focus >/dev/null
+    if set -ql _flag_x
+        herdr agent start claude --kind claude --pane $nvim_pane >/dev/null
+        herdr agent prompt $nvim_pane "$_flag_x" >/dev/null
+    else
+        herdr pane run $nvim_pane nvim >/dev/null
+        set -l claude_pane (herdr pane split $nvim_pane --direction right --ratio 0.5 --cwd $wt_path --no-focus | jq -r '.result.pane.pane_id')
+        herdr agent start claude --kind claude --pane $claude_pane >/dev/null
+        herdr pane split $claude_pane --direction down --cwd $wt_path --no-focus >/dev/null
+    end
 end

@@ -67,14 +67,12 @@ keybindings:
         lazygit -p {{.RepoPath}}
     - key: C
       name: code review
-      command: >
-        tmux new-window -n '{{.HeadRefName}}' 'wt -C {{.RepoPath}} switch pr:{{.PrNumber}} -x "claude '\''Use the review-pr skill to review this PR.'\''"'
+      command: fish -c 'ot -C {{.RepoPath}} -x "Use the review-pr skill to review this PR." {{.HeadRefName}}'
     - key: c
       name: review comments
-      command: >
-        tmux new-window -n '{{.HeadRefName}}' 'wt -C {{.RepoPath}} switch pr:{{.PrNumber}} -x "claude '\''Use the review-pr-comments skill to review and address comments on this PR.'\''"'
+      command: fish -c 'ot -C {{.RepoPath}} -x "Use the review-pr-comments skill to review and address comments on this PR." {{.HeadRefName}}'
     - key: O
-      name: open in tmux
+      name: open in herdr
       command: fish -c 'ot -C {{.RepoPath}} {{.HeadRefName}}'
 
 theme:
