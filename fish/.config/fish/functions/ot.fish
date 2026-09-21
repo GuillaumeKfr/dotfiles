@@ -89,6 +89,6 @@ function ot
         herdr pane run $nvim_pane nvim >/dev/null
         set -l claude_pane (herdr pane split $nvim_pane --direction right --ratio 0.5 --cwd $wt_path --no-focus | jq -r '.result.pane.pane_id')
         herdr agent start claude --kind claude --pane $claude_pane >/dev/null
-        herdr pane split $claude_pane --direction down --cwd $wt_path --no-focus >/dev/null
+        herdr pane split $claude_pane --direction down --cwd $wt_path >/dev/null
     end
 end
