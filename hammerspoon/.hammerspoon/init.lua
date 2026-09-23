@@ -7,9 +7,9 @@
 local Swipe = hs.loadSpoon("Swipe")
 
 local config = {
-	fingers = 3,
-	-- trigger once swipe distance exceeds 8% of the trackpad
-	threshold = 0.08,
+  fingers = 3,
+  -- trigger once swipe distance exceeds 8% of the trackpad
+  threshold = 0.08,
 }
 
 local AEROSPACE = "/opt/homebrew/bin/aerospace"
@@ -18,32 +18,32 @@ local AEROSPACE = "/opt/homebrew/bin/aerospace"
 -- move prev/next with wrap-around. The first step keeps multi-monitor setups
 -- in sync so the swipe acts on the display you're pointing at.
 local function aerospaceWorkspace(dir)
-	-- --no-stdin is required on the next/prev command: AeroSpace v0.20.0 forbids
-	-- implicit stdin, and hs.execute never runs with a TTY. It is only valid with
-	-- the next/prev argument, so it must not appear on the named-workspace command.
-	local cmd = string.format(
-		"%s list-workspaces --monitor mouse --visible | xargs %s workspace && %s workspace --no-stdin --wrap-around %s",
-		AEROSPACE,
-		AEROSPACE,
-		AEROSPACE,
-		dir
-	)
-	hs.execute(cmd)
+  -- --no-stdin is required on the next/prev command: AeroSpace v0.20.0 forbids
+  -- implicit stdin, and hs.execute never runs with a TTY. It is only valid with
+  -- the next/prev argument, so it must not appear on the named-workspace command.
+  local cmd = string.format(
+    "%s list-workspaces --monitor mouse --visible | xargs %s workspace && %s workspace --no-stdin --wrap-around %s",
+    AEROSPACE,
+    AEROSPACE,
+    AEROSPACE,
+    dir
+  )
+  hs.execute(cmd)
 end
 
 local current_id, threshold
 Swipe:start(config.fingers, function(direction, distance, id)
-	if id == current_id then
-		if distance > threshold then
-			threshold = math.huge -- only trigger once per swipe
-			if direction == "left" then
-				aerospaceWorkspace("next")
-			elseif direction == "right" then
-				aerospaceWorkspace("prev")
-			end
-		end
-	else
-		current_id = id
-		threshold = config.threshold
-	end
+  if id == current_id then
+    if distance > threshold then
+      threshold = math.huge -- only trigger once per swipe
+      if direction == "left" then
+        aerospaceWorkspace("next")
+      elseif direction == "right" then
+        aerospaceWorkspace("prev")
+      end
+    end
+  else
+    current_id = id
+    threshold = config.threshold
+  end
 end)
