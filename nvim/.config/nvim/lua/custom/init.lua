@@ -1,17 +1,7 @@
 -- Personal options and keymaps.
 require 'custom.options'
 
-local file_exists = function(name)
-  local f = io.open(name, 'r')
-  if f ~= nil then
-    io.close(f)
-    return true
-  else
-    return false
-  end
-end
-
-if file_exists '/etc/wsl.conf' then
+if vim.fn.filereadable '/etc/wsl.conf' == 1 then
   vim.g.clipboard = {
     name = 'WSLClip',
     copy = {
