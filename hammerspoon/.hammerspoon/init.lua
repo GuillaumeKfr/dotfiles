@@ -10,8 +10,6 @@ local config = {
 	fingers = 3,
 	-- trigger once swipe distance exceeds 8% of the trackpad
 	threshold = 0.08,
-	showAlert = false,
-	alertDuration = 0.4,
 }
 
 local AEROSPACE = "/opt/homebrew/bin/aerospace"
@@ -31,10 +29,6 @@ local function aerospaceWorkspace(dir)
 		dir
 	)
 	hs.execute(cmd)
-
-	if config.showAlert then
-		hs.alert.show("AeroSpace: " .. dir, config.alertDuration)
-	end
 end
 
 local current_id, threshold
