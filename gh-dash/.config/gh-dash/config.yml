@@ -72,7 +72,7 @@ keybindings:
       name: review comments
       command: fish -c 'ot -C {{.RepoPath}} -x "Use the review-pr-comments skill to review and address comments on this PR." {{.HeadRefName}}'
     - key: O
-      name: open in herdr
+      name: open worktree
       command: fish -c 'ot -C {{.RepoPath}} {{.HeadRefName}}'
 
 theme:
