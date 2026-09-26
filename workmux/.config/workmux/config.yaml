@@ -1,5 +1,5 @@
 nerdfont: true
-status_format: true
+status_format: false
 status_icons:
   working: ""
   waiting: ""
