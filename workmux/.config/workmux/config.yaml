@@ -1,9 +1,9 @@
 nerdfont: true
-status_format: false
+status_format: true
 status_icons:
-  working: ""
-  waiting: ""
-  done: ""
+  working: ""
+  waiting: ""
+  done: ""
 sidebar:
   group_by: project
   templates:
