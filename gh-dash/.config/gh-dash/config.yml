@@ -61,6 +61,12 @@ defaults:
 
 keybindings:
   prs:
+    - key: D
+      builtin: diff
+    - key: d
+      name: tuicr
+      command: >
+        cd {{.RepoPath}} && tuicr pr {{.RepoName}}#{{.PrNumber}}
     - key: g
       name: lazygit
       command: >
