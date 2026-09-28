@@ -5,6 +5,7 @@ abbr --add calc bc -l
 alias top="btop"
 alias rm="rm -i"
 abbr --add ping ping -c 5
+abbr --add wm workmux
 
 if test -n "$WSL_DISTRO_NAME"
     function clip

@@ -1,9 +1,7 @@
-# Complete branch names and flags for `ot`
-# Local branches as-is; remote branches with the remote prefix stripped
-# (so completing a remote-only branch lets `wt switch` create a local tracking branch).
-complete -c ot -f -a '(
-    git for-each-ref --format="%(refname:short)" refs/heads 2>/dev/null;
-    git for-each-ref --format="%(refname:lstrip=3)" refs/remotes 2>/dev/null \
-        | string match -v HEAD
-)'
-complete -c ot -s C -r -d 'Repository path (like git -C)'
+complete -c ot -f
+complete -c ot -s h -l help -d 'Display help'
+complete -c ot -s C -d 'Repository path' -xa '(__fish_complete_directories)'
+complete -c ot -s x -d 'Prompt to send to the agent'
+# `complete -C"git "` forces fish to autoload git's completions/git.fish,
+# which is where __fish_git_branches is defined - it isn't loaded otherwise.
+complete -c ot -n '__fish_is_first_arg' -xa '(complete -C"git " >/dev/null 2>&1; __fish_git_branches)'

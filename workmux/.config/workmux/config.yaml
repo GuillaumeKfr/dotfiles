@@ -1,0 +1,19 @@
+nerdfont: true
+status_format: false
+status_icons:
+  working: ""
+  waiting: ""
+  done: ""
+sidebar:
+  group_by: project
+  templates:
+    grouped:
+      tiles:
+        - "{primary} {pane_suffix} {fill} {pr_number} {pr_checks}"
+        - "{pane_title} {fill} {git_stats}"
+panes:
+  - command: nvim
+    focus: true
+  - command: <agent>
+    split: horizontal
+  - split: vertical

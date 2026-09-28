@@ -105,6 +105,10 @@ cmd::brew() {
         export HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications"
     fi
 
+    while IFS= read -r tap; do
+        brew trust "$tap" 2>/dev/null || true
+    done < <(grep -o 'tap "[^"]*"' "${SCRIPT_DIR}/Brewfile" | cut -d'"' -f2)
+
     logging::info "[brew] Installing from Brewfile..."
     if ! brew bundle --file="${SCRIPT_DIR}/Brewfile"; then
         logging::err "[brew] brew bundle failed"
