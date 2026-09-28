@@ -3,8 +3,8 @@ prSections:
     filters: is:open author:@me
   - title: Review
     filters: is:open review-requested:@me
-  - title: Commented
-    filters: is:open commenter:@me
+  - title: Involved
+    filters: is:open involves:@me
 issuesSections:
   - title: Creator
     filters: is:open author:@me
