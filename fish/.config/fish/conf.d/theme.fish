@@ -1,12 +1,8 @@
 if status is-interactive
-    # Catppuccin Mocha theme for fzf
-    set -gx FZF_DEFAULT_OPTS "\
---color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#cba6f7 \
---color=fg:#cdd6f4,header:#cdd6f4,info:#cba6f7,pointer:#f5e0dc \
---color=marker:#b4befe,fg+:#cdd6f4,prompt:#cba6f7,hl+:#cba6f7 \
---color=selected-bg:#45475a \
---color=border:#313244,label:#cdd6f4"
+    # fzf colors follow the theme set via the `theme` fish function
+    set -l theme_name (cat ~/.config/theme/current 2>/dev/null; or echo catppuccin)
+    set -gx FZF_DEFAULT_OPTS (cat ~/.config/fish/fzf-themes/$theme_name.conf)
 
-    # Catppuccin Mocha theme for bat
+    # Catppuccin Mocha theme for bat (no official Rosé Pine bat theme)
     set -gx BAT_THEME "Catppuccin Mocha"
 end

@@ -1,10 +1,3 @@
-git:
-  diffRenderers:
-    - colorArg: always
-      command: delta --paging=never
-gui:
-  theme:
-    # theme:start (managed by the `theme` fish function)
     activeBorderColor:
       - '#b4befe'
       - bold
@@ -24,6 +17,3 @@ gui:
       - '#cdd6f4'
     searchingActiveBorderColor:
       - '#f9e2af'
-    # theme:end
-  authorColors:
-    '*': '#b4befe'
