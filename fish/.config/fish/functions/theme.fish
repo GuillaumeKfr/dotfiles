@@ -16,7 +16,7 @@ function theme
         return 1
     end
 
-    mkdir -p $state_dir
+    command mkdir -p $state_dir
     echo $name > $state_file
 
     # kitty (live reload; kitty already bundles both themes)
