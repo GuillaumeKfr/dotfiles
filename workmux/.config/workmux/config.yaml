@@ -11,6 +11,11 @@ sidebar:
       tiles:
         - "{primary} {pane_suffix} {fill} {pr_number} {pr_checks}"
         - "{pane_title} {fill} {git_stats}"
+files:
+  symlink:
+    - .envrc
+post_create:
+  - command -v direnv >/dev/null && direnv allow || true
 panes:
   - command: nvim
     focus: true
