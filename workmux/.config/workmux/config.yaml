@@ -1,3 +1,4 @@
+agent: claude --ide
 nerdfont: true
 status_format: false
 status_icons:
