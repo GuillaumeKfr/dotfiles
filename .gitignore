@@ -16,3 +16,6 @@ opencode/.config/opencode/secrets.json
 **/secrets.json
 **/*.secret.json
 
+
+# Site-specific mwaalog helpers (internal naming) — never commit
+fish/.config/fish/functions/_mwaalog_*.fish
