@@ -11,6 +11,10 @@ description: >
 
 When evaluating and responding to comments, apply the `receiving-code-review` skill.
 
+## Comment style
+
+Apply the "Tone and wording" rules of the `comment-style` skill to every reply body. Its Conventional Comments format does not apply to replies.
+
 ## Prerequisites
 
 - `gh` CLI authenticated and available in PATH

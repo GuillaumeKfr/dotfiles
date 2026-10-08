@@ -10,16 +10,9 @@ description: >
 
 # Review PR
 
-## Tone and wording for feedback
+## Comment style
 
-These rules apply to every comment body and every commit message produced by this skill:
-
-- **Describe the issue, not the author.** "This can NPE when X" — not "you forgot to handle X".
-- **Be concrete and specific.** Point at the exact symptom or scenario; avoid "this seems off" or "consider refactoring".
-- **Suggest, don't mandate.** Phrase fixes as proposals ("consider...", "could become...") unless it's a clear bug or security issue.
-- **One thought per comment.** If a finding contains two unrelated points, split it.
-- **No throat-clearing.** No "great PR overall, but...", no "I think maybe you might want to consider...".
-- **Plain prose.** No headers, no bold labels, no titles inside comment bodies — the categorization is metadata, not the message.
+Apply the `comment-style` skill to every comment body. Default label mapping from finding category: `BUG` / `SECURITY` → `issue (blocking)`; `IMPROVEMENT` → `suggestion (non-blocking)`; `DOCS` → `suggestion` or `nitpick (non-blocking)`; `TESTS` → `suggestion` or `issue` depending on severity.
 
 ## Prerequisites
 
@@ -171,9 +164,9 @@ For each approved finding, append an entry to the queue containing:
 - `line` — line number on the new side of the diff (for a multi-line range, also set `start_line`)
 - `body` — plain explanation; include a ` ```suggestion ` block when a direct replacement applies
 
-Comment-body rules: see "Tone and wording for feedback" at the top of this skill. Example body:
+Comment-body rules: see "Comment style" at the top of this skill. Example body:
 
-    This can raise a NullPointerException when `user` is not found.
+    **issue (blocking):** `user` can be `None` here and raise on the next line.
 
     ```suggestion
     user = get_user(id)
