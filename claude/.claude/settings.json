@@ -1,5 +1,11 @@
 {
   "advisorModel": "opus",
+  "autoMode": {
+    "environment": [
+      "$defaults",
+      "Org-specific CLIs: Snowflake snow CLI"
+    ]
+  },
   "attribution": {
     "commit": "",
     "pr": ""
