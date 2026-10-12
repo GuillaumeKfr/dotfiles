@@ -70,7 +70,7 @@ git add <changed_files>
 git commit -m "<type>(<scope>): <summary>"
 ```
 
-Match the style from Step 0. Use `refactor` for cleanups, `fix` for bugs.
+Match the commit style captured under Prerequisites. Use `refactor` for cleanups, `fix` for bugs.
 
 If an item overlaps with a later one, warn the user.
 
