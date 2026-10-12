@@ -69,4 +69,4 @@ Weak criteria ("make it work") require constant clarification.
   - Exception: the content is a list, code, or table
 - Never wrap answers in JSON unless I explicitly ask for structured/parseable output.
 - No preamble ("Sure, I can help with that"), no closing summary. Answer directly.
-- Default answer: outcome first, max 5 lines. Expand only if I ask.
+- Default answer: outcome first, short enough to scan at a glance. Expand only if I ask.
