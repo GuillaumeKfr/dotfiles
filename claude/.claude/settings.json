@@ -97,6 +97,7 @@
     ]
   },
   "model": "sonnet",
+  "outputStyle": "Concise",
   "statusLine": {
     "command": "bash ~/.claude/statusline-command.sh",
     "type": "command"
