@@ -9,7 +9,7 @@ function ot
     argparse h/help 'C=' 'x=' -- $argv
     or return 2
 
-    if set -q _flag_help
+    if set -ql _flag_help
         grep '^#/' (status filename) | string replace -r '^#/( |$)' ''
         return 0
     end
@@ -32,12 +32,21 @@ function ot
     end
 
     pushd $repo_path
-    if set -ql _flag_x
-        workmux add $branch --open-if-exists -p "$_flag_x"
-    else
-        workmux add $branch --open-if-exists
+
+    # Branch only exists on the remote: pass the remote ref so workmux tracks it.
+    if not git show-ref --verify --quiet refs/heads/$branch
+        git fetch origin $branch 2>/dev/null
+        if git show-ref --verify --quiet refs/remotes/origin/$branch
+            set branch origin/$branch
+        end
     end
+
+    set -l prompt_args
+    set -ql _flag_x; and set prompt_args -p $_flag_x
+    workmux add $branch --open-if-exists $prompt_args
     set -l ret $status
+
     popd
+
     return $ret
 end
