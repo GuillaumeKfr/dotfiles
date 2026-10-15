@@ -33,7 +33,6 @@ brew "zsh"
 if OS.mac?
   tap "nikitabobko/tap"
   cask "claude-code"
-  brew "rtk"
   cask "font-jetbrains-mono-nerd-font"
   cask "hammerspoon"
   cask "kitty"

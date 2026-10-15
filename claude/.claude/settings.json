@@ -1,10 +1,7 @@
 {
   "advisorModel": "opus",
   "autoMode": {
-    "environment": [
-      "$defaults",
-      "Org-specific CLIs: Snowflake snow CLI"
-    ]
+    "environment": ["$defaults", "Org-specific CLIs: Snowflake snow CLI"]
   },
   "attribution": {
     "commit": "",
@@ -53,15 +50,14 @@
         ]
       }
     ],
-    "PreToolUse": [
+    "UserPromptSubmit": [
       {
         "hooks": [
           {
-            "command": "rtk hook claude",
+            "command": "workmux set-window-status working",
             "type": "command"
           }
-        ],
-        "matcher": "Bash"
+        ]
       }
     ],
     "SessionStart": [
@@ -80,16 +76,6 @@
         "hooks": [
           {
             "command": "workmux set-window-status done",
-            "type": "command"
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "command": "workmux set-window-status working",
             "type": "command"
           }
         ]
