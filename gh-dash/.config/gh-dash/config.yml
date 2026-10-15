@@ -73,7 +73,7 @@ keybindings:
         lazygit -p {{.RepoPath}}
     - key: C
       name: code review
-      command: fish -c 'ot -C {{.RepoPath}} -x "Use the code-review skill to review this PR." {{.HeadRefName}}'
+      command: fish -c 'ot -C {{.RepoPath}} -x "Use the review-pr skill to review this PR." {{.HeadRefName}}'
     - key: c
       name: review comments
       command: fish -c 'ot -C {{.RepoPath}} -x "Use the review-pr-comments skill to review and address comments on this PR." {{.HeadRefName}}'
