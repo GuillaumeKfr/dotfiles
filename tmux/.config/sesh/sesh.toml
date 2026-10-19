@@ -1,0 +1,3 @@
+[default_session]
+# nvim | claude / terminal, same layout as workmux (see workmux/.config/workmux/config.yaml)
+startup_command = 'tmux split-window -h -c "#{pane_current_path}" "claude --ide" \; split-window -v -c "#{pane_current_path}" \; select-pane -L \; send-keys nvim Enter'
