@@ -47,7 +47,7 @@ function ot
     set -l ret $status
 
     # workmux opens the window next to the current one; push it to the far right.
-    set -q TMUX; and tmux move-window -a -t '{end}' 2>/dev/null
+    test $ret -eq 0; and set -q TMUX; and tmux move-window -a -t '{end}' 2>/dev/null
 
     popd
 
