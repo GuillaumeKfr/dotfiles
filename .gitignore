@@ -1,21 +1,14 @@
-.git
-packer_compiled.lua
-fish/.config/fish/fish_variables
+tags
+test.sh
+.luarc.json
+nvim
 
-# Override global gitignore for stow packages that contain .cursor/
-!cursor/.cursor/
+spell/
 
-### macOS ###
-# General
+# In your personal fork, you likely want to comment this, since it's recommended to track
+# nvim-pack-lock.json in version control - see :help vim.pack-lockfile
+# For the official `nvim-lua/kickstart.nvim` git repository, we leave it ignored to avoid unneeded
+# merge conflicts.
+nvim-pack-lock.json
+
 .DS_Store
-.AppleDouble
-.LSOverride
-
-# Thumbnails
-._*
-
-# opencode local secrets — never commit
-opencode/.config/opencode/secrets.json
-**/secrets.json
-**/*.secret.json
-

@@ -1,6 +1,0 @@
-# https://worktrunk.dev/config/
-
-pre-start = [
-  "wt step copy-ignored",
-  "[ -f .envrc ] && direnv allow || true",
-]
