@@ -80,6 +80,17 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "EnterWorktree|Agent|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/require-wt.sh"
+          }
+        ]
+      }
     ]
   },
   "model": "sonnet",

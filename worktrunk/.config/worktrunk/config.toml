@@ -1,5 +1,9 @@
 # https://worktrunk.dev/config/
 
+# Same layout as workmux (<project>__worktrees/<branch>): it names tmux windows after the dir basename,
+# so no repo name or "." (tmux treats it as a pane separator) in the window name.
+worktree-path = "{{ repo_path }}/../{{ repo }}__worktrees/{{ branch | sanitize }}"
+
 pre-start = [
   "wt step copy-ignored",
   "[ -f .envrc ] && direnv allow || true",

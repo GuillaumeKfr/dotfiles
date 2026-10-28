@@ -70,3 +70,8 @@ Weak criteria ("make it work") require constant clarification.
 - Never wrap answers in JSON unless I explicitly ask for structured/parseable output.
 - No preamble ("Sure, I can help with that"), no closing summary. Answer directly.
 - Default answer: outcome first, short enough to scan at a glance. Expand only if I ask.
+
+## 6. Worktrees
+
+- Always create worktrees with `wt switch -c <branch>` (remove with `wt remove`, merge with `wt merge`). Never use `git worktree add`, EnterWorktree, or `isolation: "worktree"`.
+- If wt fails, tell me instead of falling back to raw git.
