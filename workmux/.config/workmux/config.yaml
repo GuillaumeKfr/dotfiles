@@ -23,3 +23,5 @@ panes:
   - command: <agent>
     split: horizontal
   - split: vertical
+dashboard:
+  agent_columns: [number, project, worktree, pr, status, time, title]
