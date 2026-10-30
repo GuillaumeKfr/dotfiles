@@ -1,7 +1,10 @@
 {
   "advisorModel": "opus",
   "autoMode": {
-    "environment": ["$defaults", "Org-specific CLIs: Snowflake snow CLI"]
+    "environment": [
+      "$defaults",
+      "Org-specific CLIs: Snowflake snow CLI"
+    ]
   },
   "attribution": {
     "commit": "",
@@ -88,6 +91,15 @@
           {
             "type": "command",
             "command": "bash ~/.claude/hooks/require-wt.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/block-main-edits.sh"
           }
         ]
       }
