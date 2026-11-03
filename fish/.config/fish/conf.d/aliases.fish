@@ -1,12 +1,11 @@
-abbr --add v nvim .
-abbr --add py python3
-abbr --add tf terraform
-abbr --add calc bc -l
-alias top="btop"
-alias rm="rm -i"
-abbr --add ping ping -c 5
-abbr --add wm workmux
-abbr --add cl claude --ide
+for line in (string match -r '^alias .*' < ~/.config/shell/aliases.sh)
+    set -l m (string match -r '^alias ([^=]+)="(.*)"\s*(# noabbr)?$' -- $line); or continue
+    if test -n "$m[4]"
+        alias $m[2] $m[3]
+    else
+        abbr --add $m[2] -- $m[3]
+    end
+end
 
 if test -n "$WSL_DISTRO_NAME"
     function clip
