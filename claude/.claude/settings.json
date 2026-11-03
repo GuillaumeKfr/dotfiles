@@ -1,85 +1,32 @@
 {
-  "advisorModel": "opus",
-  "autoMode": {
-    "environment": [
-      "$defaults",
-      "Org-specific CLIs: Snowflake snow CLI"
-    ]
+  "syncClaudeAiSkills": false,
+  "env": {
+    "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "haiku"
   },
   "attribution": {
     "commit": "",
     "pr": ""
   },
-  "awaySummaryEnabled": false,
-  "effortLevel": "medium",
-  "enabledPlugins": {
-    "claude-md-management@claude-plugins-official": true,
-    "code-simplifier@claude-plugins-official": true,
-    "ponytail@ponytail": true,
-    "superpowers@claude-plugins-official": true,
-    "cc-plugin-you-should-know@builtin": true
-  },
-  "env": {
-    "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1",
-    "CLAUDE_CODE_SUBAGENT_MODEL": "haiku"
-  },
-  "extraKnownMarketplaces": {
-    "ponytail": {
-      "source": {
-        "repo": "DietrichGebert/ponytail",
-        "source": "github"
-      }
-    }
-  },
+  "model": "sonnet",
   "hooks": {
     "Notification": [
       {
+        "matcher": "permission_prompt|elicitation_dialog",
         "hooks": [
           {
-            "command": "workmux set-window-status waiting",
-            "type": "command"
+            "type": "command",
+            "command": "workmux set-window-status waiting"
           }
-        ],
-        "matcher": "permission_prompt|elicitation_dialog"
+        ]
       }
     ],
     "PostToolUse": [
       {
         "hooks": [
           {
-            "command": "workmux set-window-status working",
-            "type": "command"
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "command": "workmux set-window-status working",
-            "type": "command"
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "command": "workmux register-agent",
-            "type": "command"
-          }
-        ],
-        "matcher": "startup|resume|clear|fork"
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "command": "workmux set-window-status done",
-            "type": "command"
+            "type": "command",
+            "command": "workmux set-window-status working"
           }
         ]
       }
@@ -103,15 +50,69 @@
           }
         ]
       }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|fork",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "workmux register-agent"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "workmux set-window-status done"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "workmux set-window-status working"
+          }
+        ]
+      }
     ]
   },
-  "model": "sonnet",
-  "outputStyle": "Concise",
   "statusLine": {
-    "command": "bash ~/.claude/statusline-command.sh",
-    "type": "command"
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
   },
+  "enabledPlugins": {
+    "cc-plugin-you-should-know@builtin": false,
+    "claude-md-management@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "ponytail@ponytail": true,
+    "superpowers@claude-plugins-official": true,
+    "swift-lsp@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
+    }
+  },
+  "outputStyle": "Concise",
+  "effortLevel": "medium",
+  "advisorModel": "opus",
+  "awaySummaryEnabled": false,
+  "theme": "auto",
   "switchModelsOnFlag": true,
-  "syncClaudeAiSkills": false,
-  "theme": "auto"
+  "autoMode": {
+    "environment": [
+      "$defaults",
+      "Org-specific CLIs: Snowflake snow CLI"
+    ]
+  }
 }
