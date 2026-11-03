@@ -1,6 +1,3 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
 # Homebrew
 if [[ -d /opt/homebrew ]]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -11,9 +8,8 @@ export PATH="${HOMEBREW_PREFIX}/opt/openssl/bin:$PATH"
 
 autoload -Uz compinit && compinit
 
-#Star Ship
+# Starship
 eval "$(starship init zsh)"
-
 
 # ####### #
 # Aliases #
@@ -26,7 +22,11 @@ alias tf="terraform"
 alias calc="bc -l"
 alias mkdir="mkdir -pv"
 alias rm="rm -i"
-alias update="sudo apt update && sudo apt upgrade"
+if [[ $OSTYPE == darwin* ]]; then
+    alias update="brew update && brew upgrade"
+else
+    alias update="sudo apt update && sudo apt upgrade"
+fi
 alias ping="ping -c 5"
 
 if [[ -v WSL_DISTRO_NAME ]]; then
