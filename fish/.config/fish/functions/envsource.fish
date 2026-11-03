@@ -16,8 +16,8 @@ function envsource
         set -l value (string split -m 1 '=' "$line")[2]
 
         # Strip surrounding quotes from value
-        set value (string trim -c '"' "$value")
-        set value (string trim -c "'" "$value")
+        set value (string trim -c '"' -- "$value")
+        set value (string trim -c "'" -- "$value")
 
         if test -n "$key"
             set -gx "$key" "$value"
