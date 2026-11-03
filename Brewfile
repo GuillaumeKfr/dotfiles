@@ -37,6 +37,8 @@ brew "worktrunk"
 brew "yazi"
 brew "zoxide"
 brew "zsh"
+brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
 
 # macOS only
 if OS.mac?

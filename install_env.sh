@@ -42,9 +42,6 @@ detect_os() {
 
 OS="$(detect_os)"
 
-ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
-ZSH_PLUGINS_DIR="${ZSH_CUSTOM_DIR}/plugins"
-
 CONF="${SCRIPT_DIR}/install.conf"
 
 STOW_DIRS=()
@@ -99,7 +96,7 @@ cmd::brew() {
         exit 1
     fi
 
-    # Casks install into ~/Applications (mirrors HOMEBREW_CASK_OPTS in config.fish) to avoid admin perms
+    # Casks install into ~/Applications (mirrors HOMEBREW_CASK_OPTS in shell/.config/shell/exports.sh) to avoid admin perms
     if [[ "$OS" == "macos" ]]; then
         mkdir -p "$HOME/Applications"
         export HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications"
