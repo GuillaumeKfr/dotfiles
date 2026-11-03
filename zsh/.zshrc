@@ -4,7 +4,6 @@ if [[ -d /opt/homebrew ]]; then
 elif [[ -d /home/linuxbrew/.linuxbrew ]]; then
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
-export PATH="${HOMEBREW_PREFIX}/opt/openssl/bin:$PATH"
 
 autoload -Uz compinit && compinit
 
