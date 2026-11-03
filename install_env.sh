@@ -10,7 +10,7 @@
 #/   brew          Install packages from Brewfile
 #/   stow          Symlink configuration files
 #/   hooks         Install git pre-commit hooks (detect-secrets) for this repo
-#/   post-install  Run post-install setup (bat cache, worktrunk)
+#/   post-install  Run post-install setup (bat cache, worktrunk, tpm)
 #/   shell         Configure default shell (requires sudo)
 #/   help          Show this help message
 

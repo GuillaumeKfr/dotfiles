@@ -154,6 +154,17 @@ steps::post_install() {
         logging::warn "[custom] worktrunk not found, skipping shell integration"
     fi
 
+    local tpm_dir="$HOME/.config/tmux/plugins/tpm"
+    if [[ ! -d "$tpm_dir" ]]; then
+        logging::info "[custom] Installing tmux plugin manager"
+        if ! git clone --depth 1 https://github.com/tmux-plugins/tpm "$tpm_dir"; then
+            logging::err "[custom] tpm clone failed"
+        fi
+    fi
+    if [[ -x "$tpm_dir/bin/install_plugins" ]]; then
+        "$tpm_dir/bin/install_plugins" || logging::err "[custom] tmux plugin install failed"
+    fi
+
     return 0
 }
 
