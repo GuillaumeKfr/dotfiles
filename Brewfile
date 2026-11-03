@@ -1,3 +1,7 @@
+# Taps
+tap "neo4j-labs/tap"
+tap "raine/workmux"
+
 # Formulae
 brew "awscli"
 brew "bat"
@@ -12,13 +16,11 @@ brew "gh"
 brew "git-delta"
 brew "jq"
 brew "lazygit"
-tap "neo4j-labs/tap"
 brew "neo4j-labs/tap/neo4j-cli"
 brew "neovim"
 brew "node"
 brew "pre-commit"
 brew "python"
-tap "raine/workmux"
 brew "raine/workmux/workmux"
 brew "ripgrep"
 brew "saml2aws"
