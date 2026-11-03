@@ -26,7 +26,6 @@ brew "sesh"
 brew "snowflake-cli"
 brew "starship"
 brew "stow"
-brew "tflint"
 brew "tlrc"
 brew "tmux"
 brew "tree-sitter-cli"
@@ -43,6 +42,7 @@ brew "zsh-syntax-highlighting"
 # macOS only
 if OS.mac?
   tap "nikitabobko/tap"
+  tap "terraform-linters/tap"
   cask "claude-code"
   cask "font-jetbrains-mono-nerd-font"
   cask "hammerspoon"
@@ -59,4 +59,5 @@ if OS.mac?
   cask "spotify"
   cask "vlc"
   cask "nikitabobko/tap/aerospace"
+  cask "terraform-linters/tap/tflint"
 end
