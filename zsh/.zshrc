@@ -22,11 +22,12 @@ alias tf="terraform"
 alias calc="bc -l"
 alias mkdir="mkdir -pv"
 alias rm="rm -i"
-if [[ $OSTYPE == darwin* ]]; then
-    alias update="brew update && brew upgrade"
-else
-    alias update="sudo apt update && sudo apt upgrade"
-fi
+update() {
+    if [[ $OSTYPE == linux* ]]; then
+        sudo apt update && sudo apt upgrade -y && sudo apt autoremove
+    fi
+    brew update && brew upgrade && brew cleanup
+}
 alias ping="ping -c 5"
 
 if [[ -v WSL_DISTRO_NAME ]]; then
