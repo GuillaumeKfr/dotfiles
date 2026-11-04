@@ -1,4 +1,5 @@
 # Taps
+tap "hashicorp/tap"
 tap "neo4j-labs/tap"
 tap "raine/workmux"
 
@@ -14,6 +15,7 @@ brew "fish"
 brew "fzf"
 brew "gh"
 brew "git-delta"
+brew "hashicorp/tap/terraform"
 brew "jq"
 brew "lazygit"
 brew "neo4j-labs/tap/neo4j-cli"
