@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+#/ Per-worktree setup shared by workmux (post_create) and worktrunk (pre-start).
+#/ Run from the worktree root.
+[[ -f .envrc ]] && [[ -x $(command -v direnv) ]] && direnv allow
+[[ -f .pre-commit-config.yaml ]] && [[ -x $(command -v pre-commit) ]] && pre-commit install
+exit 0
