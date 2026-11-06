@@ -162,6 +162,8 @@ steps::post_install() {
         fi
     fi
     if [[ -x "$tpm_dir/bin/install_plugins" ]]; then
+        # No tmux server has sourced tmux.conf yet, so tpm's env var is unset
+        tmux start-server \; set-environment -g TMUX_PLUGIN_MANAGER_PATH "$HOME/.config/tmux/plugins/"
         "$tpm_dir/bin/install_plugins" || logging::err "[custom] tmux plugin install failed"
     fi
 
