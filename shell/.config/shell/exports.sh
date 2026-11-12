@@ -4,6 +4,8 @@ export EDITOR=nvim
 export VISUAL=nvim
 export CLAUDE_CODE_SUBAGENT_MODEL=haiku
 export HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications"
+# Self-updating casks (spotify) run sudo launchctl on upgrade, which fails without admin
+export HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1
 
 if [ -f "$HOME/ca-bundle.pem" ]; then
     for v in PIP_CERT REQUESTS_CA_BUNDLE CURL_CA_BUNDLE SSL_CERT_FILE AWS_CA_BUNDLE NODE_EXTRA_CA_CERTS; do
