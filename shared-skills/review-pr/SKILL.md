@@ -67,7 +67,7 @@ Read each changed file in full for context beyond the diff hunks.
 
 ## Step 3: Analyze the diff
 
-Analysis runs in three phases: gather findings via parallel agents, score each one for confidence, then keep only the high-confidence ones.
+Analysis runs in three phases: gather findings via parallel agents, verify each one, then keep only the verified ones.
 
 ### Phase 3a: Gather findings (parallel agents)
 
@@ -87,17 +87,9 @@ For the multi-agent flow, dispatch the following seven agents in parallel using 
 - **Agent 6 — ponytail**: invoke the `ponytail:ponytail-review` skill on the diff in report-only mode. Flag over-engineering the PR introduces: unrequested abstractions, speculative config, new dependencies or code where the stdlib, platform, or existing codebase helpers already cover it. Category `IMPROVEMENT`.
 - **Agent 7 — simplify**: invoke the `simplify` skill on the diff in report-only mode (return the fixes it would make; do not edit files). Flag reuse of existing helpers, redundant code, needless complexity, and inefficiencies in changed lines. Category `IMPROVEMENT`.
 
-### Phase 3b: Score each finding
+### Phase 3b: Verify each finding
 
-For each finding returned in 3a, dispatch a Haiku agent (or score inline if dispatch overhead isn't worth it for a small set). Each agent receives the PR diff, the finding, and the CLAUDE.md path list, and returns a confidence score 0–100:
-
-- **0** — false positive that doesn't survive light scrutiny, or a pre-existing issue.
-- **25** — might be real, might not; couldn't verify. If stylistic, not explicitly called out by CLAUDE.md.
-- **50** — verified real but minor; nit or rare in practice.
-- **75** — verified, likely to bite in practice; the PR's approach is insufficient. Or: explicitly named in CLAUDE.md.
-- **100** — certain; evidence directly confirms it.
-
-For CLAUDE.md-flagged findings, the scorer must verify that the cited CLAUDE.md actually says what was claimed.
+For each finding returned in 3a, check it against the PR diff and the code: is it real, introduced by this PR, and likely to matter in practice? Verify inline, or dispatch an agent for a large set. For CLAUDE.md-flagged findings, confirm the cited CLAUDE.md actually says what was claimed.
 
 ### Phase 3c: Filter
 
@@ -110,7 +102,7 @@ Discard findings that match any of these false-positive patterns:
 - Likely-intentional changes related to the broader change
 - Findings on lines the user did not modify
 
-Keep only findings with score **≥ 75**, **except**: keep all `DOCS` and `TESTS` findings with score ≥ 50, since those are core to this skill's purpose and the official rubric undervalues them.
+Keep findings you verified as real and likely to matter, plus verified `DOCS` and `TESTS` findings even when minor, since those are core to this skill's purpose.
 
 Categorize each surviving finding:
 
@@ -124,16 +116,16 @@ Categorize each surviving finding:
 
 If no findings survive, present "No findings — checked for bugs, CLAUDE.md compliance, docs, and tests" and stop.
 
-Otherwise present a **short summary only** — one line per finding with category, file, and description (with score in parentheses). Do NOT show code snippets or suggested fixes yet:
+Otherwise present a **short summary only** — one line per finding with category, file, and description. Do NOT show code snippets or suggested fixes yet:
 
 > Found 3 findings:
-> 1. **BUG** (95) — `src/auth.py` — missing null check on user lookup
-> 2. **SECURITY** (80) — `src/api.py` — SQL query built with string concatenation
-> 3. **DOCS** (60) — `README.md` — restates what the code already shows
+> 1. **BUG** — `src/auth.py` — missing null check on user lookup
+> 2. **SECURITY** — `src/api.py` — SQL query built with string concatenation
+> 3. **DOCS** — `README.md` — restates what the code already shows
 
 ## Step 4: Present findings one by one
 
-> **CRITICAL: Present exactly ONE finding per message. After showing the finding and asking for approval, STOP your response and WAIT for the user to reply. Do NOT present the next finding until the user has responded.**
+> Present one finding per message and wait for the user's reply before showing the next, so each finding gets its own decision.
 
 For the **next pending** finding, show the user:
 

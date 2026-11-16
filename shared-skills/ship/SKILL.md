@@ -125,5 +125,5 @@ Commit all fixes (e.g., `fix(sonar): description`), push, then loop back to **St
 
 - **Never push to main/master** directly.
 - **Never commit secrets or .env files** — warn the user if detected.
-- **Always show the commit plan** (which files go into which commit) and get user approval before committing.
+- **Always show the commit plan** (which files go into which commit) and get user approval before the Step 3 commits. CI and Sonar fix commits (Steps 6–7) need no approval.
 - **Always show the PR title/body** before creating the PR and get user approval.
