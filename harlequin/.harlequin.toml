@@ -1,0 +1,426 @@
+default_profile = "default"
+
+[profiles.default]
+theme = "catppuccin-mocha"
+keymap_name = ["mine"]
+
+# Derived from harlequin's vscode keymap with app-level ctrl shortcuts moved to alt.
+# Not alt+b / alt+f: Textual turns ESC b / ESC f into ctrl+left / ctrl+right.
+
+[[keymaps.mine]]
+keys = "alt+q"
+action = "quit"
+
+[[keymaps.mine]]
+keys = "f1"
+action = "help"
+
+[[keymaps.mine]]
+keys = "alt+p"
+action = "command_palette"
+
+[[keymaps.mine]]
+keys = "alt+k"
+action = "focus_query_editor"
+
+[[keymaps.mine]]
+keys = "alt+j"
+action = "focus_results_viewer"
+
+[[keymaps.mine]]
+keys = "alt+h"
+action = "focus_data_catalog"
+
+[[keymaps.mine]]
+keys = "f7"
+action = "toggle_keys_panel"
+
+[[keymaps.mine]]
+keys = "f8"
+action = "show_query_history"
+
+[[keymaps.mine]]
+keys = "alt+t"
+action = "toggle_sidebar"
+
+[[keymaps.mine]]
+keys = "f12"
+action = "show_debug_info"
+
+[[keymaps.mine]]
+keys = "alt+d"
+action = "show_data_exporter"
+
+[[keymaps.mine]]
+keys = "alt+r"
+action = "refresh_catalog"
+
+[[keymaps.mine]]
+keys = "tab"
+action = "focus_next"
+
+[[keymaps.mine]]
+keys = "shift+tab"
+action = "focus_previous"
+
+[[keymaps.mine]]
+keys = "alt+n"
+action = "code_editor.new_buffer"
+
+[[keymaps.mine]]
+keys = "alt+w"
+action = "code_editor.close_buffer"
+
+[[keymaps.mine]]
+keys = "alt+l"
+action = "code_editor.next_buffer"
+
+[[keymaps.mine]]
+keys = "alt+x"
+action = "code_editor.run_query"
+
+[[keymaps.mine]]
+keys = "f4"
+action = "code_editor.format_buffer"
+
+[[keymaps.mine]]
+keys = "alt+s"
+action = "code_editor.save_buffer"
+
+[[keymaps.mine]]
+keys = "alt+o"
+action = "code_editor.load_buffer"
+
+[[keymaps.mine]]
+keys = "alt+e"
+action = "code_editor.launch_external_editor"
+
+[[keymaps.mine]]
+keys = "alt+i"
+action = "code_editor.find"
+
+[[keymaps.mine]]
+keys = "f3"
+action = "code_editor.find_next"
+
+[[keymaps.mine]]
+keys = "alt+g"
+action = "code_editor.goto_line"
+
+[[keymaps.mine]]
+keys = "up"
+action = "code_editor.cursor_up"
+
+[[keymaps.mine]]
+keys = "down"
+action = "code_editor.cursor_down"
+
+[[keymaps.mine]]
+keys = "left"
+action = "code_editor.cursor_left"
+
+[[keymaps.mine]]
+keys = "right"
+action = "code_editor.cursor_right"
+
+[[keymaps.mine]]
+keys = "ctrl+left"
+action = "code_editor.cursor_word_left"
+
+[[keymaps.mine]]
+keys = "ctrl+right"
+action = "code_editor.cursor_word_right"
+
+[[keymaps.mine]]
+keys = "home"
+action = "code_editor.cursor_line_start"
+
+[[keymaps.mine]]
+keys = "end"
+action = "code_editor.cursor_line_end"
+
+[[keymaps.mine]]
+keys = "ctrl+home"
+action = "code_editor.cursor_doc_start"
+
+[[keymaps.mine]]
+keys = "ctrl+end"
+action = "code_editor.cursor_doc_end"
+
+[[keymaps.mine]]
+keys = "pageup"
+action = "code_editor.cursor_page_up"
+
+[[keymaps.mine]]
+keys = "pagedown"
+action = "code_editor.cursor_page_down"
+
+[[keymaps.mine]]
+keys = "shift+up"
+action = "code_editor.select_up"
+
+[[keymaps.mine]]
+keys = "shift+down"
+action = "code_editor.select_down"
+
+[[keymaps.mine]]
+keys = "shift+left"
+action = "code_editor.select_left"
+
+[[keymaps.mine]]
+keys = "shift+right"
+action = "code_editor.select_right"
+
+[[keymaps.mine]]
+keys = "ctrl+shift+left"
+action = "code_editor.select_word_left"
+
+[[keymaps.mine]]
+keys = "ctrl+shift+right"
+action = "code_editor.select_word_right"
+
+[[keymaps.mine]]
+keys = "shift+home"
+action = "code_editor.select_line_start"
+
+[[keymaps.mine]]
+keys = "shift+end"
+action = "code_editor.select_line_end"
+
+[[keymaps.mine]]
+keys = "ctrl+a"
+action = "code_editor.select_all"
+
+[[keymaps.mine]]
+keys = "ctrl+up"
+action = "code_editor.scroll_up_one"
+
+[[keymaps.mine]]
+keys = "ctrl+down"
+action = "code_editor.scroll_down_one"
+
+[[keymaps.mine]]
+keys = "ctrl+underscore"
+action = "code_editor.toggle_comment"
+
+[[keymaps.mine]]
+keys = "ctrl+x"
+action = "code_editor.cut"
+
+[[keymaps.mine]]
+keys = "ctrl+c"
+action = "code_editor.copy"
+
+[[keymaps.mine]]
+keys = "ctrl+u,ctrl+v,shift+insert"
+action = "code_editor.paste"
+
+[[keymaps.mine]]
+keys = "ctrl+z"
+action = "code_editor.undo"
+
+[[keymaps.mine]]
+keys = "ctrl+y"
+action = "code_editor.redo"
+
+[[keymaps.mine]]
+keys = "backspace"
+action = "code_editor.delete_left"
+
+[[keymaps.mine]]
+keys = "delete"
+action = "code_editor.delete_right"
+
+[[keymaps.mine]]
+keys = "shift+delete"
+action = "code_editor.delete_line"
+
+[[keymaps.mine]]
+keys = "j"
+action = "data_catalog.previous_tab"
+
+[[keymaps.mine]]
+keys = "k"
+action = "data_catalog.next_tab"
+
+[[keymaps.mine]]
+keys = "ctrl+enter,ctrl+j"
+action = "data_catalog.insert_name"
+key_display = "^⏎ or ^j"
+
+[[keymaps.mine]]
+keys = "ctrl+c"
+action = "data_catalog.copy_name"
+
+[[keymaps.mine]]
+keys = "enter"
+action = "data_catalog.select_cursor"
+
+[[keymaps.mine]]
+keys = "space"
+action = "data_catalog.toggle_node"
+
+[[keymaps.mine]]
+keys = "up"
+action = "data_catalog.cursor_up"
+
+[[keymaps.mine]]
+keys = "down"
+action = "data_catalog.cursor_down"
+
+[[keymaps.mine]]
+keys = "full_stop"
+action = "data_catalog.show_context_menu"
+
+[[keymaps.mine]]
+keys = "escape"
+action = "data_catalog.hide_context_menu"
+
+[[keymaps.mine]]
+keys = "j"
+action = "results_viewer.previous_tab"
+
+[[keymaps.mine]]
+keys = "k"
+action = "results_viewer.next_tab"
+
+[[keymaps.mine]]
+keys = "ctrl+c"
+action = "results_viewer.copy_selection"
+
+[[keymaps.mine]]
+keys = "enter"
+action = "results_viewer.select_cursor"
+
+[[keymaps.mine]]
+keys = "space"
+action = "results_viewer.view_cell"
+
+[[keymaps.mine]]
+keys = "alt+g"
+action = "results_viewer.jump_to_column"
+
+[[keymaps.mine]]
+keys = "up"
+action = "results_viewer.cursor_up"
+
+[[keymaps.mine]]
+keys = "down"
+action = "results_viewer.cursor_down"
+
+[[keymaps.mine]]
+keys = "left"
+action = "results_viewer.cursor_left"
+
+[[keymaps.mine]]
+keys = "right"
+action = "results_viewer.cursor_right"
+
+[[keymaps.mine]]
+keys = "ctrl+left"
+action = "results_viewer.cursor_row_start"
+
+[[keymaps.mine]]
+keys = "ctrl+right"
+action = "results_viewer.cursor_row_end"
+
+[[keymaps.mine]]
+keys = "ctrl+up,home"
+action = "results_viewer.cursor_column_start"
+
+[[keymaps.mine]]
+keys = "ctrl+down,end"
+action = "results_viewer.cursor_column_end"
+
+[[keymaps.mine]]
+keys = "tab"
+action = "results_viewer.cursor_next_cell"
+
+[[keymaps.mine]]
+keys = "shift+tab"
+action = "results_viewer.cursor_previous_cell"
+
+[[keymaps.mine]]
+keys = "pageup"
+action = "results_viewer.cursor_page_up"
+
+[[keymaps.mine]]
+keys = "pagedown"
+action = "results_viewer.cursor_page_down"
+
+[[keymaps.mine]]
+keys = "ctrl+home"
+action = "results_viewer.cursor_table_start"
+
+[[keymaps.mine]]
+keys = "ctrl+end"
+action = "results_viewer.cursor_table_end"
+
+[[keymaps.mine]]
+keys = "shift+up"
+action = "results_viewer.select_up"
+
+[[keymaps.mine]]
+keys = "shift+down"
+action = "results_viewer.select_down"
+
+[[keymaps.mine]]
+keys = "shift+left"
+action = "results_viewer.select_left"
+
+[[keymaps.mine]]
+keys = "shift+right"
+action = "results_viewer.select_right"
+
+[[keymaps.mine]]
+keys = "ctrl+shift+left"
+action = "results_viewer.select_row_start"
+
+[[keymaps.mine]]
+keys = "ctrl+shift+right"
+action = "results_viewer.select_row_end"
+
+[[keymaps.mine]]
+keys = "ctrl+shift+up,shift+home"
+action = "results_viewer.select_column_start"
+
+[[keymaps.mine]]
+keys = "ctrl+shift+down,shift+end"
+action = "results_viewer.select_column_end"
+
+[[keymaps.mine]]
+keys = "shift+pageup"
+action = "results_viewer.select_page_up"
+
+[[keymaps.mine]]
+keys = "shift+pagedown"
+action = "results_viewer.select_page_down"
+
+[[keymaps.mine]]
+keys = "ctrl+shift+home"
+action = "results_viewer.select_table_start"
+
+[[keymaps.mine]]
+keys = "ctrl+shift+end"
+action = "results_viewer.select_table_end"
+
+[[keymaps.mine]]
+keys = "ctrl+a"
+action = "results_viewer.select_all"
+
+[[keymaps.mine]]
+keys = "enter"
+action = "history_screen.select_query"
+
+[[keymaps.mine]]
+keys = "escape"
+action = "history_screen.cancel"
+
+[[keymaps.mine]]
+keys = "ctrl+f"
+action = "history_screen.toggle_filters"
+
+# Option+Backspace arrives as ctrl+w; keep it as delete-word instead of close-buffer.
+[[keymaps.mine]]
+keys = "ctrl+w"
+action = "code_editor.delete_word_left"
