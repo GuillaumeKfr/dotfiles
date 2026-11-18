@@ -11,8 +11,8 @@ function awslog
         set skip_prompt --skip-prompt
     end
 
-    # Present a menu of AWS profiles from ~/.aws/credentials
-    set account (grep '\[.*\]' ~/.aws/credentials | tr -d '[]' | fzf)
+    # Present a menu of AWS profiles from ~/.saml2aws
+    set account (sed -n 's/^\[\(.*\)\]/\1/p' ~/.saml2aws | fzf)
     or return
 
     # Skip saml2aws login if the profile already has valid credentials
