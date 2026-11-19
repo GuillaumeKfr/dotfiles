@@ -132,7 +132,7 @@ automatically-unhide-macos-hidden-apps = false
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
     ctrl-f =  'layout tiling floating'
-    ctrl-q =  'layout tiles accordion' # Binds to A on AZERTY
+    ctrl-q =  'layout h_accordion tiles' # Binds to A on AZERTY
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#focus
     ctrl-alt-h = 'focus --boundaries all-monitors-outer-frame --boundaries-action wrap-around-the-workspace left'
@@ -146,10 +146,6 @@ automatically-unhide-macos-hidden-apps = false
     ctrl-alt-shift-k = 'move up'
     ctrl-alt-shift-l = 'move right'
 
-    ctrl-shift-h = 'join-with left'
-    ctrl-shift-j = 'join-with down'
-    ctrl-shift-k = 'join-with up'
-    ctrl-shift-l = 'join-with right'
 
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#resize
