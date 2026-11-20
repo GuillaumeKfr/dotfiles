@@ -2,6 +2,8 @@
 vim.pack.add { 'https://github.com/coder/claudecode.nvim' }
 
 require('claudecode').setup {
+  -- A nvim opened in a parent directory would match every project below it and make `claude --ide` ambiguous.
+  auto_start = vim.fs.root(0, '.git') ~= nil,
   terminal = { provider = 'none' },
 }
 
