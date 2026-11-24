@@ -59,7 +59,6 @@ if OS.mac?
   cask "drawio"
   cask "firefox"
   cask "font-hack-nerd-font"
-  cask "jordanbaird-ice"
   cask "keepassxc"
   cask "neo4j-desktop"
   cask "raycast"
